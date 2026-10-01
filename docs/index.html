@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banyumas Hospital Sentiment Dashboard (April 2026)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f8fafc; color:#334155;
+         height:100vh; overflow:hidden; display:flex; flex-direction:column; }
+
+  #header { background:linear-gradient(135deg,#e0e7ff,#ede9fe);
+             border-bottom:1px solid #ddd6fe; padding:12px 20px;
+             display:flex; align-items:center; justify-content:space-between;
+             flex-shrink:0; box-shadow:0 1px 6px rgba(99,102,241,.08); }
+  #header h1 { font-size:16px; font-weight:700; color:#4338ca; }
+  #header h1 span { color:#c026d3; }
+  .badge { background:#fff; padding:4px 12px; border-radius:20px;
+            font-size:11px; color:#6366f1; border:1px solid #c7d2fe; }
+
+  #controls { background:#ffffff; padding:10px 20px; display:flex;
+               align-items:center; gap:14px; flex-wrap:wrap;
+               border-bottom:1px solid #e2e8f0; flex-shrink:0; }
+  .ctrl-label { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
+  .btn-p { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0;
+            padding:5px 12px; border-radius:8px; cursor:pointer;
+            font-size:11px; transition:all .2s; }
+  .btn-p:hover { background:#e0e7ff; }
+  .btn-p.active { background:#6366f1; color:#fff; border-color:#6366f1; }
+  #slider { -webkit-appearance:none; width:260px; height:5px; border-radius:3px;
+             background:#e2e8f0; outline:none; cursor:pointer; }
+  #slider::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px;
+    border-radius:50%; background:#6366f1; border:2px solid #fff;
+    box-shadow:0 0 0 1px #c7d2fe; cursor:pointer; }
+  #pLabel { font-size:13px; font-weight:700; color:#6366f1; min-width:140px; }
+
+  #main { flex:1; display:flex; overflow:hidden; }
+  #mapWrap { flex:1; position:relative; }
+  #map { width:100%; height:100%; }
+
+  #legend { position:absolute; bottom:20px; left:12px; z-index:1000;
+             background:rgba(255,255,255,.95); border:1px solid #e2e8f0;
+             border-radius:10px; padding:10px 14px; font-size:11px;
+             backdrop-filter:blur(6px); box-shadow:0 4px 16px rgba(15,23,42,.08); }
+  #legend b { color:#475569; font-size:12px; display:block; margin-bottom:6px; }
+  .leg { display:flex; align-items:center; gap:6px; margin:3px 0; color:#64748b; }
+  .ldot { width:10px; height:10px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); }
+
+  #side { width:320px; background:#ffffff; border-left:1px solid #e2e8f0;
+           display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden; flex-shrink:0; }
+
+  #stats { padding:12px; border-bottom:1px solid #e2e8f0; flex-shrink:0; }
+  #stats h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  .sgrid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  .sc { background:#f8fafc; border-radius:10px; padding:8px 10px; border:1px solid #eef2f7; }
+  .sc .v { font-size:19px; font-weight:800; line-height:1; }
+  .sc .l { font-size:9px; color:#94a3b8; margin-top:3px; text-transform:uppercase; }
+  .sc.pos .v { color:#16a34a; } .sc.neg .v { color:#e11d48; }
+  .sc.net .v { color:#d97706; } .sc.tot .v { color:#6366f1; }
+  .sc.rat .v { color:#9333ea; } .sc.ul  .v { color:#0d9488; }
+
+  #trend { flex:0 0 auto; padding:14px 10px 12px 12px; display:flex; flex-direction:column;
+            min-width:0; border-bottom:1px solid #e2e8f0; }
+  #trend h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+  #rsName { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:8px;
+             white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #chartWrap { position:relative; min-width:0; width:100%; height:230px; }
+  #chartWrap canvas { max-width:100% !important; }
+  #empty { text-align:center; color:#94a3b8; font-size:12px; padding:30px 10px; }
+
+  #rslist { padding:0 12px 12px; overflow-y:auto; overflow-x:hidden; flex:1; min-height:160px; }
+  #rslist h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px;
+               margin-bottom:6px; padding-top:8px; }
+  .rsi { display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:8px;
+          cursor:pointer; transition:background .15s; margin-bottom:2px; }
+  .rsi:hover { background:#f1f5f9; }
+  .rsi.sel { background:#eef2ff; border:1px solid #c7d2fe; }
+  .rdot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .ri { flex:1; min-width:0; }
+  .rn { font-size:11px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#334155; }
+  .rs { font-size:10px; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .pop { font-family:'Segoe UI',Arial,sans-serif; width:230px; }
+  .pop .pt { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px;
+              border-bottom:2px solid #c7d2fe; padding-bottom:4px; }
+  .pop .pr { display:flex; justify-content:space-between; font-size:11px; margin:2px 0; }
+  .pop .pk { color:#94a3b8; } .pop .pv { font-weight:600; color:#334155; }
+  .pop .pb { background:#eef2f7; border-radius:4px; height:6px; margin:6px 0 3px;
+              overflow:hidden; display:flex; }
+  .pop .pb span { height:100%; }
+  .pop .ps { font-size:11px; font-weight:700; padding:3px 8px; border-radius:12px;
+              display:inline-block; margin-top:6px; }
+  .pop .ps.Positif { background:#dcfce7; color:#15803d; }
+  .pop .ps.Netral  { background:#fef3c7; color:#b45309; }
+  .pop .ps.Negatif { background:#fee2e2; color:#be123c; }
+
+  .pin-icon { background: transparent; border: none; transition: opacity .2s; }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>🏥 <span>Banyumas</span> Hospital Sentiment Dashboard — April 2026</h1>
+  <span class="badge">SVM | Weekly Breakdown</span>
+</div>
+
+<div id="controls">
+  <span class="ctrl-label">Week</span>
+  <div id="btnWrap" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
+  <span style="width:1px;height:24px;background:#e2e8f0;display:inline-block"></span>
+  <span class="ctrl-label">Slider</span>
+  <input type="range" id="slider" min="0" max="4" step="1" value="0">
+  <span id="pLabel">All Weeks</span>
+</div>
+
+<div id="main">
+  <div id="mapWrap">
+    <div id="map"></div>
+    <div id="legend">
+      <b>Dominant Sentiment</b>
+      <div class="leg"><div class="ldot" style="background:#4ade80"></div>Positive</div>
+      <div class="leg"><div class="ldot" style="background:#fbbf24"></div>Neutral</div>
+      <div class="leg"><div class="ldot" style="background:#fb7185"></div>Negative</div>
+      <div style="margin-top:6px;font-size:10px;color:#94a3b8;">● Size = Total Reviews</div>
+    </div>
+  </div>
+
+  <div id="side">
+    <div id="stats">
+      <h3>Period Statistics</h3>
+      <div class="sgrid">
+        <div class="sc pos"><div class="v" id="sPos">-</div><div class="l">Positive Hospitals</div></div>
+        <div class="sc neg"><div class="v" id="sNeg">-</div><div class="l">Negative Hospitals</div></div>
+        <div class="sc net"><div class="v" id="sNet">-</div><div class="l">Neutral Hospitals</div></div>
+        <div class="sc tot"><div class="v" id="sTot">-</div><div class="l">Total Hospitals</div></div>
+        <div class="sc rat"><div class="v" id="sRat">-</div><div class="l">Avg Rating</div></div>
+        <div class="sc ul" ><div class="v" id="sUl">-</div><div class="l">Total Reviews</div></div>
+      </div>
+    </div>
+
+    <div id="trend">
+      <h3>Weekly Rating Trend</h3>
+      <div id="rsName">Click a marker to see the trend</div>
+      <div id="chartWrap">
+        <canvas id="trendChart"></canvas>
+        <div id="empty">Select a hospital to view its weekly rating trend</div>
+      </div>
+    </div>
+
+    <div id="rslist">
+      <h3>Hospital List (sorted by rating)</h3>
+      <div id="rsListContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA    = [{"Nama RS": "Hermina Hospital Purwokerto", "Latitude": -7.420567, "Longitude": 109.202639, "Avg_Rating": 4.96, "Total": 393, "Positif": 352, "Netral": 21, "Negatif": 20, "Dominan": "Positif", "Pct_Pos": 89.6, "Pct_Net": 5.3, "Pct_Neg": 5.1, "Periode": "ALL"}, {"Nama RS": "RS Jatiwinangun", "Latitude": -7.4170162, "Longitude": 109.2436674, "Avg_Rating": 4.5, "Total": 4, "Positif": 2, "Netral": 1, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 25.0, "Pct_Neg": 25.0, "Periode": "ALL"}, {"Nama RS": "RS Khusus Mata Purwokerto", "Latitude": -7.4407532, "Longitude": 109.232536, "Avg_Rating": 4.33, "Total": 6, "Positif": 4, "Netral": 1, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 66.7, "Pct_Net": 16.7, "Pct_Neg": 16.7, "Periode": "ALL"}, {"Nama RS": "RS TK. III Wijayakusuma Purwokerto", "Latitude": -7.4150947, "Longitude": 109.2455802, "Avg_Rating": 4.15, "Total": 13, "Positif": 7, "Netral": 3, "Negatif": 3, "Dominan": "Positif", "Pct_Pos": 53.8, "Pct_Net": 23.1, "Pct_Neg": 23.1, "Periode": "ALL"}, {"Nama RS": "RSIA Bunda Arif", "Latitude": -7.420749, "Longitude": 109.2431658, "Avg_Rating": 3.0, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 0.0, "Pct_Neg": 50.0, "Periode": "ALL"}, {"Nama RS": "RSKB MITRA ARIVA", "Latitude": -7.4082505, "Longitude": 109.0835341, "Avg_Rating": 5.0, "Total": 3, "Positif": 2, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 66.7, "Pct_Net": 0.0, "Pct_Neg": 33.3, "Periode": "ALL"}, {"Nama RS": "RSU An Ni'mah", "Latitude": -7.5180652, "Longitude": 109.0622717, "Avg_Rating": 3.8, "Total": 10, "Positif": 6, "Netral": 1, "Negatif": 3, "Dominan": "Positif", "Pct_Pos": 60.0, "Pct_Net": 10.0, "Pct_Neg": 30.0, "Periode": "ALL"}, {"Nama RS": "RSU Ananda Purwokerto", "Latitude": -7.4182772, "Longitude": 109.2239929, "Avg_Rating": 3.5, "Total": 10, "Positif": 5, "Netral": 0, "Negatif": 5, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 0.0, "Pct_Neg": 50.0, "Periode": "ALL"}, {"Nama RS": "RSU Dadi Keluarga Purwokerto", "Latitude": -7.4478209, "Longitude": 109.2530153, "Avg_Rating": 4.48, "Total": 29, "Positif": 20, "Netral": 2, "Negatif": 7, "Dominan": "Positif", "Pct_Pos": 69.0, "Pct_Net": 6.9, "Pct_Neg": 24.1, "Periode": "ALL"}, {"Nama RS": "RSU Hidayah Purwokerto", "Latitude": -7.426717, "Longitude": 109.258164, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "ALL"}, {"Nama RS": "RSU Medika Lestari", "Latitude": -7.5925669, "Longitude": 109.2747121, "Avg_Rating": 3.4, "Total": 5, "Positif": 3, "Netral": 0, "Negatif": 2, "Dominan": "Positif", "Pct_Pos": 60.0, "Pct_Net": 0.0, "Pct_Neg": 40.0, "Periode": "ALL"}, {"Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH", "Latitude": -7.6114447, "Longitude": 109.3552698, "Avg_Rating": 4.17, "Total": 6, "Positif": 3, "Netral": 2, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 33.3, "Pct_Neg": 16.7, "Periode": "ALL"}, {"Nama RS": "RSU Santa Elisabeth Purwokerto", "Latitude": -7.4164698, "Longitude": 109.2397481, "Avg_Rating": 3.62, "Total": 13, "Positif": 7, "Netral": 0, "Negatif": 6, "Dominan": "Positif", "Pct_Pos": 53.8, "Pct_Net": 0.0, "Pct_Neg": 46.2, "Periode": "ALL"}, {"Nama RS": "RSU Siaga Medika Banyumas", "Latitude": -7.5255326, "Longitude": 109.2934088, "Avg_Rating": 3.88, "Total": 8, "Positif": 5, "Netral": 1, "Negatif": 2, "Dominan": "Positif", "Pct_Pos": 62.5, "Pct_Net": 12.5, "Pct_Neg": 25.0, "Periode": "ALL"}, {"Nama RS": "RSU Sinar Kasih Purwokerto", "Latitude": -7.4256086, "Longitude": 109.2618184, "Avg_Rating": 2.25, "Total": 4, "Positif": 1, "Netral": 0, "Negatif": 3, "Dominan": "Negatif", "Pct_Pos": 25.0, "Pct_Net": 0.0, "Pct_Neg": 75.0, "Periode": "ALL"}, {"Nama RS": "RSU Wiradadi Husada Banyumas", "Latitude": -7.4591178, "Longitude": 109.2718392, "Avg_Rating": 4.96, "Total": 112, "Positif": 78, "Netral": 18, "Negatif": 16, "Dominan": "Positif", "Pct_Pos": 69.6, "Pct_Net": 16.1, "Pct_Neg": 14.3, "Periode": "ALL"}, {"Nama RS": "RSUD Ajibarang", "Latitude": -7.412809, "Longitude": 109.0792511, "Avg_Rating": 4.09, "Total": 34, "Positif": 23, "Netral": 3, "Negatif": 8, "Dominan": "Positif", "Pct_Pos": 67.6, "Pct_Net": 8.8, "Pct_Neg": 23.5, "Periode": "ALL"}, {"Nama RS": "RSUD Banyumas", "Latitude": -7.529866, "Longitude": 109.2924346, "Avg_Rating": 3.87, "Total": 15, "Positif": 7, "Netral": 2, "Negatif": 6, "Dominan": "Positif", "Pct_Pos": 46.7, "Pct_Net": 13.3, "Pct_Neg": 40.0, "Periode": "ALL"}, {"Nama RS": "RSUD Prof. Dr. Margono Soekarjo", "Latitude": -7.4374273, "Longitude": 109.2673789, "Avg_Rating": 4.52, "Total": 62, "Positif": 43, "Netral": 8, "Negatif": 11, "Dominan": "Positif", "Pct_Pos": 69.4, "Pct_Net": 12.9, "Pct_Neg": 17.7, "Periode": "ALL"}, {"Nama RS": "Rumah Sakit \"JIH\" Purwokerto", "Latitude": -7.4103233, "Longitude": 109.274308, "Avg_Rating": 4.61, "Total": 28, "Positif": 20, "Netral": 5, "Negatif": 3, "Dominan": "Positif", "Pct_Pos": 71.4, "Pct_Net": 17.9, "Pct_Neg": 10.7, "Periode": "ALL"}, {"Nama RS": "Rumah Sakit Islam Purwokerto", "Latitude": -7.4186458, "Longitude": 109.212873, "Avg_Rating": 3.64, "Total": 11, "Positif": 6, "Netral": 0, "Negatif": 5, "Dominan": "Positif", "Pct_Pos": 54.5, "Pct_Net": 0.0, "Pct_Neg": 45.5, "Periode": "ALL"}, {"Nama RS": "Rumah Sakit Orthopaedi Purwokerto", "Latitude": -7.4429224, "Longitude": 109.2726441, "Avg_Rating": 4.81, "Total": 21, "Positif": 17, "Netral": 2, "Negatif": 2, "Dominan": "Positif", "Pct_Pos": 81.0, "Pct_Net": 9.5, "Pct_Neg": 9.5, "Periode": "ALL"}, {"Nama RS": "Rumah Sakit Umum Bunda", "Latitude": -7.4290317, "Longitude": 109.2535107, "Avg_Rating": 4.87, "Total": 71, "Positif": 59, "Netral": 6, "Negatif": 6, "Dominan": "Positif", "Pct_Pos": 83.1, "Pct_Net": 8.5, "Pct_Neg": 8.5, "Periode": "ALL"}, {"Nama RS": "Hermina Hospital Purwokerto", "Latitude": -7.420567, "Longitude": 109.202639, "Avg_Rating": 4.98, "Total": 63, "Positif": 59, "Netral": 3, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 93.7, "Pct_Net": 4.8, "Pct_Neg": 1.6, "Periode": "W1"}, {"Nama RS": "Hermina Hospital Purwokerto", "Latitude": -7.420567, "Longitude": 109.202639, "Avg_Rating": 4.95, "Total": 78, "Positif": 72, "Netral": 2, "Negatif": 4, "Dominan": "Positif", "Pct_Pos": 92.3, "Pct_Net": 2.6, "Pct_Neg": 5.1, "Periode": "W2"}, {"Nama RS": "Hermina Hospital Purwokerto", "Latitude": -7.420567, "Longitude": 109.202639, "Avg_Rating": 4.96, "Total": 102, "Positif": 94, "Netral": 2, "Negatif": 6, "Dominan": "Positif", "Pct_Pos": 92.2, "Pct_Net": 2.0, "Pct_Neg": 5.9, "Periode": "W3"}, {"Nama RS": "Hermina Hospital Purwokerto", "Latitude": -7.420567, "Longitude": 109.202639, "Avg_Rating": 4.95, "Total": 150, "Positif": 127, "Netral": 14, "Negatif": 9, "Dominan": "Positif", "Pct_Pos": 84.7, "Pct_Net": 9.3, "Pct_Neg": 6.0, "Periode": "W4"}, {"Nama RS": "RS Jatiwinangun", "Latitude": -7.4170162, "Longitude": 109.2436674, "Avg_Rating": 3.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W1"}, {"Nama RS": "RS Jatiwinangun", "Latitude": -7.4170162, "Longitude": 109.2436674, "Avg_Rating": 5.0, "Total": 3, "Positif": 2, "Netral": 1, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 66.7, "Pct_Net": 33.3, "Pct_Neg": 0.0, "Periode": "W3"}, {"Nama RS": "RS Khusus Mata Purwokerto", "Latitude": -7.4407532, "Longitude": 109.232536, "Avg_Rating": 4.33, "Total": 6, "Positif": 4, "Netral": 1, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 66.7, "Pct_Net": 16.7, "Pct_Neg": 16.7, "Periode": "W4"}, {"Nama RS": "RS TK. III Wijayakusuma Purwokerto", "Latitude": -7.4150947, "Longitude": 109.2455802, "Avg_Rating": 2.0, "Total": 2, "Positif": 0, "Netral": 0, "Negatif": 2, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W1"}, {"Nama RS": "RS TK. III Wijayakusuma Purwokerto", "Latitude": -7.4150947, "Longitude": 109.2455802, "Avg_Rating": 5.0, "Total": 4, "Positif": 2, "Netral": 2, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 50.0, "Pct_Neg": 0.0, "Periode": "W2"}, {"Nama RS": "RS TK. III Wijayakusuma Purwokerto", "Latitude": -7.4150947, "Longitude": 109.2455802, "Avg_Rating": 4.0, "Total": 4, "Positif": 3, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 75.0, "Pct_Net": 0.0, "Pct_Neg": 25.0, "Periode": "W3"}, {"Nama RS": "RS TK. III Wijayakusuma Purwokerto", "Latitude": -7.4150947, "Longitude": 109.2455802, "Avg_Rating": 4.67, "Total": 3, "Positif": 2, "Netral": 1, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 66.7, "Pct_Net": 33.3, "Pct_Neg": 0.0, "Periode": "W4"}, {"Nama RS": "RSIA Bunda Arif", "Latitude": -7.420749, "Longitude": 109.2431658, "Avg_Rating": 3.0, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 0.0, "Pct_Neg": 50.0, "Periode": "W3"}, {"Nama RS": "RSKB MITRA ARIVA", "Latitude": -7.4082505, "Longitude": 109.0835341, "Avg_Rating": 5.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W1"}, {"Nama RS": "RSKB MITRA ARIVA", "Latitude": -7.4082505, "Longitude": 109.0835341, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W3"}, {"Nama RS": "RSKB MITRA ARIVA", "Latitude": -7.4082505, "Longitude": 109.0835341, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W4"}, {"Nama RS": "RSU An Ni'mah", "Latitude": -7.5180652, "Longitude": 109.0622717, "Avg_Rating": 2.5, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 0.0, "Pct_Neg": 50.0, "Periode": "W1"}, {"Nama RS": "RSU An Ni'mah", "Latitude": -7.5180652, "Longitude": 109.0622717, "Avg_Rating": 2.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W2"}, {"Nama RS": "RSU An Ni'mah", "Latitude": -7.5180652, "Longitude": 109.0622717, "Avg_Rating": 5.0, "Total": 4, "Positif": 3, "Netral": 1, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 75.0, "Pct_Net": 25.0, "Pct_Neg": 0.0, "Periode": "W3"}, {"Nama RS": "RSU An Ni'mah", "Latitude": -7.5180652, "Longitude": 109.0622717, "Avg_Rating": 3.67, "Total": 3, "Positif": 2, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 66.7, "Pct_Net": 0.0, "Pct_Neg": 33.3, "Periode": "W4"}, {"Nama RS": "RSU Ananda Purwokerto", "Latitude": -7.4182772, "Longitude": 109.2239929, "Avg_Rating": 2.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W2"}, {"Nama RS": "RSU Ananda Purwokerto", "Latitude": -7.4182772, "Longitude": 109.2239929, "Avg_Rating": 5.0, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 0.0, "Pct_Neg": 50.0, "Periode": "W3"}, {"Nama RS": "RSU Ananda Purwokerto", "Latitude": -7.4182772, "Longitude": 109.2239929, "Avg_Rating": 3.29, "Total": 7, "Positif": 4, "Netral": 0, "Negatif": 3, "Dominan": "Positif", "Pct_Pos": 57.1, "Pct_Net": 0.0, "Pct_Neg": 42.9, "Periode": "W4"}, {"Nama RS": "RSU Dadi Keluarga Purwokerto", "Latitude": -7.4478209, "Longitude": 109.2530153, "Avg_Rating": 4.36, "Total": 11, "Positif": 9, "Netral": 0, "Negatif": 2, "Dominan": "Positif", "Pct_Pos": 81.8, "Pct_Net": 0.0, "Pct_Neg": 18.2, "Periode": "W1"}, {"Nama RS": "RSU Dadi Keluarga Purwokerto", "Latitude": -7.4478209, "Longitude": 109.2530153, "Avg_Rating": 5.0, "Total": 14, "Positif": 10, "Netral": 1, "Negatif": 3, "Dominan": "Positif", "Pct_Pos": 71.4, "Pct_Net": 7.1, "Pct_Neg": 21.4, "Periode": "W2"}, {"Nama RS": "RSU Dadi Keluarga Purwokerto", "Latitude": -7.4478209, "Longitude": 109.2530153, "Avg_Rating": 3.0, "Total": 4, "Positif": 1, "Netral": 1, "Negatif": 2, "Dominan": "Negatif", "Pct_Pos": 25.0, "Pct_Net": 25.0, "Pct_Neg": 50.0, "Periode": "W4"}, {"Nama RS": "RSU Hidayah Purwokerto", "Latitude": -7.426717, "Longitude": 109.258164, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W2"}, {"Nama RS": "RSU Medika Lestari", "Latitude": -7.5925669, "Longitude": 109.2747121, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W1"}, {"Nama RS": "RSU Medika Lestari", "Latitude": -7.5925669, "Longitude": 109.2747121, "Avg_Rating": 1.0, "Total": 2, "Positif": 0, "Netral": 0, "Negatif": 2, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W2"}, {"Nama RS": "RSU Medika Lestari", "Latitude": -7.5925669, "Longitude": 109.2747121, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W3"}, {"Nama RS": "RSU Medika Lestari", "Latitude": -7.5925669, "Longitude": 109.2747121, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W4"}, {"Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH", "Latitude": -7.6114447, "Longitude": 109.3552698, "Avg_Rating": 3.0, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 0.0, "Pct_Neg": 50.0, "Periode": "W1"}, {"Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH", "Latitude": -7.6114447, "Longitude": 109.3552698, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W2"}, {"Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH", "Latitude": -7.6114447, "Longitude": 109.3552698, "Avg_Rating": 4.5, "Total": 2, "Positif": 1, "Netral": 1, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 50.0, "Pct_Neg": 0.0, "Periode": "W3"}, {"Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH", "Latitude": -7.6114447, "Longitude": 109.3552698, "Avg_Rating": 5.0, "Total": 1, "Positif": 0, "Netral": 1, "Negatif": 0, "Dominan": "Netral", "Pct_Pos": 0.0, "Pct_Net": 100.0, "Pct_Neg": 0.0, "Periode": "W4"}, {"Nama RS": "RSU Santa Elisabeth Purwokerto", "Latitude": -7.4164698, "Longitude": 109.2397481, "Avg_Rating": 5.0, "Total": 3, "Positif": 3, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W1"}, {"Nama RS": "RSU Santa Elisabeth Purwokerto", "Latitude": -7.4164698, "Longitude": 109.2397481, "Avg_Rating": 3.5, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 0.0, "Pct_Neg": 50.0, "Periode": "W2"}, {"Nama RS": "RSU Santa Elisabeth Purwokerto", "Latitude": -7.4164698, "Longitude": 109.2397481, "Avg_Rating": 3.29, "Total": 7, "Positif": 3, "Netral": 0, "Negatif": 4, "Dominan": "Negatif", "Pct_Pos": 42.9, "Pct_Net": 0.0, "Pct_Neg": 57.1, "Periode": "W3"}, {"Nama RS": "RSU Santa Elisabeth Purwokerto", "Latitude": -7.4164698, "Longitude": 109.2397481, "Avg_Rating": 2.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W4"}, {"Nama RS": "RSU Siaga Medika Banyumas", "Latitude": -7.5255326, "Longitude": 109.2934088, "Avg_Rating": 5.0, "Total": 2, "Positif": 2, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W1"}, {"Nama RS": "RSU Siaga Medika Banyumas", "Latitude": -7.5255326, "Longitude": 109.2934088, "Avg_Rating": 3.75, "Total": 4, "Positif": 2, "Netral": 1, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 25.0, "Pct_Neg": 25.0, "Periode": "W3"}, {"Nama RS": "RSU Siaga Medika Banyumas", "Latitude": -7.5255326, "Longitude": 109.2934088, "Avg_Rating": 3.0, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 50.0, "Pct_Net": 0.0, "Pct_Neg": 50.0, "Periode": "W4"}, {"Nama RS": "RSU Sinar Kasih Purwokerto", "Latitude": -7.4256086, "Longitude": 109.2618184, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W1"}, {"Nama RS": "RSU Sinar Kasih Purwokerto", "Latitude": -7.4256086, "Longitude": 109.2618184, "Avg_Rating": 2.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W2"}, {"Nama RS": "RSU Sinar Kasih Purwokerto", "Latitude": -7.4256086, "Longitude": 109.2618184, "Avg_Rating": 1.0, "Total": 2, "Positif": 0, "Netral": 0, "Negatif": 2, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W4"}, {"Nama RS": "RSU Wiradadi Husada Banyumas", "Latitude": -7.4591178, "Longitude": 109.2718392, "Avg_Rating": 5.0, "Total": 16, "Positif": 12, "Netral": 1, "Negatif": 3, "Dominan": "Positif", "Pct_Pos": 75.0, "Pct_Net": 6.2, "Pct_Neg": 18.8, "Periode": "W1"}, {"Nama RS": "RSU Wiradadi Husada Banyumas", "Latitude": -7.4591178, "Longitude": 109.2718392, "Avg_Rating": 5.0, "Total": 36, "Positif": 23, "Netral": 9, "Negatif": 4, "Dominan": "Positif", "Pct_Pos": 63.9, "Pct_Net": 25.0, "Pct_Neg": 11.1, "Periode": "W2"}, {"Nama RS": "RSU Wiradadi Husada Banyumas", "Latitude": -7.4591178, "Longitude": 109.2718392, "Avg_Rating": 5.0, "Total": 29, "Positif": 20, "Netral": 4, "Negatif": 5, "Dominan": "Positif", "Pct_Pos": 69.0, "Pct_Net": 13.8, "Pct_Neg": 17.2, "Periode": "W3"}, {"Nama RS": "RSU Wiradadi Husada Banyumas", "Latitude": -7.4591178, "Longitude": 109.2718392, "Avg_Rating": 4.87, "Total": 31, "Positif": 23, "Netral": 4, "Negatif": 4, "Dominan": "Positif", "Pct_Pos": 74.2, "Pct_Net": 12.9, "Pct_Neg": 12.9, "Periode": "W4"}, {"Nama RS": "RSUD Ajibarang", "Latitude": -7.412809, "Longitude": 109.0792511, "Avg_Rating": 4.12, "Total": 8, "Positif": 6, "Netral": 0, "Negatif": 2, "Dominan": "Positif", "Pct_Pos": 75.0, "Pct_Net": 0.0, "Pct_Neg": 25.0, "Periode": "W1"}, {"Nama RS": "RSUD Ajibarang", "Latitude": -7.412809, "Longitude": 109.0792511, "Avg_Rating": 5.0, "Total": 7, "Positif": 6, "Netral": 1, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 85.7, "Pct_Net": 14.3, "Pct_Neg": 0.0, "Periode": "W2"}, {"Nama RS": "RSUD Ajibarang", "Latitude": -7.412809, "Longitude": 109.0792511, "Avg_Rating": 4.43, "Total": 7, "Positif": 4, "Netral": 2, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 57.1, "Pct_Net": 28.6, "Pct_Neg": 14.3, "Periode": "W3"}, {"Nama RS": "RSUD Ajibarang", "Latitude": -7.412809, "Longitude": 109.0792511, "Avg_Rating": 3.33, "Total": 12, "Positif": 7, "Netral": 0, "Negatif": 5, "Dominan": "Positif", "Pct_Pos": 58.3, "Pct_Net": 0.0, "Pct_Neg": 41.7, "Periode": "W4"}, {"Nama RS": "RSUD Banyumas", "Latitude": -7.529866, "Longitude": 109.2924346, "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W1"}, {"Nama RS": "RSUD Banyumas", "Latitude": -7.529866, "Longitude": 109.2924346, "Avg_Rating": 4.0, "Total": 13, "Positif": 6, "Netral": 2, "Negatif": 5, "Dominan": "Positif", "Pct_Pos": 46.2, "Pct_Net": 15.4, "Pct_Neg": 38.5, "Periode": "W3"}, {"Nama RS": "RSUD Banyumas", "Latitude": -7.529866, "Longitude": 109.2924346, "Avg_Rating": 1.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W4"}, {"Nama RS": "RSUD Prof. Dr. Margono Soekarjo", "Latitude": -7.4374273, "Longitude": 109.2673789, "Avg_Rating": 4.83, "Total": 6, "Positif": 5, "Netral": 1, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 83.3, "Pct_Net": 16.7, "Pct_Neg": 0.0, "Periode": "W1"}, {"Nama RS": "RSUD Prof. Dr. Margono Soekarjo", "Latitude": -7.4374273, "Longitude": 109.2673789, "Avg_Rating": 4.88, "Total": 32, "Positif": 24, "Netral": 6, "Negatif": 2, "Dominan": "Positif", "Pct_Pos": 75.0, "Pct_Net": 18.8, "Pct_Neg": 6.2, "Periode": "W2"}, {"Nama RS": "RSUD Prof. Dr. Margono Soekarjo", "Latitude": -7.4374273, "Longitude": 109.2673789, "Avg_Rating": 3.92, "Total": 13, "Positif": 8, "Netral": 1, "Negatif": 4, "Dominan": "Positif", "Pct_Pos": 61.5, "Pct_Net": 7.7, "Pct_Neg": 30.8, "Periode": "W3"}, {"Nama RS": "RSUD Prof. Dr. Margono Soekarjo", "Latitude": -7.4374273, "Longitude": 109.2673789, "Avg_Rating": 4.0, "Total": 11, "Positif": 6, "Netral": 0, "Negatif": 5, "Dominan": "Positif", "Pct_Pos": 54.5, "Pct_Net": 0.0, "Pct_Neg": 45.5, "Periode": "W4"}, {"Nama RS": "Rumah Sakit \"JIH\" Purwokerto", "Latitude": -7.4103233, "Longitude": 109.274308, "Avg_Rating": 4.25, "Total": 4, "Positif": 3, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 75.0, "Pct_Net": 0.0, "Pct_Neg": 25.0, "Periode": "W1"}, {"Nama RS": "Rumah Sakit \"JIH\" Purwokerto", "Latitude": -7.4103233, "Longitude": 109.274308, "Avg_Rating": 4.5, "Total": 8, "Positif": 6, "Netral": 1, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 75.0, "Pct_Net": 12.5, "Pct_Neg": 12.5, "Periode": "W2"}, {"Nama RS": "Rumah Sakit \"JIH\" Purwokerto", "Latitude": -7.4103233, "Longitude": 109.274308, "Avg_Rating": 4.64, "Total": 11, "Positif": 8, "Netral": 2, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 72.7, "Pct_Net": 18.2, "Pct_Neg": 9.1, "Periode": "W3"}, {"Nama RS": "Rumah Sakit \"JIH\" Purwokerto", "Latitude": -7.4103233, "Longitude": 109.274308, "Avg_Rating": 5.0, "Total": 5, "Positif": 3, "Netral": 2, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 60.0, "Pct_Net": 40.0, "Pct_Neg": 0.0, "Periode": "W4"}, {"Nama RS": "Rumah Sakit Islam Purwokerto", "Latitude": -7.4186458, "Longitude": 109.212873, "Avg_Rating": 4.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1, "Dominan": "Negatif", "Pct_Pos": 0.0, "Pct_Net": 0.0, "Pct_Neg": 100.0, "Periode": "W1"}, {"Nama RS": "Rumah Sakit Islam Purwokerto", "Latitude": -7.4186458, "Longitude": 109.212873, "Avg_Rating": 5.0, "Total": 3, "Positif": 3, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W2"}, {"Nama RS": "Rumah Sakit Islam Purwokerto", "Latitude": -7.4186458, "Longitude": 109.212873, "Avg_Rating": 2.33, "Total": 3, "Positif": 2, "Netral": 0, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 66.7, "Pct_Net": 0.0, "Pct_Neg": 33.3, "Periode": "W3"}, {"Nama RS": "Rumah Sakit Islam Purwokerto", "Latitude": -7.4186458, "Longitude": 109.212873, "Avg_Rating": 3.5, "Total": 4, "Positif": 1, "Netral": 0, "Negatif": 3, "Dominan": "Negatif", "Pct_Pos": 25.0, "Pct_Net": 0.0, "Pct_Neg": 75.0, "Periode": "W4"}, {"Nama RS": "Rumah Sakit Orthopaedi Purwokerto", "Latitude": -7.4429224, "Longitude": 109.2726441, "Avg_Rating": 5.0, "Total": 6, "Positif": 6, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W1"}, {"Nama RS": "Rumah Sakit Orthopaedi Purwokerto", "Latitude": -7.4429224, "Longitude": 109.2726441, "Avg_Rating": 5.0, "Total": 5, "Positif": 5, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W2"}, {"Nama RS": "Rumah Sakit Orthopaedi Purwokerto", "Latitude": -7.4429224, "Longitude": 109.2726441, "Avg_Rating": 5.0, "Total": 3, "Positif": 3, "Netral": 0, "Negatif": 0, "Dominan": "Positif", "Pct_Pos": 100.0, "Pct_Net": 0.0, "Pct_Neg": 0.0, "Periode": "W3"}, {"Nama RS": "Rumah Sakit Orthopaedi Purwokerto", "Latitude": -7.4429224, "Longitude": 109.2726441, "Avg_Rating": 4.43, "Total": 7, "Positif": 3, "Netral": 2, "Negatif": 2, "Dominan": "Positif", "Pct_Pos": 42.9, "Pct_Net": 28.6, "Pct_Neg": 28.6, "Periode": "W4"}, {"Nama RS": "Rumah Sakit Umum Bunda", "Latitude": -7.4290317, "Longitude": 109.2535107, "Avg_Rating": 4.78, "Total": 18, "Positif": 15, "Netral": 2, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 83.3, "Pct_Net": 11.1, "Pct_Neg": 5.6, "Periode": "W1"}, {"Nama RS": "Rumah Sakit Umum Bunda", "Latitude": -7.4290317, "Longitude": 109.2535107, "Avg_Rating": 4.69, "Total": 13, "Positif": 11, "Netral": 0, "Negatif": 2, "Dominan": "Positif", "Pct_Pos": 84.6, "Pct_Net": 0.0, "Pct_Neg": 15.4, "Periode": "W2"}, {"Nama RS": "Rumah Sakit Umum Bunda", "Latitude": -7.4290317, "Longitude": 109.2535107, "Avg_Rating": 4.94, "Total": 17, "Positif": 14, "Netral": 2, "Negatif": 1, "Dominan": "Positif", "Pct_Pos": 82.4, "Pct_Net": 11.8, "Pct_Neg": 5.9, "Periode": "W3"}, {"Nama RS": "Rumah Sakit Umum Bunda", "Latitude": -7.4290317, "Longitude": 109.2535107, "Avg_Rating": 5.0, "Total": 23, "Positif": 19, "Netral": 2, "Negatif": 2, "Dominan": "Positif", "Pct_Pos": 82.6, "Pct_Net": 8.7, "Pct_Neg": 8.7, "Periode": "W4"}];
+const TREN    = {"Hermina Hospital Purwokerto": [{"Periode": "W1", "Avg_Rating": 4.98, "Total": 63, "Positif": 59, "Netral": 3, "Negatif": 1}, {"Periode": "W2", "Avg_Rating": 4.95, "Total": 78, "Positif": 72, "Netral": 2, "Negatif": 4}, {"Periode": "W3", "Avg_Rating": 4.96, "Total": 102, "Positif": 94, "Netral": 2, "Negatif": 6}, {"Periode": "W4", "Avg_Rating": 4.95, "Total": 150, "Positif": 127, "Netral": 14, "Negatif": 9}], "RS Jatiwinangun": [{"Periode": "W1", "Avg_Rating": 3.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1}, {"Periode": "W3", "Avg_Rating": 5.0, "Total": 3, "Positif": 2, "Netral": 1, "Negatif": 0}], "RS Khusus Mata Purwokerto": [{"Periode": "W4", "Avg_Rating": 4.33, "Total": 6, "Positif": 4, "Netral": 1, "Negatif": 1}], "RS TK. III Wijayakusuma Purwokerto": [{"Periode": "W1", "Avg_Rating": 2.0, "Total": 2, "Positif": 0, "Netral": 0, "Negatif": 2}, {"Periode": "W2", "Avg_Rating": 5.0, "Total": 4, "Positif": 2, "Netral": 2, "Negatif": 0}, {"Periode": "W3", "Avg_Rating": 4.0, "Total": 4, "Positif": 3, "Netral": 0, "Negatif": 1}, {"Periode": "W4", "Avg_Rating": 4.67, "Total": 3, "Positif": 2, "Netral": 1, "Negatif": 0}], "RSIA Bunda Arif": [{"Periode": "W3", "Avg_Rating": 3.0, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1}], "RSKB MITRA ARIVA": [{"Periode": "W1", "Avg_Rating": 5.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1}, {"Periode": "W3", "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0}, {"Periode": "W4", "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0}], "RSU An Ni'mah": [{"Periode": "W1", "Avg_Rating": 2.5, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1}, {"Periode": "W2", "Avg_Rating": 2.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1}, {"Periode": "W3", "Avg_Rating": 5.0, "Total": 4, "Positif": 3, "Netral": 1, "Negatif": 0}, {"Periode": "W4", "Avg_Rating": 3.67, "Total": 3, "Positif": 2, "Netral": 0, "Negatif": 1}], "RSU Ananda Purwokerto": [{"Periode": "W2", "Avg_Rating": 2.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1}, {"Periode": "W3", "Avg_Rating": 5.0, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1}, {"Periode": "W4", "Avg_Rating": 3.29, "Total": 7, "Positif": 4, "Netral": 0, "Negatif": 3}], "RSU Dadi Keluarga Purwokerto": [{"Periode": "W1", "Avg_Rating": 4.36, "Total": 11, "Positif": 9, "Netral": 0, "Negatif": 2}, {"Periode": "W2", "Avg_Rating": 5.0, "Total": 14, "Positif": 10, "Netral": 1, "Negatif": 3}, {"Periode": "W4", "Avg_Rating": 3.0, "Total": 4, "Positif": 1, "Netral": 1, "Negatif": 2}], "RSU Hidayah Purwokerto": [{"Periode": "W2", "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0}], "RSU Medika Lestari": [{"Periode": "W1", "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0}, {"Periode": "W2", "Avg_Rating": 1.0, "Total": 2, "Positif": 0, "Netral": 0, "Negatif": 2}, {"Periode": "W3", "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0}, {"Periode": "W4", "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0}], "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH": [{"Periode": "W1", "Avg_Rating": 3.0, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1}, {"Periode": "W2", "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0}, {"Periode": "W3", "Avg_Rating": 4.5, "Total": 2, "Positif": 1, "Netral": 1, "Negatif": 0}, {"Periode": "W4", "Avg_Rating": 5.0, "Total": 1, "Positif": 0, "Netral": 1, "Negatif": 0}], "RSU Santa Elisabeth Purwokerto": [{"Periode": "W1", "Avg_Rating": 5.0, "Total": 3, "Positif": 3, "Netral": 0, "Negatif": 0}, {"Periode": "W2", "Avg_Rating": 3.5, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1}, {"Periode": "W3", "Avg_Rating": 3.29, "Total": 7, "Positif": 3, "Netral": 0, "Negatif": 4}, {"Periode": "W4", "Avg_Rating": 2.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1}], "RSU Siaga Medika Banyumas": [{"Periode": "W1", "Avg_Rating": 5.0, "Total": 2, "Positif": 2, "Netral": 0, "Negatif": 0}, {"Periode": "W3", "Avg_Rating": 3.75, "Total": 4, "Positif": 2, "Netral": 1, "Negatif": 1}, {"Periode": "W4", "Avg_Rating": 3.0, "Total": 2, "Positif": 1, "Netral": 0, "Negatif": 1}], "RSU Sinar Kasih Purwokerto": [{"Periode": "W1", "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0}, {"Periode": "W2", "Avg_Rating": 2.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1}, {"Periode": "W4", "Avg_Rating": 1.0, "Total": 2, "Positif": 0, "Netral": 0, "Negatif": 2}], "RSU Wiradadi Husada Banyumas": [{"Periode": "W1", "Avg_Rating": 5.0, "Total": 16, "Positif": 12, "Netral": 1, "Negatif": 3}, {"Periode": "W2", "Avg_Rating": 5.0, "Total": 36, "Positif": 23, "Netral": 9, "Negatif": 4}, {"Periode": "W3", "Avg_Rating": 5.0, "Total": 29, "Positif": 20, "Netral": 4, "Negatif": 5}, {"Periode": "W4", "Avg_Rating": 4.87, "Total": 31, "Positif": 23, "Netral": 4, "Negatif": 4}], "RSUD Ajibarang": [{"Periode": "W1", "Avg_Rating": 4.12, "Total": 8, "Positif": 6, "Netral": 0, "Negatif": 2}, {"Periode": "W2", "Avg_Rating": 5.0, "Total": 7, "Positif": 6, "Netral": 1, "Negatif": 0}, {"Periode": "W3", "Avg_Rating": 4.43, "Total": 7, "Positif": 4, "Netral": 2, "Negatif": 1}, {"Periode": "W4", "Avg_Rating": 3.33, "Total": 12, "Positif": 7, "Netral": 0, "Negatif": 5}], "RSUD Banyumas": [{"Periode": "W1", "Avg_Rating": 5.0, "Total": 1, "Positif": 1, "Netral": 0, "Negatif": 0}, {"Periode": "W3", "Avg_Rating": 4.0, "Total": 13, "Positif": 6, "Netral": 2, "Negatif": 5}, {"Periode": "W4", "Avg_Rating": 1.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1}], "RSUD Prof. Dr. Margono Soekarjo": [{"Periode": "W1", "Avg_Rating": 4.83, "Total": 6, "Positif": 5, "Netral": 1, "Negatif": 0}, {"Periode": "W2", "Avg_Rating": 4.88, "Total": 32, "Positif": 24, "Netral": 6, "Negatif": 2}, {"Periode": "W3", "Avg_Rating": 3.92, "Total": 13, "Positif": 8, "Netral": 1, "Negatif": 4}, {"Periode": "W4", "Avg_Rating": 4.0, "Total": 11, "Positif": 6, "Netral": 0, "Negatif": 5}], "Rumah Sakit \"JIH\" Purwokerto": [{"Periode": "W1", "Avg_Rating": 4.25, "Total": 4, "Positif": 3, "Netral": 0, "Negatif": 1}, {"Periode": "W2", "Avg_Rating": 4.5, "Total": 8, "Positif": 6, "Netral": 1, "Negatif": 1}, {"Periode": "W3", "Avg_Rating": 4.64, "Total": 11, "Positif": 8, "Netral": 2, "Negatif": 1}, {"Periode": "W4", "Avg_Rating": 5.0, "Total": 5, "Positif": 3, "Netral": 2, "Negatif": 0}], "Rumah Sakit Islam Purwokerto": [{"Periode": "W1", "Avg_Rating": 4.0, "Total": 1, "Positif": 0, "Netral": 0, "Negatif": 1}, {"Periode": "W2", "Avg_Rating": 5.0, "Total": 3, "Positif": 3, "Netral": 0, "Negatif": 0}, {"Periode": "W3", "Avg_Rating": 2.33, "Total": 3, "Positif": 2, "Netral": 0, "Negatif": 1}, {"Periode": "W4", "Avg_Rating": 3.5, "Total": 4, "Positif": 1, "Netral": 0, "Negatif": 3}], "Rumah Sakit Orthopaedi Purwokerto": [{"Periode": "W1", "Avg_Rating": 5.0, "Total": 6, "Positif": 6, "Netral": 0, "Negatif": 0}, {"Periode": "W2", "Avg_Rating": 5.0, "Total": 5, "Positif": 5, "Netral": 0, "Negatif": 0}, {"Periode": "W3", "Avg_Rating": 5.0, "Total": 3, "Positif": 3, "Netral": 0, "Negatif": 0}, {"Periode": "W4", "Avg_Rating": 4.43, "Total": 7, "Positif": 3, "Netral": 2, "Negatif": 2}], "Rumah Sakit Umum Bunda": [{"Periode": "W1", "Avg_Rating": 4.78, "Total": 18, "Positif": 15, "Netral": 2, "Negatif": 1}, {"Periode": "W2", "Avg_Rating": 4.69, "Total": 13, "Positif": 11, "Netral": 0, "Negatif": 2}, {"Periode": "W3", "Avg_Rating": 4.94, "Total": 17, "Positif": 14, "Netral": 2, "Negatif": 1}, {"Periode": "W4", "Avg_Rating": 5.0, "Total": 23, "Positif": 19, "Netral": 2, "Negatif": 2}]};
+const MAPBOX_TOKEN = "pk.eyJ1IjoibmhhYXprIiwiYSI6ImNtdW51Z3liajBkYmcyeHE3dHYwaW1wZmYifQ.CvBbuiQZHlSCpzni9EU-og";
+const PERIODS = ['ALL','W1','W2','W3','W4'];
+const PLABEL  = {
+  'ALL':'All Weeks',
+  'W1':'W1 (Apr 1–7)',
+  'W2':'W2 (Apr 8–14)',
+  'W3':'W3 (Apr 15–21)',
+  'W4':'W4 (Apr 22–30)'
+};
+const COL = {Positif:'#4ade80', Netral:'#fbbf24', Negatif:'#fb7185'};
+const SENT_LABEL = {Positif:'Positive', Netral:'Neutral', Negatif:'Negative'};
+
+let cur = 'ALL', markers = [], selRS = null, chart = null;
+
+const map = L.map('map').setView([-7.45, 109.25], 11);
+
+L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}?access_token=' + MAPBOX_TOKEN, {
+  attribution: '&copy; Mapbox &copy; OpenStreetMap contributors',
+  maxZoom: 19
+}).addTo(map);
+
+const bw = document.getElementById('btnWrap');
+PERIODS.forEach((p,i) => {
+  const b = document.createElement('button');
+  b.className = 'btn-p' + (p==='ALL'?' active':'');
+  b.textContent = p==='ALL' ? 'All' : p;
+  b.dataset.p = p;
+  b.onclick = () => set(p, i);
+  bw.appendChild(b);
+});
+
+document.getElementById('slider').addEventListener('input', function() {
+  set(PERIODS[+this.value], +this.value);
+});
+
+function set(p, idx) {
+  cur = p;
+  document.getElementById('pLabel').textContent = PLABEL[p];
+  document.getElementById('slider').value = idx ?? PERIODS.indexOf(p);
+  document.querySelectorAll('.btn-p').forEach(b => b.classList.toggle('active', b.dataset.p===p));
+  render(); stats(); rsList();
+}
+
+function getPeriodData(p) { return DATA.filter(d => d.Periode === p); }
+
+function pinIcon(color, size) {
+  const svg = `
+    <svg width="${size}" height="${size*1.3}" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20c0-6.6-5.4-12-12-12z"
+            fill="${color}" stroke="#fff" stroke-width="1.5"/>
+      <circle cx="12" cy="12" r="5" fill="#fff"/>
+    </svg>`;
+  return L.divIcon({
+    html: svg,
+    className: 'pin-icon',
+    iconSize: [size, size*1.3],
+    iconAnchor: [size/2, size*1.3],
+    popupAnchor: [0, -size*1.3]
+  });
+}
+
+function pinSize(n) { return Math.max(24, Math.min(52, 22 + Math.sqrt(n) * 3)); }
+
+function popup(d) {
+  return `<div class="pop">
+    <div class="pt">${d['Nama RS']}</div>
+    <div class="pr"><span class="pk">Period</span><span class="pv">${PLABEL[d.Periode]||d.Periode}</span></div>
+    <div class="pr"><span class="pk">Avg Rating</span><span class="pv">${d.Avg_Rating.toFixed(2)}</span></div>
+    <div class="pr"><span class="pk">Total Reviews</span><span class="pv">${d.Total}</span></div>
+    <div class="pb">
+      <span style="width:${d.Pct_Pos}%;background:#4ade80"></span>
+      <span style="width:${d.Pct_Net}%;background:#fbbf24"></span>
+      <span style="width:${d.Pct_Neg}%;background:#fb7185"></span>
+    </div>
+    <div class="pr"><span class="pk" style="color:#16a34a">Positive</span><span class="pv">${d.Positif} (${d.Pct_Pos}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#d97706">Neutral</span><span class="pv">${d.Netral} (${d.Pct_Net}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#e11d48">Negative</span><span class="pv">${d.Negatif} (${d.Pct_Neg}%)</span></div>
+    <span class="ps ${d.Dominan}">${SENT_LABEL[d.Dominan]||d.Dominan}</span>
+  </div>`;
+}
+
+function render() {
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+  getPeriodData(cur).forEach(d => {
+    const c = COL[d.Dominan]||'#94a3b8';
+    const m = L.marker([d.Latitude,d.Longitude], {
+      icon: pinIcon(c, pinSize(d.Total))
+    });
+    m.bindPopup(popup(d), {maxWidth:260});
+    m.bindTooltip(`${d['Nama RS']} | ${SENT_LABEL[d.Dominan]} | ${d.Avg_Rating.toFixed(1)}★`, {sticky:true});
+    m.on('click', () => pick(d['Nama RS']));
+    m.rsName = d['Nama RS'];
+    m.addTo(map);
+    markers.push(m);
+  });
+}
+
+function stats() {
+  const d = getPeriodData(cur);
+  document.getElementById('sPos').textContent = d.filter(x=>x.Dominan==='Positif').length;
+  document.getElementById('sNeg').textContent = d.filter(x=>x.Dominan==='Negatif').length;
+  document.getElementById('sNet').textContent = d.filter(x=>x.Dominan==='Netral').length;
+  document.getElementById('sTot').textContent = d.length;
+  document.getElementById('sRat').textContent = d.length
+    ? (d.reduce((s,x)=>s+x.Avg_Rating,0)/d.length).toFixed(2) : '-';
+  document.getElementById('sUl').textContent  = d.reduce((s,x)=>s+x.Total,0).toLocaleString('en-US');
+}
+
+function rsList() {
+  const sorted = [...getPeriodData(cur)].sort((a,b)=>b.Avg_Rating-a.Avg_Rating);
+  document.getElementById('rsListContent').innerHTML = sorted.map(d=>`
+    <div class="rsi ${selRS===d['Nama RS']?'sel':''}"
+         onclick="pick('${d['Nama RS'].replace(/'/g,"\\'")}')"
+         data-rs="${d['Nama RS'].replace(/'/g,'&quot;')}">
+      <div class="rdot" style="background:${COL[d.Dominan]}"></div>
+      <div class="ri">
+        <div class="rn">${d['Nama RS']}</div>
+        <div class="rs">${d.Avg_Rating.toFixed(1)}★ | ${d.Total} reviews | ${PLABEL[d.Periode]||d.Periode}</div>
+      </div>
+    </div>`).join('');
+}
+
+function pick(name) {
+  selRS = name;
+  document.getElementById('rsName').textContent = name;
+  document.querySelectorAll('.rsi').forEach(el=>el.classList.toggle('sel', el.dataset.rs===name));
+  markers.forEach(m=>{
+    const el = m.getElement();
+    if (el) el.style.opacity = (m.rsName===name) ? '1' : '0.35';
+    if(m.rsName===name) m.openPopup();
+  });
+
+  const tren = TREN[name];
+  if(!tren||!tren.length) {
+    document.getElementById('empty').style.display='block';
+    if(chart){ chart.destroy(); chart=null; }
+    return;
+  }
+  document.getElementById('empty').style.display='none';
+  const labs = tren.map(t=>PLABEL[t.Periode]||t.Periode);
+  const rats = tren.map(t=>t.Avg_Rating);
+  const tots = tren.map(t=>t.Total);
+  if(chart) chart.destroy();
+  chart = new Chart(document.getElementById('trendChart').getContext('2d'), {
+    type:'line',
+    data:{labels:labs, datasets:[
+      {label:'Avg Rating', data:rats, borderColor:'#818cf8',
+        backgroundColor:'rgba(129,140,248,.12)', fill:true, tension:.4,
+        pointBackgroundColor:'#818cf8', pointRadius:5, yAxisID:'y'},
+      {label:'Total Reviews', data:tots, borderColor:'#2dd4bf',
+        backgroundColor:'rgba(45,212,191,.08)', fill:false, tension:.4,
+        pointBackgroundColor:'#2dd4bf', pointRadius:4, borderDash:[4,3], yAxisID:'y1'}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{ top:4, right:6, bottom:0, left:0 } },
+      plugins:{
+        legend:{
+          labels:{color:'#64748b', font:{size:9}, boxWidth:10, padding:8},
+          position:'bottom'
+        },
+        tooltip:{backgroundColor:'#ffffff',titleColor:'#334155',bodyColor:'#334155',
+                  borderColor:'#e2e8f0',borderWidth:1}
+      },
+      scales:{
+        x:{ticks:{color:'#94a3b8',font:{size:8}}, grid:{color:'#f1f5f9'}},
+        y:{min:1,max:5, ticks:{color:'#818cf8',font:{size:8}}, grid:{color:'#f1f5f9'}},
+        y1:{position:'right', ticks:{color:'#2dd4bf',font:{size:8}},
+            grid:{drawOnChartArea:false},
+            title:{display:false}
+        }
+      }
+    }
+  });
+}
+
+render(); stats(); rsList();
+</script>
+</body>
+</html>

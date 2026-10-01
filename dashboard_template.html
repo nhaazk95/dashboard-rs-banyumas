@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banyumas Hospital Sentiment Dashboard (April 2026)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f8fafc; color:#334155;
+         height:100vh; overflow:hidden; display:flex; flex-direction:column; }
+
+  #header { background:linear-gradient(135deg,#e0e7ff,#ede9fe);
+             border-bottom:1px solid #ddd6fe; padding:12px 20px;
+             display:flex; align-items:center; justify-content:space-between;
+             flex-shrink:0; box-shadow:0 1px 6px rgba(99,102,241,.08); }
+  #header h1 { font-size:16px; font-weight:700; color:#4338ca; }
+  #header h1 span { color:#c026d3; }
+  .badge { background:#fff; padding:4px 12px; border-radius:20px;
+            font-size:11px; color:#6366f1; border:1px solid #c7d2fe; }
+
+  #controls { background:#ffffff; padding:10px 20px; display:flex;
+               align-items:center; gap:14px; flex-wrap:wrap;
+               border-bottom:1px solid #e2e8f0; flex-shrink:0; }
+  .ctrl-label { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
+  .btn-p { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0;
+            padding:5px 12px; border-radius:8px; cursor:pointer;
+            font-size:11px; transition:all .2s; }
+  .btn-p:hover { background:#e0e7ff; }
+  .btn-p.active { background:#6366f1; color:#fff; border-color:#6366f1; }
+  #slider { -webkit-appearance:none; width:260px; height:5px; border-radius:3px;
+             background:#e2e8f0; outline:none; cursor:pointer; }
+  #slider::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px;
+    border-radius:50%; background:#6366f1; border:2px solid #fff;
+    box-shadow:0 0 0 1px #c7d2fe; cursor:pointer; }
+  #pLabel { font-size:13px; font-weight:700; color:#6366f1; min-width:140px; }
+
+  #main { flex:1; display:flex; overflow:hidden; }
+  #mapWrap { flex:1; position:relative; }
+  #map { width:100%; height:100%; }
+
+  #legend { position:absolute; bottom:20px; left:12px; z-index:1000;
+             background:rgba(255,255,255,.95); border:1px solid #e2e8f0;
+             border-radius:10px; padding:10px 14px; font-size:11px;
+             backdrop-filter:blur(6px); box-shadow:0 4px 16px rgba(15,23,42,.08); }
+  #legend b { color:#475569; font-size:12px; display:block; margin-bottom:6px; }
+  .leg { display:flex; align-items:center; gap:6px; margin:3px 0; color:#64748b; }
+  .ldot { width:10px; height:10px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); }
+
+  #side { width:320px; background:#ffffff; border-left:1px solid #e2e8f0;
+           display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden; flex-shrink:0; }
+
+  #stats { padding:12px; border-bottom:1px solid #e2e8f0; flex-shrink:0; }
+  #stats h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  .sgrid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  .sc { background:#f8fafc; border-radius:10px; padding:8px 10px; border:1px solid #eef2f7; }
+  .sc .v { font-size:19px; font-weight:800; line-height:1; }
+  .sc .l { font-size:9px; color:#94a3b8; margin-top:3px; text-transform:uppercase; }
+  .sc.pos .v { color:#16a34a; } .sc.neg .v { color:#e11d48; }
+  .sc.net .v { color:#d97706; } .sc.tot .v { color:#6366f1; }
+  .sc.rat .v { color:#9333ea; } .sc.ul  .v { color:#0d9488; }
+
+  #trend { flex:0 0 auto; padding:14px 10px 12px 12px; display:flex; flex-direction:column;
+            min-width:0; border-bottom:1px solid #e2e8f0; }
+  #trend h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+  #rsName { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:8px;
+             white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #chartWrap { position:relative; min-width:0; width:100%; height:230px; }
+  #chartWrap canvas { max-width:100% !important; }
+  #empty { text-align:center; color:#94a3b8; font-size:12px; padding:30px 10px; }
+
+  #rslist { padding:0 12px 12px; overflow-y:auto; overflow-x:hidden; flex:1; min-height:160px; }
+  #rslist h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px;
+               margin-bottom:6px; padding-top:8px; }
+  .rsi { display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:8px;
+          cursor:pointer; transition:background .15s; margin-bottom:2px; }
+  .rsi:hover { background:#f1f5f9; }
+  .rsi.sel { background:#eef2ff; border:1px solid #c7d2fe; }
+  .rdot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .ri { flex:1; min-width:0; }
+  .rn { font-size:11px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#334155; }
+  .rs { font-size:10px; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .pop { font-family:'Segoe UI',Arial,sans-serif; width:230px; }
+  .pop .pt { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px;
+              border-bottom:2px solid #c7d2fe; padding-bottom:4px; }
+  .pop .pr { display:flex; justify-content:space-between; font-size:11px; margin:2px 0; }
+  .pop .pk { color:#94a3b8; } .pop .pv { font-weight:600; color:#334155; }
+  .pop .pb { background:#eef2f7; border-radius:4px; height:6px; margin:6px 0 3px;
+              overflow:hidden; display:flex; }
+  .pop .pb span { height:100%; }
+  .pop .ps { font-size:11px; font-weight:700; padding:3px 8px; border-radius:12px;
+              display:inline-block; margin-top:6px; }
+  .pop .ps.Positif { background:#dcfce7; color:#15803d; }
+  .pop .ps.Netral  { background:#fef3c7; color:#b45309; }
+  .pop .ps.Negatif { background:#fee2e2; color:#be123c; }
+
+  .pin-icon { background: transparent; border: none; transition: opacity .2s; }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>🏥 <span>Banyumas</span> Hospital Sentiment Dashboard — April 2026</h1>
+  <span class="badge">SVM | Weekly Breakdown</span>
+</div>
+
+<div id="controls">
+  <span class="ctrl-label">Week</span>
+  <div id="btnWrap" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
+  <span style="width:1px;height:24px;background:#e2e8f0;display:inline-block"></span>
+  <span class="ctrl-label">Slider</span>
+  <input type="range" id="slider" min="0" max="4" step="1" value="0">
+  <span id="pLabel">All Weeks</span>
+</div>
+
+<div id="main">
+  <div id="mapWrap">
+    <div id="map"></div>
+    <div id="legend">
+      <b>Dominant Sentiment</b>
+      <div class="leg"><div class="ldot" style="background:#4ade80"></div>Positive</div>
+      <div class="leg"><div class="ldot" style="background:#fbbf24"></div>Neutral</div>
+      <div class="leg"><div class="ldot" style="background:#fb7185"></div>Negative</div>
+      <div style="margin-top:6px;font-size:10px;color:#94a3b8;">● Size = Total Reviews</div>
+    </div>
+  </div>
+
+  <div id="side">
+    <div id="stats">
+      <h3>Period Statistics</h3>
+      <div class="sgrid">
+        <div class="sc pos"><div class="v" id="sPos">-</div><div class="l">Positive Hospitals</div></div>
+        <div class="sc neg"><div class="v" id="sNeg">-</div><div class="l">Negative Hospitals</div></div>
+        <div class="sc net"><div class="v" id="sNet">-</div><div class="l">Neutral Hospitals</div></div>
+        <div class="sc tot"><div class="v" id="sTot">-</div><div class="l">Total Hospitals</div></div>
+        <div class="sc rat"><div class="v" id="sRat">-</div><div class="l">Avg Rating</div></div>
+        <div class="sc ul" ><div class="v" id="sUl">-</div><div class="l">Total Reviews</div></div>
+      </div>
+    </div>
+
+    <div id="trend">
+      <h3>Weekly Rating Trend</h3>
+      <div id="rsName">Click a marker to see the trend</div>
+      <div id="chartWrap">
+        <canvas id="trendChart"></canvas>
+        <div id="empty">Select a hospital to view its weekly rating trend</div>
+      </div>
+    </div>
+
+    <div id="rslist">
+      <h3>Hospital List (sorted by rating)</h3>
+      <div id="rsListContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA    = __DATA_JS__;
+const TREN    = __TREN_JS__;
+const MAPBOX_TOKEN = "__MAPBOX_TOKEN__";
+const PERIODS = ['ALL','W1','W2','W3','W4'];
+const PLABEL  = {
+  'ALL':'All Weeks',
+  'W1':'W1 (Apr 1–7)',
+  'W2':'W2 (Apr 8–14)',
+  'W3':'W3 (Apr 15–21)',
+  'W4':'W4 (Apr 22–30)'
+};
+const COL = {Positif:'#4ade80', Netral:'#fbbf24', Negatif:'#fb7185'};
+const SENT_LABEL = {Positif:'Positive', Netral:'Neutral', Negatif:'Negative'};
+
+let cur = 'ALL', markers = [], selRS = null, chart = null;
+
+const map = L.map('map').setView([-7.45, 109.25], 11);
+
+L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}?access_token=' + MAPBOX_TOKEN, {
+  attribution: '&copy; Mapbox &copy; OpenStreetMap contributors',
+  maxZoom: 19
+}).addTo(map);
+
+const bw = document.getElementById('btnWrap');
+PERIODS.forEach((p,i) => {
+  const b = document.createElement('button');
+  b.className = 'btn-p' + (p==='ALL'?' active':'');
+  b.textContent = p==='ALL' ? 'All' : p;
+  b.dataset.p = p;
+  b.onclick = () => set(p, i);
+  bw.appendChild(b);
+});
+
+document.getElementById('slider').addEventListener('input', function() {
+  set(PERIODS[+this.value], +this.value);
+});
+
+function set(p, idx) {
+  cur = p;
+  document.getElementById('pLabel').textContent = PLABEL[p];
+  document.getElementById('slider').value = idx ?? PERIODS.indexOf(p);
+  document.querySelectorAll('.btn-p').forEach(b => b.classList.toggle('active', b.dataset.p===p));
+  render(); stats(); rsList();
+}
+
+function getPeriodData(p) { return DATA.filter(d => d.Periode === p); }
+
+function pinIcon(color, size) {
+  const svg = `
+    <svg width="${size}" height="${size*1.3}" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20c0-6.6-5.4-12-12-12z"
+            fill="${color}" stroke="#fff" stroke-width="1.5"/>
+      <circle cx="12" cy="12" r="5" fill="#fff"/>
+    </svg>`;
+  return L.divIcon({
+    html: svg,
+    className: 'pin-icon',
+    iconSize: [size, size*1.3],
+    iconAnchor: [size/2, size*1.3],
+    popupAnchor: [0, -size*1.3]
+  });
+}
+
+function pinSize(n) { return Math.max(24, Math.min(52, 22 + Math.sqrt(n) * 3)); }
+
+function popup(d) {
+  return `<div class="pop">
+    <div class="pt">${d['Nama RS']}</div>
+    <div class="pr"><span class="pk">Period</span><span class="pv">${PLABEL[d.Periode]||d.Periode}</span></div>
+    <div class="pr"><span class="pk">Avg Rating</span><span class="pv">${d.Avg_Rating.toFixed(2)}</span></div>
+    <div class="pr"><span class="pk">Total Reviews</span><span class="pv">${d.Total}</span></div>
+    <div class="pb">
+      <span style="width:${d.Pct_Pos}%;background:#4ade80"></span>
+      <span style="width:${d.Pct_Net}%;background:#fbbf24"></span>
+      <span style="width:${d.Pct_Neg}%;background:#fb7185"></span>
+    </div>
+    <div class="pr"><span class="pk" style="color:#16a34a">Positive</span><span class="pv">${d.Positif} (${d.Pct_Pos}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#d97706">Neutral</span><span class="pv">${d.Netral} (${d.Pct_Net}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#e11d48">Negative</span><span class="pv">${d.Negatif} (${d.Pct_Neg}%)</span></div>
+    <span class="ps ${d.Dominan}">${SENT_LABEL[d.Dominan]||d.Dominan}</span>
+  </div>`;
+}
+
+function render() {
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+  getPeriodData(cur).forEach(d => {
+    const c = COL[d.Dominan]||'#94a3b8';
+    const m = L.marker([d.Latitude,d.Longitude], {
+      icon: pinIcon(c, pinSize(d.Total))
+    });
+    m.bindPopup(popup(d), {maxWidth:260});
+    m.bindTooltip(`${d['Nama RS']} | ${SENT_LABEL[d.Dominan]} | ${d.Avg_Rating.toFixed(1)}★`, {sticky:true});
+    m.on('click', () => pick(d['Nama RS']));
+    m.rsName = d['Nama RS'];
+    m.addTo(map);
+    markers.push(m);
+  });
+}
+
+function stats() {
+  const d = getPeriodData(cur);
+  document.getElementById('sPos').textContent = d.filter(x=>x.Dominan==='Positif').length;
+  document.getElementById('sNeg').textContent = d.filter(x=>x.Dominan==='Negatif').length;
+  document.getElementById('sNet').textContent = d.filter(x=>x.Dominan==='Netral').length;
+  document.getElementById('sTot').textContent = d.length;
+  document.getElementById('sRat').textContent = d.length
+    ? (d.reduce((s,x)=>s+x.Avg_Rating,0)/d.length).toFixed(2) : '-';
+  document.getElementById('sUl').textContent  = d.reduce((s,x)=>s+x.Total,0).toLocaleString('en-US');
+}
+
+function rsList() {
+  const sorted = [...getPeriodData(cur)].sort((a,b)=>b.Avg_Rating-a.Avg_Rating);
+  document.getElementById('rsListContent').innerHTML = sorted.map(d=>`
+    <div class="rsi ${selRS===d['Nama RS']?'sel':''}"
+         onclick="pick('${d['Nama RS'].replace(/'/g,"\\'")}')"
+         data-rs="${d['Nama RS'].replace(/'/g,'&quot;')}">
+      <div class="rdot" style="background:${COL[d.Dominan]}"></div>
+      <div class="ri">
+        <div class="rn">${d['Nama RS']}</div>
+        <div class="rs">${d.Avg_Rating.toFixed(1)}★ | ${d.Total} reviews | ${PLABEL[d.Periode]||d.Periode}</div>
+      </div>
+    </div>`).join('');
+}
+
+function pick(name) {
+  selRS = name;
+  document.getElementById('rsName').textContent = name;
+  document.querySelectorAll('.rsi').forEach(el=>el.classList.toggle('sel', el.dataset.rs===name));
+  markers.forEach(m=>{
+    const el = m.getElement();
+    if (el) el.style.opacity = (m.rsName===name) ? '1' : '0.35';
+    if(m.rsName===name) m.openPopup();
+  });
+
+  const tren = TREN[name];
+  if(!tren||!tren.length) {
+    document.getElementById('empty').style.display='block';
+    if(chart){ chart.destroy(); chart=null; }
+    return;
+  }
+  document.getElementById('empty').style.display='none';
+  const labs = tren.map(t=>PLABEL[t.Periode]||t.Periode);
+  const rats = tren.map(t=>t.Avg_Rating);
+  const tots = tren.map(t=>t.Total);
+  if(chart) chart.destroy();
+  chart = new Chart(document.getElementById('trendChart').getContext('2d'), {
+    type:'line',
+    data:{labels:labs, datasets:[
+      {label:'Avg Rating', data:rats, borderColor:'#818cf8',
+        backgroundColor:'rgba(129,140,248,.12)', fill:true, tension:.4,
+        pointBackgroundColor:'#818cf8', pointRadius:5, yAxisID:'y'},
+      {label:'Total Reviews', data:tots, borderColor:'#2dd4bf',
+        backgroundColor:'rgba(45,212,191,.08)', fill:false, tension:.4,
+        pointBackgroundColor:'#2dd4bf', pointRadius:4, borderDash:[4,3], yAxisID:'y1'}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      layout:{ padding:{ top:4, right:6, bottom:0, left:0 } },
+      plugins:{
+        legend:{
+          labels:{color:'#64748b', font:{size:9}, boxWidth:10, padding:8},
+          position:'bottom'
+        },
+        tooltip:{backgroundColor:'#ffffff',titleColor:'#334155',bodyColor:'#334155',
+                  borderColor:'#e2e8f0',borderWidth:1}
+      },
+      scales:{
+        x:{ticks:{color:'#94a3b8',font:{size:8}}, grid:{color:'#f1f5f9'}},
+        y:{min:1,max:5, ticks:{color:'#818cf8',font:{size:8}}, grid:{color:'#f1f5f9'}},
+        y1:{position:'right', ticks:{color:'#2dd4bf',font:{size:8}},
+            grid:{drawOnChartArea:false},
+            title:{display:false}
+        }
+      }
+    }
+  });
+}
+
+render(); stats(); rsList();
+</script>
+</body>
+</html>
