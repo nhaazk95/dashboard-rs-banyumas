@@ -190,14 +190,25 @@ def main():
     # --- Klasifikasi sentimen untuk ulasan baru saja ---
     wake_up_svm_api()
     processed_new = []
+    skipped_failed = 0
     for i, row in enumerate(new_rows, 1):
         print(f"  [{i}/{len(new_rows)}] Klasifikasi: {row['Nama RS'][:30]}...")
         result = classify_sentiment(row["Isi Ulasan"])
-        row["Sentimen_Prediksi"] = result.get("sentimen", "Netral")  # fallback aman kalau API gagal
+        if not result or "sentimen" not in result:
+            # FIX: jangan simpan dengan label palsu "Netral" kalau API gagal --
+            # skip saja (id belum masuk existing_ids) supaya otomatis di-retry
+            # di run berikutnya, bukan "cacat" permanen di dataset.
+            print(f"    Gagal/API tidak merespons dengan benar, dilewati (akan dicoba lagi run berikutnya).")
+            skipped_failed += 1
+            continue
+        row["Sentimen_Prediksi"] = result.get("sentimen")
         row["Confidence"] = result.get("confidence")
         row["Processed_At"] = datetime.utcnow().isoformat()
         processed_new.append(row)
         time.sleep(0.5)  # jaga-jaga rate limit
+
+    if skipped_failed:
+        print(f"⚠️  {skipped_failed} ulasan baru gagal diklasifikasi dan akan dicoba lagi run berikutnya.")
 
     # --- Gabungkan dengan data lama, simpan ---
     combined = existing + processed_new

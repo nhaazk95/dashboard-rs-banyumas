@@ -97,6 +97,21 @@
 
   .pin-icon { background: transparent; border: none; transition: opacity .2s; }
 
+  #reviewSection { flex:0 0 auto; padding:10px 12px 12px; border-bottom:1px solid #e2e8f0; }
+  #reviewSection h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+  #reviewListContent { max-height:200px; overflow-y:auto; overflow-x:hidden; }
+  .revItem { padding:8px; border-radius:8px; background:#f8fafc; border:1px solid #eef2f7; margin-bottom:6px; }
+  .revItem .revTop { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+  .revItem .revDate { font-size:9px; color:#94a3b8; }
+  .revItem .revStars { font-size:10px; color:#d97706; }
+  .revItem .revText { font-size:11px; color:#475569; line-height:1.4;
+                       display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .revItem .revBadge { font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px; display:inline-block; margin-top:5px; }
+  .revItem .revBadge.Positif { background:#dcfce7; color:#15803d; }
+  .revItem .revBadge.Netral  { background:#fef3c7; color:#b45309; }
+  .revItem .revBadge.Negatif { background:#fee2e2; color:#be123c; }
+  #revEmpty { text-align:center; color:#94a3b8; font-size:11px; padding:16px 10px; }
+
   #loadingOverlay { position:absolute; inset:0; background:rgba(248,250,252,.9);
                     display:flex; align-items:center; justify-content:center;
                     font-size:13px; color:#6366f1; z-index:1500; }
@@ -145,12 +160,17 @@
     </div>
 
     <div id="trend">
-      <h3>Rating Trend (per week)</h3>
+      <h3>Rating Trend</h3>
       <div id="rsName">Click a marker to see the trend</div>
       <div id="chartWrap">
         <canvas id="trendChart"></canvas>
         <div id="empty">Select a hospital to view its weekly rating trend</div>
       </div>
+    </div>
+
+    <div id="reviewSection">
+      <h3>Ulasan Terbaru</h3>
+      <div id="reviewListContent"><div id="revEmpty">Pilih RS untuk melihat ulasan</div></div>
     </div>
 
     <div id="rslist">
@@ -194,13 +214,102 @@ function setPeriod(p) {
   recompute();
 }
 
-function isoWeek(d) {
-  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  const dayNum = (date.getUTCDay() + 6) % 7;
-  date.setUTCDate(date.getUTCDate() - dayNum + 3);
-  const firstThursday = new Date(Date.UTC(date.getUTCFullYear(),0,4));
-  const weekNum = 1 + Math.round(((date - firstThursday) / 86400000 - 3 + (firstThursday.getUTCDay()+6)%7) / 7);
-  return `${date.getUTCFullYear()}-W${String(weekNum).padStart(2,'0')}`;
+function formatDateID(d) {
+  return d.toLocaleDateString('id-ID', { day:'numeric', month:'short' });
+}
+function formatDateTimeID(d) {
+  return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+}
+function monthKey(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
+function monthLabelID(d) { return d.toLocaleDateString('id-ID', { month:'short', year:'numeric' }); }
+
+/**
+ * Bikin label & data tren sesuai granularitas periode yang dipilih:
+ * - 7D  -> per hari, label "3 Okt", "4 Okt", dst (7 hari terakhir, tanggal-bulan)
+ * - 30D -> per minggu SEKUENSIAL dalam rentang 30 hari, label "Minggu 1", "Minggu 2", dst
+ * - ALL -> per bulan, label "Okt 2026", "Sep 2026", dst (maks 12 bulan terakhir yang ada datanya)
+ */
+function buildTrend(rowsRS, period) {
+  if (period === '7D') {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - i);
+      days.push({ date: d, ratingSum: 0, total: 0 });
+    }
+    rowsRS.forEach(r => {
+      const rd = new Date(r['Waktu Ulasan']); rd.setHours(0,0,0,0);
+      const b = days.find(x => x.date.getTime() === rd.getTime());
+      if (b) { b.ratingSum += (r.Rating || 0); b.total += 1; }
+    });
+    return {
+      labels: days.map(b => formatDateID(b.date)),
+      ratings: days.map(b => b.total ? +(b.ratingSum/b.total).toFixed(2) : null),
+      totals: days.map(b => b.total)
+    };
+  }
+
+  if (period === '30D') {
+    const end = new Date(); end.setHours(23,59,59,999);
+    const start = new Date(end); start.setDate(start.getDate() - 29); start.setHours(0,0,0,0);
+    const weeks = [];
+    let wkStart = new Date(start), idx = 1;
+    while (wkStart <= end) {
+      const wkEnd = new Date(wkStart); wkEnd.setDate(wkEnd.getDate() + 6); wkEnd.setHours(23,59,59,999);
+      weeks.push({ label: `Minggu ${idx}`, start: new Date(wkStart),
+                   end: wkEnd < end ? wkEnd : end, ratingSum: 0, total: 0 });
+      wkStart = new Date(wkStart); wkStart.setDate(wkStart.getDate() + 7);
+      idx++;
+    }
+    rowsRS.forEach(r => {
+      const rd = new Date(r['Waktu Ulasan']);
+      const w = weeks.find(x => rd >= x.start && rd <= x.end);
+      if (w) { w.ratingSum += (r.Rating || 0); w.total += 1; }
+    });
+    return {
+      labels: weeks.map(w => w.label),
+      ratings: weeks.map(w => w.total ? +(w.ratingSum/w.total).toFixed(2) : null),
+      totals: weeks.map(w => w.total)
+    };
+  }
+
+  // ALL -> per bulan
+  const byMonth = {};
+  rowsRS.forEach(r => {
+    const d = new Date(r['Waktu Ulasan']);
+    const key = monthKey(d);
+    if (!byMonth[key]) byMonth[key] = { label: monthLabelID(d), ratingSum: 0, total: 0, sortKey: key };
+    byMonth[key].ratingSum += (r.Rating || 0);
+    byMonth[key].total += 1;
+  });
+  const monthsSorted = Object.values(byMonth).sort((a,b) => a.sortKey.localeCompare(b.sortKey)).slice(-12);
+  return {
+    labels: monthsSorted.map(m => m.label),
+    ratings: monthsSorted.map(m => m.total ? +(m.ratingSum/m.total).toFixed(2) : null),
+    totals: monthsSorted.map(m => m.total)
+  };
+}
+
+function renderReviewList(rowsRS) {
+  const container = document.getElementById('reviewListContent');
+  if (!rowsRS.length) {
+    container.innerHTML = '<div id="revEmpty">Belum ada ulasan di periode ini</div>';
+    return;
+  }
+  const sorted = [...rowsRS].sort((a,b) => new Date(b['Waktu Ulasan']) - new Date(a['Waktu Ulasan']));
+  container.innerHTML = sorted.slice(0, 15).map(r => {
+    const stars = '★'.repeat(Math.round(r.Rating || 0)) + '☆'.repeat(5 - Math.round(r.Rating || 0));
+    const dateStr = formatDateTimeID(new Date(r['Waktu Ulasan']));
+    const sent = r.Sentimen_Prediksi || 'Netral';
+    const text = (r['Isi Ulasan'] || '').trim();
+    return `<div class="revItem">
+      <div class="revTop">
+        <span class="revStars">${stars}</span>
+        <span class="revDate">${dateStr}</span>
+      </div>
+      <div class="revText">${text.replace(/</g,'&lt;')}</div>
+      <span class="revBadge ${sent}">${SENT_LABEL[sent]||sent}</span>
+    </div>`;
+  }).join('');
 }
 
 function filterByPeriod(rows, p) {
@@ -242,6 +351,7 @@ function recompute() {
   const filtered = filterByPeriod(RAW, cur);
   AGG_ALL = aggregate(filtered);
   render(); stats(); rsList();
+  if (selRS) pick(selRS);  // refresh trend & komentar RS yang sedang dipilih untuk periode baru
 }
 
 async function loadData() {
@@ -343,33 +453,29 @@ function pick(name) {
     if(m.rsName===name) m.openPopup();
   });
 
-  // Hitung tren mingguan dari data mentah (bukan fixed April W1-W4 lagi)
+  // Data mentah RS ini untuk periode yang sedang dipilih
   const rowsRS = filterByPeriod(RAW, cur).filter(r => r['Nama RS'] === name);
-  const byWeek = {};
-  rowsRS.forEach(r => {
-    const wk = isoWeek(new Date(r['Waktu Ulasan']));
-    if (!byWeek[wk]) byWeek[wk] = { ratingSum:0, total:0 };
-    byWeek[wk].ratingSum += (r.Rating || 0);
-    byWeek[wk].total += 1;
-  });
-  const weeks = Object.keys(byWeek).sort().slice(-8); // 8 minggu terakhir yang ada datanya
 
-  if (!weeks.length) {
+  // Daftar komentar (selalu ditampilkan kalau ada data, terlepas dari chart)
+  renderReviewList(rowsRS);
+
+  if (!rowsRS.length) {
     document.getElementById('empty').style.display='block';
     if(chart){ chart.destroy(); chart=null; }
     return;
   }
   document.getElementById('empty').style.display='none';
-  const rats = weeks.map(w => +(byWeek[w].ratingSum/byWeek[w].total).toFixed(2));
-  const tots = weeks.map(w => byWeek[w].total);
+
+  const { labels, ratings, totals } = buildTrend(rowsRS, cur);
   if(chart) chart.destroy();
   chart = new Chart(document.getElementById('trendChart').getContext('2d'), {
     type:'line',
-    data:{labels:weeks, datasets:[
-      {label:'Avg Rating', data:rats, borderColor:'#818cf8',
+    data:{labels:labels, datasets:[
+      {label:'Avg Rating', data:ratings, borderColor:'#818cf8',
         backgroundColor:'rgba(129,140,248,.12)', fill:true, tension:.4,
-        pointBackgroundColor:'#818cf8', pointRadius:5, yAxisID:'y'},
-      {label:'Total Reviews', data:tots, borderColor:'#2dd4bf',
+        pointBackgroundColor:'#818cf8', pointRadius:5, yAxisID:'y',
+        spanGaps:true},
+      {label:'Total Reviews', data:totals, borderColor:'#2dd4bf',
         backgroundColor:'rgba(45,212,191,.08)', fill:false, tension:.4,
         pointBackgroundColor:'#2dd4bf', pointRadius:4, borderDash:[4,3], yAxisID:'y1'}
     ]},
