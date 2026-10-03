@@ -63,6 +63,17 @@ daftar_rs_url = [
 ]
 
 
+def get_field(obj, key: str):
+    """Ambil field dari hasil Apify, kompatibel baik obj berupa dict (versi lama
+    apify-client) maupun object dengan atribut snake_case (versi baru)."""
+    if isinstance(obj, dict):
+        return obj.get(key)
+    snake_key = "".join(f"_{c.lower()}" if c.isupper() else c for c in key).lstrip("_")
+    if hasattr(obj, snake_key):
+        return getattr(obj, snake_key)
+    return getattr(obj, key, None)
+
+
 def review_id(row: dict) -> str:
     """ID unik per ulasan, dipakai untuk deteksi duplikat antar-run."""
     raw = f"{row['Nama RS']}|{row['Username']}|{row['Waktu Ulasan']}|{row['Isi Ulasan']}"
@@ -109,6 +120,10 @@ def main():
     run_input = {
         "startUrls": [{"url": u} for u in daftar_rs_url],
         "language": "id",
+        "countryCode": "id",   # FIX: batasi pencarian ke Indonesia -- tanpa ini,
+                               # Actor bisa salah menemukan tempat di luar negeri
+                               # yang kebetulan namanya mirip (terbukti dari log run
+                               # sebelumnya: beberapa RS ketemu di koordinat Amerika)
         "maxReviews": MAX_REVIEWS_PER_RS,
         "reviewsSort": "newest",
         "maxImages": 0,
@@ -117,11 +132,14 @@ def main():
 
     print(f"Menjalankan Apify actor untuk {len(daftar_rs_url)} RS...")
     run = client.actor("compass/crawler-google-places").call(run_input=run_input)
-    print(f"Selesai scraping. Dataset: {run['defaultDatasetId']}")
+    dataset_id = get_field(run, "defaultDatasetId")
+    print(f"Selesai scraping. Dataset: {dataset_id}")
 
     # --- Flatten hasil scraping ---
+    # iterate_items() dari dataset client SELALU mengembalikan dict biasa (hasil JSON API),
+    # jadi .get() di bagian ini sudah aman apa adanya -- cuma objek `run` di atas yang perlu get_field().
     scraped_rows = []
-    for place in client.dataset(run["defaultDatasetId"]).iterate_items():
+    for place in client.dataset(dataset_id).iterate_items():
         nama_rs = place.get("title")
         lokasi = place.get("location") or {}
         lat = lokasi.get("lat") if lokasi else place.get("latitude")
@@ -142,6 +160,22 @@ def main():
                 continue
             row["id"] = review_id(row)
             scraped_rows.append(row)
+
+    # FIX: jaring pengaman -- buang baris yang koordinatnya di luar Indonesia
+    # (bounding box kasar), berjaga-jaga kalau parameter countryCode di atas
+    # tidak sepenuhnya dihormati oleh Actor untuk sebagian hasil pencarian.
+    INDONESIA_BBOX = {"lat_min": -11, "lat_max": 6, "lng_min": 95, "lng_max": 141}
+    before_filter = len(scraped_rows)
+    scraped_rows = [
+        r for r in scraped_rows
+        if r["Latitude"] is not None and r["Longitude"] is not None
+        and INDONESIA_BBOX["lat_min"] <= r["Latitude"] <= INDONESIA_BBOX["lat_max"]
+        and INDONESIA_BBOX["lng_min"] <= r["Longitude"] <= INDONESIA_BBOX["lng_max"]
+    ]
+    dropped = before_filter - len(scraped_rows)
+    if dropped:
+        print(f"⚠️  {dropped} ulasan dibuang karena koordinatnya di luar Indonesia "
+              f"(kemungkinan Actor salah menemukan tempat di luar negeri)")
 
     print(f"Total ulasan ter-scrape (termasuk yang sudah pernah diproses): {len(scraped_rows)}")
 
