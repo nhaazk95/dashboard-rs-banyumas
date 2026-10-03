@@ -1,0 +1,38 @@
+name: Update Hospital Reviews Data
+
+on:
+  schedule:
+    # Tiap 6 jam (cron pakai UTC; 6 jam cukup untuk "near real-time" tanpa boros kuota Apify)
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}   # supaya bisa di-trigger manual dari tab "Actions" di GitHub
+
+permissions:
+  contents: write   # perlu untuk commit & push balik ke repo
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install apify-client requests
+
+      - name: Run scraper + classifier
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+        run: python scripts/scrape_update.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/reviews.json
+          git diff --quiet --cached || git commit -m "Update data ulasan RS ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+          git push
