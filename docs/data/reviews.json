@@ -6046,5 +6046,19 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3276,
     "Processed_At": "2026-10-03T15:31:19.543433"
+  },
+  {
+    "Nama RS": "RSIA Bunda Arif",
+    "Username": "Kevin Bramasta",
+    "Rating": 1,
+    "Waktu Ulasan": "2026-10-03T15:40:49.041Z",
+    "Lokasi Tempat": "Jl. Jatiwinangun No.16, Kebondalem, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53114, Indonesia",
+    "Latitude": -7.420749,
+    "Longitude": 109.2431658,
+    "Isi Ulasan": "Tolong lah kepada pihak RS bundaarif barusan istri saya USG dapat antrian 29 sudah daftar online dari semalem katanya suruh daftar ulang lagi jam 15.30 saya datang sebelum dari jam 15.30 sudah di lokasi dan menunggu dokter obgyn nya, setelah jam 16.00 lebih baru dateng dokternya posisi sudah senang tinggal mengantri dan yang bikin bingung antrian cuma dipanggil nama saja engga sama nomer antrian dan saya sama istri pikir mungkin udah sesuai urutan antrian eh sampai maghrib masih belum dipanggil panggil terus dokter obgyn nya sholat maghrib terus habis sholat sekitar pukul 18.45 dokter lanjut lagi dan udah muak banget cape saya tanya ke mbak nya yg ngurusin antrian mba ini masih lama nomor antrian 29? Mbak nya bilang bentar lagi,dan yg bikin sakit hati banget ada ibu ibu duduk di sebelah saya nomor antrian 11 dipanggil duluan, ternyata antrian nya tidak teratur tidak sesuai nomer antrian yang udah kelewat diutamain bukannya suruh ngantri lagi utamain urut antriannya dong alhasil saya dipanggil sekitar jam 20.00 terus nebus obat pulang sampai rumah sekitar jam 20.40 kan kasihan sama yg udah nunggu lama , harusnya ada speaker/monitor ga cuma ngomong nama aja sebutin nomer antrian biar tau biar jelas udah nomor berapa kaya gini juga pakai umum ga gratis sama sama bayar, tolong lah kedepannya diperbaiki lagi antrianya kasian orang orang yg udah ngantri lama.",
+    "id": "d684e0db9a4a87cc",
+    "Sentimen_Prediksi": "Negatif",
+    "Confidence": 1.3682,
+    "Processed_At": "2026-10-03T20:27:44.361306"
   }
 ]
