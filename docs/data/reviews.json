@@ -5976,5 +5976,61 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3402,
     "Processed_At": "2026-10-03T10:57:25.863552"
+  },
+  {
+    "Nama RS": "Hermina Hospital Purwokerto",
+    "Username": "Ikhda Faresi",
+    "Rating": 2,
+    "Waktu Ulasan": "2026-10-03T11:43:19.415Z",
+    "Lokasi Tempat": "Jl. Yos Sudarso, RT.03/RW.01, Karanglewas Lor, Kec. Purwokerto Bar., Kabupaten Banyumas, Jawa Tengah 53136, Indonesia",
+    "Latitude": -7.420567,
+    "Longitude": 109.202639,
+    "Isi Ulasan": "ngantri obat lama bgt, hampir 2 jan. farmasi gatau ngapain. ngobrol ajaa huhuk padahal first time kesini :(",
+    "id": "a535b547aa40e4b0",
+    "Sentimen_Prediksi": "Negatif",
+    "Confidence": 1.2878,
+    "Processed_At": "2026-10-03T12:27:54.039111"
+  },
+  {
+    "Nama RS": "RSUD Ajibarang",
+    "Username": "Syafril Gunawan",
+    "Rating": 1,
+    "Waktu Ulasan": "2026-10-03T11:55:17.080Z",
+    "Lokasi Tempat": "Jl. Raya Pancasan, Kaliumbul, Pancurendang, Kec. Ajibarang, Kabupaten Banyumas, Jawa Tengah 53163, Indonesia",
+    "Latitude": -7.412809,
+    "Longitude": 109.0792511,
+    "Isi Ulasan": "Cukup nggo pengalaman aku Karo bojoku nek arep lahiran aja neng RSUD ajibarang pelayanan'e kurang apa maning suster perawatte sing menangani bojoku bener\" ngga ada rasa empati dan etikane terhadap pasien!",
+    "id": "c865d034cbc08670",
+    "Sentimen_Prediksi": "Netral",
+    "Confidence": 1.0288,
+    "Processed_At": "2026-10-03T12:28:01.422348"
+  },
+  {
+    "Nama RS": "RSU Dadi Keluarga Purwokerto",
+    "Username": "Ice",
+    "Rating": 5,
+    "Waktu Ulasan": "2026-09-11T13:45:34.656Z",
+    "Lokasi Tempat": "Jl. Sultan Agung No.8A, Kalibiru, Teluk, Kec. Purwokerto Sel., Kabupaten Banyumas, Jawa Tengah 53145, Indonesia",
+    "Latitude": -7.4478209,
+    "Longitude": 109.2530153,
+    "Isi Ulasan": "Penanganannya sangat memuaskan. Dokter, perawat, pengantar makanan, maupun petugas kebersihan sangat ramah&sopan saat melakukan visit. Dokter penyakit dalam dan dokter bedah digestif sangat informatif&humble sehingga pasien tidak merasa takut/cemas saat akan operasi maupun setelah operasi. Ruang rawat inapnya jg sangat bersih karena ada petugas kebersihan yg datang 2x sehari untuk menyapu,mengepel,mengosongkan tempat sampah,merefill tisu toilet,dan membersihkan area kamar mandi. Makanan yg diberikan jg sesuai kebutuhan pasien&terjamin kebersihannya. Perawat yg bertugas jg sangat sigap saat bel dibunyikan langsung merespon.",
+    "id": "74aaf88461971372",
+    "Sentimen_Prediksi": "Positif",
+    "Confidence": 1.1095,
+    "Processed_At": "2026-10-03T12:28:10.023966"
+  },
+  {
+    "Nama RS": "RSU Santa Elisabeth Purwokerto",
+    "Username": "Dwi Kirana Cahyaningtyas",
+    "Rating": 1,
+    "Waktu Ulasan": "2026-09-29T13:53:32.077Z",
+    "Lokasi Tempat": "Jalan Dokter Angka No. 40 Sokanegara, Sitapen, Purwanegara, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53116, Indonesia",
+    "Latitude": -7.4164698,
+    "Longitude": 109.2397481,
+    "Isi Ulasan": "staff tidak ramah antrian lama sekali ketika ditanya alasannya trouble, tapi menumpuk antrian obat ditumpuk jadi satu setelah banyak baru dipanggil ketika ditanya katanya bisa ditinggal kalo gamau nunggu bintang 1",
+    "id": "0c5bc23e785aa552",
+    "Sentimen_Prediksi": "Negatif",
+    "Confidence": 1.3702,
+    "Processed_At": "2026-10-03T12:28:12.935116"
   }
 ]
