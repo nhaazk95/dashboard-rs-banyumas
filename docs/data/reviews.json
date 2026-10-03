@@ -6032,5 +6032,19 @@
     "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.3702,
     "Processed_At": "2026-10-03T12:28:12.935116"
+  },
+  {
+    "Nama RS": "RSU Medika Lestari",
+    "Username": "aulia Ramadhan",
+    "Rating": 5,
+    "Waktu Ulasan": "2026-10-03T15:06:29.168Z",
+    "Lokasi Tempat": "Jl. Raya Buntu, Gombong, Pageralang, Kec. Kemranjen, Kabupaten Banyumas, Jawa Tengah 53194, Indonesia",
+    "Latitude": -7.5925669,
+    "Longitude": 109.2747121,
+    "Isi Ulasan": "Rsu dengan layanan terbaik.",
+    "id": "0549dfc4140bd958",
+    "Sentimen_Prediksi": "Positif",
+    "Confidence": 1.3276,
+    "Processed_At": "2026-10-03T15:31:19.543433"
   }
 ]
