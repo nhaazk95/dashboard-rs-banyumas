@@ -533,12 +533,22 @@ loadData();
     width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
     font-size: 14px; line-height: 1;
   }
-  #chatPanel iframe { flex: 1; width: 100%; border: none; }
-
   @media (max-width: 480px) {
     #chatPanel { right: 12px; bottom: 84px; }
     #chatToggleBtn { right: 12px; bottom: 12px; }
   }
+
+  #chatMessages { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; }
+  .msgBubble { max-width:85%; padding:8px 12px; border-radius:12px; font-size:12.5px; line-height:1.5; white-space:pre-wrap; }
+  .msgBubble.user { align-self:flex-end; background:#6366f1; color:#fff; border-bottom-right-radius:4px; }
+  .msgBubble.bot { align-self:flex-start; background:#f1f5f9; color:#334155; border-bottom-left-radius:4px; }
+  .msgBubble.typing { align-self:flex-start; background:#f1f5f9; color:#94a3b8; font-style:italic; }
+  #chatInputRow { display:flex; gap:6px; padding:10px; border-top:1px solid #e2e8f0; flex-shrink:0; }
+  #chatInputRow input { flex:1; border:1px solid #e2e8f0; border-radius:20px; padding:8px 14px; font-size:12.5px; outline:none; }
+  #chatInputRow input:focus { border-color:#6366f1; }
+  #chatSendBtn { background:#6366f1; color:#fff; border:none; width:36px; height:36px; border-radius:50%;
+                 cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  #chatSendBtn:disabled { opacity:.5; cursor:not-allowed; }
 </style>
 
 <button id="chatToggleBtn" onclick="toggleChat()" aria-label="Buka chat asisten">
@@ -550,20 +560,126 @@ loadData();
     <span>Asisten Analisis RS</span>
     <button onclick="toggleChat()">✕</button>
   </div>
-  <iframe
-    id="chatIframe"
-    src="about:blank"
-    data-src="https://copilotstudio.microsoft.com/environments/Default-90affe0f-c2a3-4108-bb98-6ceb4e94ef15/bots/ca_agentBtg3qR/webchat?__version__=2"
-  ></iframe>
+  <div id="chatMessages"></div>
+  <div id="chatInputRow">
+    <input id="chatInput" type="text" placeholder="Tanya tentang RS, atau tempel ulasan untuk dianalisis..."
+           onkeydown="if(event.key==='Enter') sendChatMessage()">
+    <button id="chatSendBtn" onclick="sendChatMessage()">➤</button>
+  </div>
 </div>
 
 <script>
+  // GANTI dengan API key Gemini kamu sendiri (gratis, dari aistudio.google.com -> Get API key)
+  const GEMINI_API_KEY = "AQ.Ab8RN6LAbLs9XkoCjjohSLX1vjnHa3cgz3qNr-khZE1H_vJ7EQ";
+  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const SVM_PREDICT_URL = "https://sentimen-api.onrender.com/predict";
+
+  let chatHistory = [];  // {role: 'user'|'model', text: '...'}
+  let chatOpened = false;
+
   function toggleChat() {
     const panel = document.getElementById('chatPanel');
-    const iframe = document.getElementById('chatIframe');
     const isOpen = panel.classList.toggle('open');
-    if (isOpen && iframe.src === 'about:blank') {
-      iframe.src = iframe.dataset.src;
+    if (isOpen && !chatOpened) {
+      chatOpened = true;
+      addBubble('bot', 'Halo! Saya asisten analisis RS Banyumas. Saya bisa bantu cari/bandingkan RS, atau analisis sentimen ulasan (tempel teks ulasan untuk diklasifikasi pakai model SVM).');
+    }
+  }
+
+  function addBubble(role, text, extraClass) {
+    const container = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `msgBubble ${role}` + (extraClass ? ` ${extraClass}` : '');
+    div.textContent = text;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+    return div;
+  }
+
+  function looksLikeReviewText(text) {
+    // Heuristik sederhana: kalau cukup panjang dan tidak diawali kata tanya umum,
+    // anggap ini teks ulasan yang mau diklasifikasi.
+    const lower = text.toLowerCase();
+    const searchWords = ['cari', 'rekomendasi', 'bandingkan', 'rs mana', 'rumah sakit mana', 'dimana', 'akurasi', 'berapa'];
+    if (searchWords.some(w => lower.includes(w))) return false;
+    return text.trim().split(/\s+/).length >= 4;
+  }
+
+  async function classifyWithSVM(text) {
+    try {
+      const resp = await fetch(SVM_PREDICT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      if (!resp.ok) return null;
+      return await resp.json();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function buildHospitalContext() {
+    // Ringkasan singkat dari data yang sudah ter-load, supaya Gemini bisa jawab
+    // pertanyaan pencarian/perbandingan RS berbasis data riil di dashboard ini.
+    if (!AGG_ALL || !AGG_ALL.length) return "Data RS belum termuat.";
+    return AGG_ALL.map(d =>
+      `${d['Nama RS']}: rating ${d.Avg_Rating}, ${d.Total} ulasan (${d.Pct_Pos}% positif, ${d.Pct_Net}% netral, ${d.Pct_Neg}% negatif)`
+    ).join('\n');
+  }
+
+  const SYSTEM_INSTRUCTION = `Kamu adalah asisten analisis rumah sakit di Kabupaten Banyumas untuk sebuah dashboard web.
+Tugasmu:
+1. Membantu mencari/membandingkan RS berdasarkan data yang diberikan (rating, jumlah ulasan, distribusi sentimen). Jangan menyebut satu RS sebagai "terbaik" mutlak -- beri beberapa pilihan sesuai kondisi.
+2. Kalau user menempelkan teks ulasan untuk dianalisis, kamu akan diberi HASIL SENTIMEN dari model SVM asli (bukan dari dirimu sendiri) -- gunakan itu apa adanya, JANGAN menebak sentimen sendiri. Tambahkan breakdown aspek (HANYA dari 4 kategori: Dokter, Pelayanan, Farmasi, Petugas -- aspek lain masuk ke "Pelayanan"), topik utama, dan ringkasan singkat.
+3. Kalau ditanya akurasi model: CV F1-macro 0.8866, akurasi uji manual (n=299, test set terpisah dari training): 97.00%.
+Gunakan Bahasa Indonesia yang jelas dan ringkas.`;
+
+  async function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    document.getElementById('chatSendBtn').disabled = true;
+
+    addBubble('user', text);
+    chatHistory.push({ role: 'user', text });
+    const typingBubble = addBubble('bot', 'Mengetik...', 'typing');
+
+    let promptText = text;
+
+    // Kalau teks ini kelihatan seperti ulasan, klasifikasi dulu pakai SVM asli
+    if (looksLikeReviewText(text)) {
+      const svmResult = await classifyWithSVM(text);
+      if (svmResult && svmResult.sentimen) {
+        promptText = `[Konteks: ulasan berikut sudah diklasifikasi oleh model SVM dengan hasil Sentimen="${svmResult.sentimen}", Confidence=${svmResult.confidence}]\n\nAnalisis ulasan ini: "${text}"`;
+      }
+    } else {
+      promptText = `[Data RS saat ini di dashboard:\n${buildHospitalContext()}]\n\nPertanyaan user: ${text}`;
+    }
+
+    try {
+      const resp = await fetch(GEMINI_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+          contents: [
+            ...chatHistory.slice(0, -1).map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.text }] })),
+            { role: 'user', parts: [{ text: promptText }] }
+          ]
+        })
+      });
+      const data = await resp.json();
+      const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, terjadi kesalahan saat memproses jawaban.';
+      typingBubble.remove();
+      addBubble('bot', replyText);
+      chatHistory.push({ role: 'model', text: replyText });
+    } catch (e) {
+      typingBubble.remove();
+      addBubble('bot', 'Maaf, gagal terhubung ke asisten AI. Coba lagi nanti.');
+    } finally {
+      document.getElementById('chatSendBtn').disabled = false;
     }
   }
 </script>
