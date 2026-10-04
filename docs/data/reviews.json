@@ -6060,5 +6060,33 @@
     "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.3682,
     "Processed_At": "2026-10-03T20:27:44.361306"
+  },
+  {
+    "Nama RS": "RSUD Ajibarang",
+    "Username": "Siti Solikhah",
+    "Rating": 5,
+    "Waktu Ulasan": "2026-10-04T03:01:15.466Z",
+    "Lokasi Tempat": "Jl. Raya Pancasan, Kaliumbul, Pancurendang, Kec. Ajibarang, Kabupaten Banyumas, Jawa Tengah 53163, Indonesia",
+    "Latitude": -7.412809,
+    "Longitude": 109.0792511,
+    "Isi Ulasan": "Selama anak kami di  ruang kepodang di rawat dengan baik dan ramah\nFasilitas nyaman kebersihan baik\nSemoga rsud semakin jaya.dan lebih baik lagi",
+    "id": "9cc3ceaa9f37615d",
+    "Sentimen_Prediksi": "Positif",
+    "Confidence": 1.1604,
+    "Processed_At": "2026-10-04T03:38:43.157451"
+  },
+  {
+    "Nama RS": "RSUD Ajibarang",
+    "Username": "Atmiatun",
+    "Rating": 5,
+    "Waktu Ulasan": "2026-10-04T01:37:51.736Z",
+    "Lokasi Tempat": "Jl. Raya Pancasan, Kaliumbul, Pancurendang, Kec. Ajibarang, Kabupaten Banyumas, Jawa Tengah 53163, Indonesia",
+    "Latitude": -7.412809,
+    "Longitude": 109.0792511,
+    "Isi Ulasan": "Pelayanan bagus dari perawatnya ramah ramah fasikitasnya juga lengkap",
+    "id": "6969ac38942620ef",
+    "Sentimen_Prediksi": "Positif",
+    "Confidence": 1.4247,
+    "Processed_At": "2026-10-04T03:38:45.146227"
   }
 ]
