@@ -2,16 +2,21 @@ name: Update Hospital Reviews Data
 
 on:
   schedule:
-    # Tiap 6 jam (cron pakai UTC; 6 jam cukup untuk "near real-time" tanpa boros kuota Apify)
-    - cron: "0 */6 * * *"
-  workflow_dispatch: {}   # supaya bisa di-trigger manual dari tab "Actions" di GitHub
+    # Tiap Senin 00:00 UTC (07:00 WIB) -- hemat kredit Apify
+    - cron: "0 0 * * 1"
+  workflow_dispatch: {}   # bisa di-trigger manual dari tab "Actions"
 
 permissions:
   contents: write   # perlu untuk commit & push balik ke repo
 
+concurrency:
+  group: update-reviews
+  cancel-in-progress: false
+
 jobs:
   scrape-and-update:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -22,7 +27,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install apify-client requests
+        run: pip install -U apify-client requests
 
       - name: Run scraper + classifier
         env:
@@ -36,11 +41,8 @@ jobs:
           git add docs/data/reviews.json
           git diff --quiet --cached || git commit -m "Update data ulasan RS ($(date -u +'%Y-%m-%d %H:%M UTC'))"
 
-          # FIX: selaraskan dulu dengan remote sebelum push, supaya tidak gagal
-          # kalau ada commit lain masuk ke main di antara checkout dan push
-          # (misal push manual dari VS Code yang bersamaan waktunya).
-          # --autostash aman dipakai di sini karena working tree sudah bersih
-          # (perubahan sudah di-commit di baris atas).
+          # Selaraskan dengan remote sebelum push, supaya tidak gagal
+          # kalau ada commit lain masuk ke main di antara checkout dan push.
           for i in 1 2 3; do
             git pull --rebase --autostash origin main && git push && break
             echo "Push gagal (percobaan $i), retry dalam 5 detik..."

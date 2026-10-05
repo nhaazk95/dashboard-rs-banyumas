@@ -1,12 +1,12 @@
 """
 Scrape ulasan terbaru dari 25 RS via Apify, klasifikasi sentimen via API SVM
 (Render), lalu gabungkan ke docs/data/reviews.json (cumulative, tidak menimpa
-data lama -- ulasan yang sudah pernah diproses tidak di-scrape ulang ke API
+data lama -- ulasan yang sudah pernah diproses tidak dikirim ulang ke API
 SVM supaya hemat kuota/waktu).
 
 Dijalankan otomatis oleh GitHub Actions (lihat .github/workflows/update-data.yml),
 bisa juga dijalankan manual lokal untuk tes:
-    pip install apify-client requests
+    pip install -U apify-client requests
     export APIFY_TOKEN=xxxx          (Linux/Mac)
     $env:APIFY_TOKEN="xxxx"          (PowerShell)
     python scripts/scrape_update.py
@@ -16,11 +16,13 @@ import hashlib
 import json
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
+from decimal import Decimal
 from pathlib import Path
 
 import requests
 from apify_client import ApifyClient
+from apify_client.errors import ApifyApiError
 
 # ============================================================
 # KONFIGURASI
@@ -31,8 +33,9 @@ SVM_WAKEUP_URL = "https://sentimen-api.onrender.com/"
 
 OUTPUT_FILE = Path("docs/data/reviews.json")
 
-MAX_REVIEWS_PER_RS = 20   # per run -- cukup kecil karena jalan berkala, bukan full-scrape tiap kali
-REQUEST_TIMEOUT = 90      # detik -- Render free tier bisa cold-start lama
+MAX_REVIEWS_PER_RS = 20     # per run -- kecil karena jalan berkala
+MAX_CHARGE_USD = Decimal("0.15")  # batas biaya Apify per run
+REQUEST_TIMEOUT = 90        # detik -- Render free tier bisa cold-start lama
 
 daftar_rs_url = [
     "https://www.google.com/maps/search/?api=1&query=Rumah+Sakit+Umum+Bunda+Purwokerto",
@@ -86,6 +89,17 @@ def load_existing() -> list[dict]:
     return []
 
 
+def last_review_date(rows: list[dict], margin_days: int = 7) -> str | None:
+    """Tanggal ulasan terbaru di data lama, dikurangi margin supaya ulasan
+    yang gagal diklasifikasi di run lalu tetap terjangkau (duplikat sudah
+    disaring lewat id)."""
+    dates = [r["Waktu Ulasan"] for r in rows if r.get("Waktu Ulasan")]
+    if not dates:
+        return None
+    d = datetime.fromisoformat(max(dates)[:10]) - timedelta(days=margin_days)
+    return d.strftime("%Y-%m-%d")
+
+
 def wake_up_svm_api():
     """Render free tier sleep kalau idle -- bangunkan dulu sebelum mulai batch."""
     print("Membangunkan API SVM (Render free tier)...")
@@ -120,24 +134,36 @@ def main():
     run_input = {
         "startUrls": [{"url": u} for u in daftar_rs_url],
         "language": "id",
-        "countryCode": "id",   # FIX: batasi pencarian ke Indonesia -- tanpa ini,
-                               # Actor bisa salah menemukan tempat di luar negeri
-                               # yang kebetulan namanya mirip (terbukti dari log run
-                               # sebelumnya: beberapa RS ketemu di koordinat Amerika)
+        "countryCode": "id",              # batasi pencarian ke Indonesia
+        "maxCrawledPlacesPerSearch": 1,   # 1 RS per URL pencarian
         "maxReviews": MAX_REVIEWS_PER_RS,
         "reviewsSort": "newest",
         "maxImages": 0,
         "maxQuestions": 0,
     }
 
+    start_date = last_review_date(existing)
+    if start_date:
+        run_input["reviewsStartDate"] = start_date  # hanya ulasan baru
+        print(f"Hanya mengambil ulasan sejak {start_date}")
+
     print(f"Menjalankan Apify actor untuk {len(daftar_rs_url)} RS...")
-    run = client.actor("compass/crawler-google-places").call(run_input=run_input)
+    try:
+        run = client.actor("compass/crawler-google-places").call(
+            run_input=run_input,
+            max_total_charge_usd=MAX_CHARGE_USD,  # batas biaya per run
+        )
+    except ApifyApiError as e:
+        # Kredit habis / limit tercapai: data lama tetap aman, workflow tidak merah
+        print(f"⚠️ Apify gagal dijalankan: {e}")
+        print("Data lama dipertahankan, tidak ada perubahan file.")
+        return
+
     dataset_id = get_field(run, "defaultDatasetId")
     print(f"Selesai scraping. Dataset: {dataset_id}")
 
     # --- Flatten hasil scraping ---
-    # iterate_items() dari dataset client SELALU mengembalikan dict biasa (hasil JSON API),
-    # jadi .get() di bagian ini sudah aman apa adanya -- cuma objek `run` di atas yang perlu get_field().
+    # iterate_items() selalu mengembalikan dict biasa, jadi .get() aman di sini.
     scraped_rows = []
     for place in client.dataset(dataset_id).iterate_items():
         nama_rs = place.get("title")
@@ -161,9 +187,7 @@ def main():
             row["id"] = review_id(row)
             scraped_rows.append(row)
 
-    # FIX: jaring pengaman -- buang baris yang koordinatnya di luar Indonesia
-    # (bounding box kasar), berjaga-jaga kalau parameter countryCode di atas
-    # tidak sepenuhnya dihormati oleh Actor untuk sebagian hasil pencarian.
+    # Jaring pengaman: buang baris yang koordinatnya di luar Indonesia (bounding box kasar)
     INDONESIA_BBOX = {"lat_min": -11, "lat_max": 6, "lng_min": 95, "lng_max": 141}
     before_filter = len(scraped_rows)
     scraped_rows = [
@@ -179,7 +203,7 @@ def main():
 
     print(f"Total ulasan ter-scrape (termasuk yang sudah pernah diproses): {len(scraped_rows)}")
 
-    # --- Filter yang BENAR-BENAR baru saja ---
+    # --- Filter yang benar-benar baru ---
     new_rows = [r for r in scraped_rows if r["id"] not in existing_ids]
     print(f"Ulasan BARU yang perlu diklasifikasi: {len(new_rows)}")
 
@@ -192,13 +216,12 @@ def main():
     processed_new = []
     skipped_failed = 0
     for i, row in enumerate(new_rows, 1):
-        print(f"  [{i}/{len(new_rows)}] Klasifikasi: {row['Nama RS'][:30]}...")
+        print(f"  [{i}/{len(new_rows)}] Klasifikasi: {(row['Nama RS'] or '-')[:30]}...")
         result = classify_sentiment(row["Isi Ulasan"])
         if not result or "sentimen" not in result:
-            # FIX: jangan simpan dengan label palsu "Netral" kalau API gagal --
-            # skip saja (id belum masuk existing_ids) supaya otomatis di-retry
-            # di run berikutnya, bukan "cacat" permanen di dataset.
-            print(f"    Gagal/API tidak merespons dengan benar, dilewati (akan dicoba lagi run berikutnya).")
+            # Jangan simpan label palsu kalau API gagal -- skip supaya
+            # otomatis dicoba lagi di run berikutnya.
+            print("    Gagal/API tidak merespons dengan benar, dilewati (dicoba lagi run berikutnya).")
             skipped_failed += 1
             continue
         row["Sentimen_Prediksi"] = result.get("sentimen")
