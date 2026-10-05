@@ -247,7 +247,7 @@
     "Longitude": 109.2535107,
     "Isi Ulasan": "Sya pasien dr sugrisno ibu isa dikmar t5 .sya sngg puas dg pelayannha bidanya cantik cntik dan ramah ..kebidanan memnah jos jis",
     "id": "fa51e03758dffec7",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0269,
     "Processed_At": "2026-10-03T00:23:25.042313"
   },
@@ -331,7 +331,7 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "perawatan di lantai 4 padma, pelayanan baik, semua suster membantu, kebetulan saya op tulang selangka karna tertabrak, alhamdullilah op nya sudah selesai bersama dokter hidayat dan sudah boleh pulang, terima kasih untuk rs hermina purwokerto dan staf yang bertugas..",
     "id": "ba2efcabeec8831a",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0245,
     "Processed_At": "2026-10-03T00:23:37.635351"
   },
@@ -345,7 +345,7 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "dirawat di RS hermina purwokerto untuk keseluruhan baik, apalagi perawat nya ramah dan cantik, anak saya di rawat di lantai 4 kamar 406",
     "id": "bfd885df7889cb73",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0056,
     "Processed_At": "2026-10-03T00:23:38.957792"
   },
@@ -387,7 +387,7 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Pelayanan di ruang hd hermina baik, perawat dan dokternya",
     "id": "e83035a607f6b83d",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0231,
     "Processed_At": "2026-10-03T00:23:44.087667"
   },
@@ -401,7 +401,7 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "saya dirawat dikamar 511 lantai 5 perawatnya ramahh sabar dan baikkk bangetttt, trimaksih hermina purwokerto",
     "id": "6b2fc180fdd274b4",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0862,
     "Processed_At": "2026-10-03T00:23:45.430474"
   },
@@ -415,7 +415,7 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Ruangannya bersih di VIP padma, petugas juga cekatan dan profesional. Administrasi baik dan tertib",
     "id": "50cc4de83a2676f8",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1363,
     "Processed_At": "2026-10-03T00:23:46.241545"
   },
@@ -443,7 +443,7 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Radiologi baik",
     "id": "f897b7b11943983d",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2314,
     "Processed_At": "2026-10-03T00:23:51.322870"
   },
@@ -527,7 +527,7 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Utk radiologi\nPelayanan baik sekali",
     "id": "a2f1fa50a49b2b12",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0116,
     "Processed_At": "2026-10-03T00:24:06.815622"
   },
@@ -569,7 +569,7 @@
     "Longitude": 109.2455802,
     "Isi Ulasan": "Pelayanan judes banget terutama di poli paru",
     "id": "f090a43107a28d11",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.0567,
     "Processed_At": "2026-10-03T00:24:10.259783"
   },
@@ -793,7 +793,7 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Saya keluarga pasien Bu Wasem di rawat di kenari bawah pelayanan nya sudah baik, terimkasih",
     "id": "bfb9073283cd373e",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1877,
     "Processed_At": "2026-10-03T00:24:46.417230"
   },
@@ -903,7 +903,7 @@
     "Lokasi Tempat": "Jl. Raya Pancasan, Kaliumbul, Pancurendang, Kec. Ajibarang, Kabupaten Banyumas, Jawa Tengah 53163, Indonesia",
     "Latitude": -7.412809,
     "Longitude": 109.0792511,
-    "Isi Ulasan": "Selama anak saya drawat di ruang kepodang pelayanannya bagu, perawatnya Ramah, ruangannya bersih, sukses terus rsud ajibarang",
+    "Isi Ulasan": "Selama anak saya drawat di ruang kepodang pelayanannya bagus, perawatnya Ramah, ruangannya bersih, sukses terus rsud ajibarang",
     "id": "1d63dc8ee9ac0697",
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1654,
@@ -1143,7 +1143,7 @@
     "Longitude": 109.2530153,
     "Isi Ulasan": "Pelayanan di RS Dadi keluarga Sip, perawat dan dokternya baik dan ramah",
     "id": "4e9482aa44084ae1",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0348,
     "Processed_At": "2026-10-03T00:25:42.838795"
   },
@@ -1227,7 +1227,7 @@
     "Longitude": 109.2530153,
     "Isi Ulasan": "Penangan BPJS Bagus",
     "id": "ab02e580846dafb5",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1756,
     "Processed_At": "2026-10-03T00:25:54.228063"
   },
@@ -1283,7 +1283,7 @@
     "Longitude": 109.2239929,
     "Isi Ulasan": "Pelayanan prima dengan penuh kehangatan dan profesional",
     "id": "7a49af5614c05625",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1543,
     "Processed_At": "2026-10-03T00:25:58.434859"
   },
@@ -1339,7 +1339,7 @@
     "Longitude": 109.2239929,
     "Isi Ulasan": "terima kasih untuk RS Ananda yang mendengarkan keluh kesah pasien, semoga admin RS bisa satu arah saja kedepannya, jadi pasien bisa segera tertangani tanpa harus kebingungan karena harus pindah chat sana sini.\n\nDokter, bidan, suster dan team RS Ananda sangat baik dan profesional ⭐️⭐️⭐️⭐️⭐️",
     "id": "1b901bc621e44a16",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.02,
     "Processed_At": "2026-10-03T00:26:04.716808"
   },
@@ -1479,7 +1479,7 @@
     "Longitude": 109.2239929,
     "Isi Ulasan": "RS Swasta terbaik.....",
     "id": "02e5a04560c64452",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2881,
     "Processed_At": "2026-10-03T00:26:16.546118"
   },
@@ -1661,7 +1661,7 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "Baik",
     "id": "f9f89d3614e09eae",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3738,
     "Processed_At": "2026-10-03T00:26:33.046015"
   },
@@ -1703,7 +1703,7 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "Pelayanannya simpel dan ramah,rekomended untuk berobat",
     "id": "e37df649e5e2e2db",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0499,
     "Processed_At": "2026-10-03T00:26:37.718857"
   },
@@ -1745,7 +1745,7 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "Alhamdulilah.. di rawat di siaga medika Pemalang.. baik..ramah..makasih..sudah di bantu swgala nya",
     "id": "907e4e8070300811",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1754,
     "Processed_At": "2026-10-03T00:26:44.927958"
   },
@@ -2571,7 +2571,7 @@
     "Longitude": 109.0622717,
     "Isi Ulasan": "Good",
     "id": "2ecf4131328088d0",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0226,
     "Processed_At": "2026-10-03T00:28:04.532043"
   },
@@ -2599,7 +2599,7 @@
     "Longitude": 109.0622717,
     "Isi Ulasan": "Bgus",
     "id": "d27ca8a2bb70bcce",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1717,
     "Processed_At": "2026-10-03T00:28:07.612924"
   },
@@ -2907,7 +2907,7 @@
     "Longitude": 109.2726441,
     "Isi Ulasan": "Hebat semuanya Alhamdulillah luar biasa",
     "id": "45331c3770968659",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0342,
     "Processed_At": "2026-10-03T00:28:35.686763"
   },
@@ -3187,7 +3187,7 @@
     "Longitude": 109.2536386,
     "Isi Ulasan": "pernah tambal gigi di sini, dokter dan perawatnya ramah dan dijelasin banget. terima kasih RSGM UNSOED",
     "id": "1f5767ea8fa5f00c",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1253,
     "Processed_At": "2026-10-03T00:29:23.639181"
   },
@@ -3313,7 +3313,7 @@
     "Longitude": 109.2673789,
     "Isi Ulasan": "Pelayanan baik sudah di bantu dan di edukasi pelayanan rawat jalan terima kasih infomrasi.",
     "id": "9a6e6096ab28ae4f",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0395,
     "Processed_At": "2026-10-03T00:29:42.711693"
   },
@@ -3439,7 +3439,7 @@
     "Longitude": 109.274308,
     "Isi Ulasan": "Pertama kali anak ku dirujuk dan ke JIH ..rumah sakit sangat baik pelayanan kepada kamu yg pasein BPJS..dari lobby administrasi,suster2 full senyum Raman..maju terus JIH.",
     "id": "3bc044f18d43f229",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0331,
     "Processed_At": "2026-10-03T00:30:07.435837"
   },
@@ -3453,7 +3453,7 @@
     "Longitude": 109.274308,
     "Isi Ulasan": "Rumah sakit nya bagus, ga ky di rs pd umumnya.. Dokter & assisten nya profesional.",
     "id": "dfc8086901409ddf",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9894,
     "Processed_At": "2026-10-03T00:30:08.704709"
   },
@@ -3481,7 +3481,7 @@
     "Longitude": 109.274308,
     "Isi Ulasan": "Fast respon banget",
     "id": "8301bd9b9f7912f2",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0686,
     "Processed_At": "2026-10-03T00:30:21.808689"
   },
@@ -3579,7 +3579,7 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "Pelayan sigap ramah dan cepat delallu memuaskan do setiap edukasi pelayannnya, ga pernah kecewa kalo make  BPJS disni 😉😊😇🥰😍",
     "id": "2a212871a5e8054c",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1098,
     "Processed_At": "2026-10-03T00:30:45.014808"
   },
@@ -3607,7 +3607,7 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "Pelayanan memang jos top dan terbaik tertuma dalam mengurusi pasien pasien BPJS",
     "id": "976691893a848298",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1894,
     "Processed_At": "2026-10-03T00:30:48.116965"
   },
@@ -3621,7 +3621,7 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "Pelayan sigal ceoat ganggal respon sif hntuk padien pasien lengguna BPJS",
     "id": "8cbd84e0c20ca3b5",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0083,
     "Processed_At": "2026-10-03T00:30:52.413298"
   },
@@ -3663,7 +3663,7 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "Jadi andalan berobat menggunakan BPJS pokoke top markotop",
     "id": "bd36b012e16a9ac9",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.113,
     "Processed_At": "2026-10-03T00:30:55.931802"
   },
@@ -3705,7 +3705,7 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "Pelayanan sigap cekatan dalam penanganan pasien pasien pengguna BPJS",
     "id": "9559294cf4c41c35",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0195,
     "Processed_At": "2026-10-03T00:30:59.130787"
   },
@@ -3733,8 +3733,8 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "pelayanan Penang anang patients BPJS SANG AT SANG AT TERBAIK",
     "id": "d5d787006ecb23ae",
-    "Sentimen_Prediksi": "Negatif",
-    "Confidence": 0.0262,
+    "Sentimen_Prediksi": "Positif",
+    "Confidence": 1.0262,
     "Processed_At": "2026-10-03T00:31:01.226557"
   },
   {
@@ -3901,7 +3901,7 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "Pelayanan SDH bagus,Memuaskan,Terimakasih SDH dibantu ndaftarin MJKN",
     "id": "86c8d863c2e24735",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2422,
     "Processed_At": "2026-10-03T00:31:16.323382"
   },
@@ -4139,7 +4139,7 @@
     "Longitude": 109.2397481,
     "Isi Ulasan": "Bagus",
     "id": "2db065526dd112b4",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3738,
     "Processed_At": "2026-10-03T00:31:36.410411"
   },
@@ -4349,7 +4349,7 @@
     "Longitude": 109.2408375,
     "Isi Ulasan": "Langganan selalu di RS BUDHI ASIH memang pelayanannya trbaik..😍🥰🥰 rekomend bgt buat bunda2 yg lain",
     "id": "8297c7813c79f4df",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0233,
     "Processed_At": "2026-10-03T00:32:01.735088"
   },
@@ -4377,7 +4377,7 @@
     "Longitude": 109.2408375,
     "Isi Ulasan": "Alhamdulillah bisa periksa dan persalinan disini,\nBagus semua dari dokter,bidan,ahligisi,dan yg lain lainnya,sampai security dan kang parkirnya",
     "id": "9e826b4a6e6ef427",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1462,
     "Processed_At": "2026-10-03T00:32:05.747028"
   },
@@ -4545,7 +4545,7 @@
     "Longitude": 109.258164,
     "Isi Ulasan": "Belum secara langsung periksa di RS ini, namun saya menghubungi contact di sosial medianya luar biasa responsif dan memberikan informasi dengan sabar, rinci, dan memberi solusi.\nsemoga layanan di RS nya juga demikian",
     "id": "256b3743b3ac45ec",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2192,
     "Processed_At": "2026-10-03T00:32:30.811755"
   },
@@ -4587,7 +4587,7 @@
     "Longitude": 109.258164,
     "Isi Ulasan": "Jazakhumullah khoiran katsiran\nAtas pelayanan yg baik , setiap kali minta rujukan🙏",
     "id": "59037e3fc7fb75db",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.041,
     "Processed_At": "2026-10-03T00:32:36.515946"
   },
@@ -4615,7 +4615,7 @@
     "Longitude": 109.258164,
     "Isi Ulasan": "Pernah tambal dan bersihin karang gigi disini, dokternya sabar dn dijelasin sampek jelas top. trmksh",
     "id": "14d0e2ef2639b06c",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.229,
     "Processed_At": "2026-10-03T00:32:41.717104"
   },
@@ -4657,7 +4657,7 @@
     "Longitude": 109.258164,
     "Isi Ulasan": "Rumah sakite tah pelayanane apik, bersih, tapi sayang satpame kurang RAMAH,",
     "id": "00d6179bf9c42ad3",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3709,
     "Processed_At": "2026-10-03T00:32:46.615305"
   },
@@ -4727,7 +4727,7 @@
     "Longitude": 109.0835341,
     "Isi Ulasan": "Kamarnya tidak brisik jadi nyaman",
     "id": "5c39214486e621b3",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2684,
     "Processed_At": "2026-10-03T00:32:52.214304"
   },
@@ -4797,7 +4797,7 @@
     "Longitude": 109.0835341,
     "Isi Ulasan": "Good",
     "id": "a67d836cef361e5c",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0226,
     "Processed_At": "2026-10-03T00:32:56.693732"
   },
@@ -4937,7 +4937,7 @@
     "Longitude": 109.2436674,
     "Isi Ulasan": "RS Jatiwinangun Purwokerto,melayani dgn mudah dan cepat,buat pasien seperti saya,yg memakai KIS-BPJS.saya Agus Irawansyah.",
     "id": "f5f8be6a58f1e4d3",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.241,
     "Processed_At": "2026-10-03T00:33:10.111677"
   },
@@ -5217,7 +5217,7 @@
     "Longitude": 109.2924346,
     "Isi Ulasan": "Kalau hasil lab blm keluar jgn lgsg lapor desa kena penyakit pdhl hasile lab negatif udah dicek sampe dua kali ttp negatif keburu lapor desa kan JD gosip bijak sedikit dong jgn apa\" buru\"tanggung jwbnya mana untuk bersihin nama baik pasien asal diagnosa pas dicek lab negatif udah buru\" lapor desa rumah sakit bagaimana siy ini",
     "id": "06e61aaaba7867bd",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.0259,
     "Processed_At": "2026-10-03T00:33:54.016087"
   },
@@ -5273,7 +5273,7 @@
     "Longitude": 109.2924346,
     "Isi Ulasan": "Radiografer nya baik” semua",
     "id": "beef0772a6ad1b90",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1613,
     "Processed_At": "2026-10-03T00:34:00.913798"
   },
@@ -5301,7 +5301,7 @@
     "Longitude": 109.2924346,
     "Isi Ulasan": "Pelayanan bintang 5 10 jempol top asli bukan katanya katanya tapi pengalaman pribadi saat persalinan istriku semua tenaga medis dan stafnya gercep Rama komunikatif dan sangat membantu kami, padahal kami pake BPJS, dan keperluan utk pengurusan BPJS anak kami pun dibantu dengan gercep tanpa bertele tele, bravo RSUD BMS terimaksih sekali dan selalu tingkatkan pelayanannya, terimaksih",
     "id": "24bc0dc7298f4e37",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.067,
     "Processed_At": "2026-10-03T00:34:04.912797"
   },
@@ -5539,7 +5539,7 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Apik pelayanan di ruang elang",
     "id": "b4692170105a12e3",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1413,
     "Processed_At": "2026-10-03T10:56:42.271199"
   },
@@ -6001,7 +6001,7 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Cukup nggo pengalaman aku Karo bojoku nek arep lahiran aja neng RSUD ajibarang pelayanan'e kurang apa maning suster perawatte sing menangani bojoku bener\" ngga ada rasa empati dan etikane terhadap pasien!",
     "id": "c865d034cbc08670",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.0288,
     "Processed_At": "2026-10-03T12:28:01.422348"
   },
@@ -6211,7 +6211,7 @@
     "Longitude": 109.2747121,
     "Isi Ulasan": "Medika lestari joss pelayananya",
     "id": "85ec4073072cfef2",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.04,
     "Processed_At": "2026-10-04T11:37:29.473033"
   },
@@ -6505,7 +6505,7 @@
     "Longitude": 109.2747121,
     "Isi Ulasan": "Sudah baik",
     "id": "488b7535dc93c63f",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0236,
     "Processed_At": "2026-10-04T16:15:24.008364"
   },

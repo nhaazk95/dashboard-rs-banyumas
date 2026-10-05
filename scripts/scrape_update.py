@@ -33,9 +33,9 @@ SVM_WAKEUP_URL = "https://sentimen-api.onrender.com/"
 
 OUTPUT_FILE = Path("docs/data/reviews.json")
 
-MAX_REVIEWS_PER_RS = 20     # per run -- kecil karena jalan berkala
+MAX_REVIEWS_PER_RS = 20           # per run -- kecil karena jalan berkala
 MAX_CHARGE_USD = Decimal("0.15")  # batas biaya Apify per run
-REQUEST_TIMEOUT = 90        # detik -- Render free tier bisa cold-start lama
+REQUEST_TIMEOUT = 90              # detik -- Render free tier bisa cold-start lama
 
 daftar_rs_url = [
     "https://www.google.com/maps/search/?api=1&query=Rumah+Sakit+Umum+Bunda+Purwokerto",
@@ -115,7 +115,8 @@ def wake_up_svm_api():
 
 
 def classify_sentiment(text: str) -> dict:
-    """Panggil API SVM, kembalikan dict kosong kalau gagal (ditandai butuh retry)."""
+    """Panggil API SVM (preprocessing dilakukan di sisi API), kembalikan
+    dict kosong kalau gagal (ditandai butuh retry)."""
     try:
         resp = requests.post(SVM_API_URL, json={"text": text}, timeout=REQUEST_TIMEOUT)
         resp.raise_for_status()
@@ -226,6 +227,7 @@ def main():
             continue
         row["Sentimen_Prediksi"] = result.get("sentimen")
         row["Confidence"] = result.get("confidence")
+        row["Teks_Bersih"] = result.get("clean_text")   # BARU: None jika API belum di-deploy ulang
         row["Processed_At"] = datetime.utcnow().isoformat()
         processed_new.append(row)
         time.sleep(0.5)  # jaga-jaga rate limit
