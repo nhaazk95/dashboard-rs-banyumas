@@ -16,6 +16,7 @@ import hashlib
 import json
 import os
 import time
+import sys
 from datetime import datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
@@ -24,18 +25,19 @@ import requests
 from apify_client import ApifyClient
 from apify_client.errors import ApifyApiError
 
+
 # ============================================================
 # KONFIGURASI
 # ============================================================
-API_TOKEN = os.environ["APIFY_TOKEN"]  # WAJIB diset lewat GitHub Secrets, jangan di-hardcode
+API_TOKEN = os.environ["APIFY_TOKEN"]  
 SVM_API_URL = "https://sentimen-api.onrender.com/predict"
 SVM_WAKEUP_URL = "https://sentimen-api.onrender.com/"
 
 OUTPUT_FILE = Path("docs/data/reviews.json")
 
-MAX_REVIEWS_PER_RS = 20           # per run -- kecil karena jalan berkala
-MAX_CHARGE_USD = Decimal("0.15")  # batas biaya Apify per run
-REQUEST_TIMEOUT = 90              # detik -- Render free tier bisa cold-start lama
+MAX_REVIEWS_PER_RS = 20           
+MAX_CHARGE_USD = Decimal("0.15")  
+REQUEST_TIMEOUT = 90              
 
 daftar_rs_url = [
     "https://www.google.com/maps/search/?api=1&query=Rumah+Sakit+Umum+Bunda+Purwokerto",
@@ -129,19 +131,36 @@ def classify_sentiment(text: str) -> dict:
 def main():
     existing = load_existing()
     existing_ids = {r["id"] for r in existing}
+
+    if "--reclassify" in sys.argv:
+        wake_up_svm_api()
+        for row in existing:
+            res = classify_sentiment(row["Isi Ulasan"])
+            if res.get("sentimen"):
+                row["Sentimen_Prediksi"] = res["sentimen"]
+                row["Confidence"] = res.get("confidence")
+                row["Teks_Bersih"] = res.get("clean_text")
+            time.sleep(0.5)
+        OUTPUT_FILE.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"Klasifikasi ulang selesai: {len(existing)} ulasan")
+        return
+    
     print(f"Data lama: {len(existing)} ulasan (ID unik: {len(existing_ids)})")
 
     client = ApifyClient(API_TOKEN)
     run_input = {
         "startUrls": [{"url": u} for u in daftar_rs_url],
         "language": "id",
-        "countryCode": "id",              # batasi pencarian ke Indonesia
-        "maxCrawledPlacesPerSearch": 1,   # 1 RS per URL pencarian
+        "countryCode": "id",              
+        "maxCrawledPlacesPerSearch": 1,   
         "maxReviews": MAX_REVIEWS_PER_RS,
         "reviewsSort": "newest",
         "maxImages": 0,
         "maxQuestions": 0,
+
     }
+
+    
 
     start_date = last_review_date(existing)
     if start_date:
