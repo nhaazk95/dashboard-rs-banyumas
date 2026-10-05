@@ -6060,8 +6060,6 @@
     "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.3682,
     "Processed_At": "2026-10-03T20:27:44.361306"
-<<<<<<< HEAD
-=======
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -6664,6 +6662,5 @@
     "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.2056,
     "Processed_At": "2026-10-04T20:44:32.570733"
->>>>>>> 9614db8e89e273e551f0e3f11269b3048deaab15
   }
 ]
