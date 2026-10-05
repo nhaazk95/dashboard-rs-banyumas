@@ -185,8 +185,8 @@ const MAPBOX_TOKEN = "pk.eyJ1IjoibmhhYXprIiwiYSI6ImNtdW51Z3liajBkYmcyeHE3dHYwaW1
 const COL = {Positif:'#4ade80', Netral:'#fbbf24', Negatif:'#fb7185'};
 const SENT_LABEL = {Positif:'Positive', Netral:'Neutral', Negatif:'Negative'};
 
-let RAW = [];          // array mentah per-ulasan, hasil fetch reviews.json
-let AGG_ALL = [];      // hasil agregasi per RS untuk periode terpilih
+let RAW = [];
+let AGG_ALL = [];
 let cur = 'ALL', markers = [], selRS = null, chart = null;
 
 const map = L.map('map').setView([-7.45, 109.25], 11);
@@ -223,12 +223,6 @@ function formatDateTimeID(d) {
 function monthKey(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
 function monthLabelID(d) { return d.toLocaleDateString('id-ID', { month:'short', year:'numeric' }); }
 
-/**
- * Bikin label & data tren sesuai granularitas periode yang dipilih:
- * - 7D  -> per hari, label "3 Okt", "4 Okt", dst (7 hari terakhir, tanggal-bulan)
- * - 30D -> per minggu SEKUENSIAL dalam rentang 30 hari, label "Minggu 1", "Minggu 2", dst
- * - ALL -> per bulan, label "Okt 2026", "Sep 2026", dst (maks 12 bulan terakhir yang ada datanya)
- */
 function buildTrend(rowsRS, period) {
   if (period === '7D') {
     const days = [];
@@ -272,7 +266,6 @@ function buildTrend(rowsRS, period) {
     };
   }
 
-  // ALL -> per bulan
   const byMonth = {};
   rowsRS.forEach(r => {
     const d = new Date(r['Waktu Ulasan']);
@@ -351,7 +344,7 @@ function recompute() {
   const filtered = filterByPeriod(RAW, cur);
   AGG_ALL = aggregate(filtered);
   render(); stats(); rsList();
-  if (selRS) pick(selRS);  // refresh trend & komentar RS yang sedang dipilih untuk periode baru
+  if (selRS) pick(selRS);
 }
 
 async function loadData() {
@@ -453,10 +446,7 @@ function pick(name) {
     if(m.rsName===name) m.openPopup();
   });
 
-  // Data mentah RS ini untuk periode yang sedang dipilih
   const rowsRS = filterByPeriod(RAW, cur).filter(r => r['Nama RS'] === name);
-
-  // Daftar komentar (selalu ditampilkan kalau ada data, terlepas dari chart)
   renderReviewList(rowsRS);
 
   if (!rowsRS.length) {
@@ -569,12 +559,14 @@ loadData();
 </div>
 
 <script>
-  // GANTI dengan API key Gemini kamu sendiri (gratis, dari aistudio.google.com -> Get API key)
-  const GEMINI_API_KEY = "AQ.Ab8RN6LAbLs9XkoCjjohSLX1vjnHa3cgz3qNr-khZE1H_vJ7EQ";
-  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  // FIX: tidak ada API key di sini lagi -- semua panggilan AI (Groq) lewat
+  // backend Render kamu sendiri (endpoint /chat), supaya tidak ada secret
+  // yang ter-expose di kode publik (sama seperti kasus Mapbox & Gemini
+  // sebelumnya yang kena GitHub push protection).
+  const CHAT_URL = "https://sentimen-api.onrender.com/chat";
   const SVM_PREDICT_URL = "https://sentimen-api.onrender.com/predict";
 
-  let chatHistory = [];  // {role: 'user'|'model', text: '...'}
+  let chatHistory = [];
   let chatOpened = false;
 
   function toggleChat() {
@@ -597,8 +589,6 @@ loadData();
   }
 
   function looksLikeReviewText(text) {
-    // Heuristik sederhana: kalau cukup panjang dan tidak diawali kata tanya umum,
-    // anggap ini teks ulasan yang mau diklasifikasi.
     const lower = text.toLowerCase();
     const searchWords = ['cari', 'rekomendasi', 'bandingkan', 'rs mana', 'rumah sakit mana', 'dimana', 'akurasi', 'berapa'];
     if (searchWords.some(w => lower.includes(w))) return false;
@@ -620,20 +610,11 @@ loadData();
   }
 
   function buildHospitalContext() {
-    // Ringkasan singkat dari data yang sudah ter-load, supaya Gemini bisa jawab
-    // pertanyaan pencarian/perbandingan RS berbasis data riil di dashboard ini.
     if (!AGG_ALL || !AGG_ALL.length) return "Data RS belum termuat.";
     return AGG_ALL.map(d =>
       `${d['Nama RS']}: rating ${d.Avg_Rating}, ${d.Total} ulasan (${d.Pct_Pos}% positif, ${d.Pct_Net}% netral, ${d.Pct_Neg}% negatif)`
     ).join('\n');
   }
-
-  const SYSTEM_INSTRUCTION = `Kamu adalah asisten analisis rumah sakit di Kabupaten Banyumas untuk sebuah dashboard web.
-Tugasmu:
-1. Membantu mencari/membandingkan RS berdasarkan data yang diberikan (rating, jumlah ulasan, distribusi sentimen). Jangan menyebut satu RS sebagai "terbaik" mutlak -- beri beberapa pilihan sesuai kondisi.
-2. Kalau user menempelkan teks ulasan untuk dianalisis, kamu akan diberi HASIL SENTIMEN dari model SVM asli (bukan dari dirimu sendiri) -- gunakan itu apa adanya, JANGAN menebak sentimen sendiri. Tambahkan breakdown aspek (HANYA dari 4 kategori: Dokter, Pelayanan, Farmasi, Petugas -- aspek lain masuk ke "Pelayanan"), topik utama, dan ringkasan singkat.
-3. Kalau ditanya akurasi model: CV F1-macro 0.8866, akurasi uji manual (n=299, test set terpisah dari training): 97.00%.
-Gunakan Bahasa Indonesia yang jelas dan ringkas.`;
 
   async function sendChatMessage() {
     const input = document.getElementById('chatInput');
@@ -648,7 +629,6 @@ Gunakan Bahasa Indonesia yang jelas dan ringkas.`;
 
     let promptText = text;
 
-    // Kalau teks ini kelihatan seperti ulasan, klasifikasi dulu pakai SVM asli
     if (looksLikeReviewText(text)) {
       const svmResult = await classifyWithSVM(text);
       if (svmResult && svmResult.sentimen) {
@@ -659,19 +639,16 @@ Gunakan Bahasa Indonesia yang jelas dan ringkas.`;
     }
 
     try {
-      const resp = await fetch(GEMINI_URL, {
+      const resp = await fetch(CHAT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-          contents: [
-            ...chatHistory.slice(0, -1).map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.text }] })),
-            { role: 'user', parts: [{ text: promptText }] }
-          ]
+          message: promptText,
+          history: chatHistory.slice(0, -1).map(m => ({ role: m.role, text: m.text }))
         })
       });
       const data = await resp.json();
-      const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, terjadi kesalahan saat memproses jawaban.';
+      const replyText = data.reply || 'Maaf, terjadi kesalahan saat memproses jawaban.';
       typingBubble.remove();
       addBubble('bot', replyText);
       chatHistory.push({ role: 'model', text: replyText });
