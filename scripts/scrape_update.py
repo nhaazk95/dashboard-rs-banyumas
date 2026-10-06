@@ -1,17 +1,3 @@
-"""
-Scrape ulasan terbaru dari 25 RS via Apify, klasifikasi sentimen via API SVM
-(Render), lalu gabungkan ke docs/data/reviews.json (cumulative, tidak menimpa
-data lama -- ulasan yang sudah pernah diproses tidak dikirim ulang ke API
-SVM supaya hemat kuota/waktu).
-
-Dijalankan otomatis oleh GitHub Actions (lihat .github/workflows/update-data.yml),
-bisa juga dijalankan manual lokal untuk tes:
-    pip install -U apify-client requests
-    export APIFY_TOKEN=xxxx          (Linux/Mac)
-    $env:APIFY_TOKEN="xxxx"          (PowerShell)
-    python scripts/scrape_update.py
-"""
-
 import hashlib
 import json
 import os
@@ -36,7 +22,7 @@ SVM_WAKEUP_URL = "https://sentimen-api.onrender.com/"
 OUTPUT_FILE = Path("docs/data/reviews.json")
 
 MAX_REVIEWS_PER_RS = 20           
-MAX_CHARGE_USD = Decimal("0.15")  
+MAX_CHARGE_USD = Decimal("50")  
 REQUEST_TIMEOUT = 90              
 
 daftar_rs_url = [
@@ -80,7 +66,6 @@ def get_field(obj, key: str):
 
 
 def review_id(row: dict) -> str:
-    """ID unik per ulasan, dipakai untuk deteksi duplikat antar-run."""
     raw = f"{row['Nama RS']}|{row['Username']}|{row['Waktu Ulasan']}|{row['Isi Ulasan']}"
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
 
@@ -92,9 +77,6 @@ def load_existing() -> list[dict]:
 
 
 def last_review_date(rows: list[dict], margin_days: int = 7) -> str | None:
-    """Tanggal ulasan terbaru di data lama, dikurangi margin supaya ulasan
-    yang gagal diklasifikasi di run lalu tetap terjangkau (duplikat sudah
-    disaring lewat id)."""
     dates = [r["Waktu Ulasan"] for r in rows if r.get("Waktu Ulasan")]
     if not dates:
         return None
@@ -103,7 +85,6 @@ def last_review_date(rows: list[dict], margin_days: int = 7) -> str | None:
 
 
 def wake_up_svm_api():
-    """Render free tier sleep kalau idle -- bangunkan dulu sebelum mulai batch."""
     print("Membangunkan API SVM (Render free tier)...")
     for attempt in range(3):
         try:
@@ -117,8 +98,6 @@ def wake_up_svm_api():
 
 
 def classify_sentiment(text: str) -> dict:
-    """Panggil API SVM (preprocessing dilakukan di sisi API), kembalikan
-    dict kosong kalau gagal (ditandai butuh retry)."""
     try:
         resp = requests.post(SVM_API_URL, json={"text": text}, timeout=REQUEST_TIMEOUT)
         resp.raise_for_status()
