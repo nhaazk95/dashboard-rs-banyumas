@@ -106,6 +106,12 @@ def classify_sentiment(text: str) -> dict:
         print(f"  Gagal klasifikasi: {e}")
         return {}
 
+def arg_value(name, default=None):
+    if name in sys.argv:
+        i = sys.argv.index(name)
+        if i + 1 < len(sys.argv):
+            return sys.argv[i + 1]
+    return default
 
 def main():
     existing = load_existing()
@@ -127,33 +133,35 @@ def main():
     print(f"Data lama: {len(existing)} ulasan (ID unik: {len(existing_ids)})")
 
     client = ApifyClient(API_TOKEN)
+
+    max_reviews = int(arg_value("--max-reviews", MAX_REVIEWS_PER_RS))
+    max_charge = Decimal(arg_value("--max-charge", str(MAX_CHARGE_USD)))
+
     run_input = {
         "startUrls": [{"url": u} for u in daftar_rs_url],
         "language": "id",
         "countryCode": "id",              
         "maxCrawledPlacesPerSearch": 1,   
-        "maxReviews": MAX_REVIEWS_PER_RS,
+        "maxReviews": max_reviews,
         "reviewsSort": "newest",
         "maxImages": 0,
         "maxQuestions": 0,
 
     }
 
-    
-
-    start_date = last_review_date(existing)
+    start_date = arg_value("--since") or last_review_date(existing)
     if start_date:
-        run_input["reviewsStartDate"] = start_date  # hanya ulasan baru
+        run_input["reviewsStartDate"] = start_date  # hanya ulasan sejak tanggal ini
         print(f"Hanya mengambil ulasan sejak {start_date}")
 
-    print(f"Menjalankan Apify actor untuk {len(daftar_rs_url)} RS...")
+    print(f"Menjalankan Apify actor untuk {len(daftar_rs_url)} RS "
+          f"(maks {max_reviews} ulasan/RS, batas biaya ${max_charge})...")
     try:
         run = client.actor("compass/crawler-google-places").call(
             run_input=run_input,
-            max_total_charge_usd=MAX_CHARGE_USD,  # batas biaya per run
+            max_total_charge_usd=max_charge,   # <- ganti dari MAX_CHARGE_USD
         )
     except ApifyApiError as e:
-        # Kredit habis / limit tercapai: data lama tetap aman, workflow tidak merah
         print(f"⚠️ Apify gagal dijalankan: {e}")
         print("Data lama dipertahankan, tidak ada perubahan file.")
         return
