@@ -2,8 +2,9 @@ name: Update Hospital Reviews Data
 
 on:
   schedule:
-    # Tiap Senin 00:00 UTC (07:00 WIB) -- hemat kredit Apify
-    - cron: "0 0 * * 1"
+    # Tiap 6 jam -- near-live, tapi MAX_REVIEWS_PER_RS di scrape_update.py
+    # sudah dikecilkan supaya tetap hemat kredit Apify.
+    - cron: "0 */6 * * *"
   workflow_dispatch: {}   # bisa di-trigger manual dari tab "Actions"
 
 permissions:

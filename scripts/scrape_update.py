@@ -21,7 +21,7 @@ SVM_WAKEUP_URL = "https://sentimen-api.onrender.com/"
 
 OUTPUT_FILE = Path("docs/data/reviews.json")
 
-MAX_REVIEWS_PER_RS = 20           
+MAX_REVIEWS_PER_RS = 5          
 MAX_CHARGE_USD = Decimal("50")  
 REQUEST_TIMEOUT = 90              
 
