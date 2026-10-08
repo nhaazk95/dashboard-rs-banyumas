@@ -99,17 +99,20 @@
 
   #reviewSection { flex:0 0 auto; padding:10px 12px 12px; border-bottom:1px solid #e2e8f0; }
   #reviewSection h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
-  #reviewListContent { max-height:200px; overflow-y:auto; overflow-x:hidden; }
+  #reviewListContent { max-height:380px; overflow-y:auto; overflow-x:hidden; }
   .revItem { padding:8px; border-radius:8px; background:#f8fafc; border:1px solid #eef2f7; margin-bottom:6px; }
   .revItem .revTop { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
   .revItem .revDate { font-size:9px; color:#94a3b8; }
   .revItem .revStars { font-size:10px; color:#d97706; }
-  .revItem .revText { font-size:11px; color:#475569; line-height:1.4;
-                       display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .revItem .revText { font-size:11px; color:#475569; line-height:1.4; white-space:pre-wrap; word-break:break-word; }
   .revItem .revBadge { font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px; display:inline-block; margin-top:5px; }
   .revItem .revBadge.Positif { background:#dcfce7; color:#15803d; }
   .revItem .revBadge.Netral  { background:#fef3c7; color:#b45309; }
   .revItem .revBadge.Negatif { background:#fee2e2; color:#be123c; }
+  .revCount { font-size:10px; color:#94a3b8; margin-bottom:6px; }
+  .revMore { width:100%; padding:6px; margin:2px 0 6px; border:1px solid #c7d2fe; background:#eef2ff;
+             color:#6366f1; border-radius:8px; font-size:11px; cursor:pointer; }
+  .revMore:hover { background:#e0e7ff; }
   #revEmpty { text-align:center; color:#94a3b8; font-size:11px; padding:16px 10px; }
 
   #loadingOverlay { position:absolute; inset:0; background:rgba(248,250,252,.9);
@@ -274,7 +277,7 @@ function buildTrend(rowsRS, period) {
     byMonth[key].ratingSum += (r.Rating || 0);
     byMonth[key].total += 1;
   });
-  const monthsSorted = Object.values(byMonth).sort((a,b) => a.sortKey.localeCompare(b.sortKey)).slice(-12);
+  const monthsSorted = Object.values(byMonth).sort((a,b) => a.sortKey.localeCompare(b.sortKey)).slice(-24);
   return {
     labels: monthsSorted.map(m => m.label),
     ratings: monthsSorted.map(m => m.total ? +(m.ratingSum/m.total).toFixed(2) : null),
@@ -282,27 +285,46 @@ function buildTrend(rowsRS, period) {
   };
 }
 
-function renderReviewList(rowsRS) {
+/* ---------- Daftar ulasan (semua ulasan, teks penuh, muat bertahap) ---------- */
+const REV_PAGE = 20;
+let revRows = [], revShown = REV_PAGE;
+
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function revCard(r) {
+  const n = Math.max(0, Math.min(5, Math.round(r.Rating || 0)));
+  const stars = '★'.repeat(n) + '☆'.repeat(5 - n);
+  const sent = r.Sentimen_Prediksi || 'Netral';
+  return `<div class="revItem">
+    <div class="revTop">
+      <span class="revStars">${stars}</span>
+      <span class="revDate">${formatDateTimeID(new Date(r['Waktu Ulasan']))}</span>
+    </div>
+    <div class="revText">${esc((r['Isi Ulasan'] || '').trim())}</div>
+    <span class="revBadge ${sent}">${SENT_LABEL[sent] || sent}</span>
+  </div>`;
+}
+
+function renderReviewList(rowsRS, reset = true) {
   const container = document.getElementById('reviewListContent');
-  if (!rowsRS.length) {
+  const scroll = container.scrollTop;
+  if (reset) {
+    revRows = [...rowsRS].sort((a,b) => new Date(b['Waktu Ulasan']) - new Date(a['Waktu Ulasan']));
+    revShown = REV_PAGE;
+  }
+  if (!revRows.length) {
     container.innerHTML = '<div id="revEmpty">Belum ada ulasan di periode ini</div>';
     return;
   }
-  const sorted = [...rowsRS].sort((a,b) => new Date(b['Waktu Ulasan']) - new Date(a['Waktu Ulasan']));
-  container.innerHTML = sorted.slice(0, 15).map(r => {
-    const stars = '★'.repeat(Math.round(r.Rating || 0)) + '☆'.repeat(5 - Math.round(r.Rating || 0));
-    const dateStr = formatDateTimeID(new Date(r['Waktu Ulasan']));
-    const sent = r.Sentimen_Prediksi || 'Netral';
-    const text = (r['Isi Ulasan'] || '').trim();
-    return `<div class="revItem">
-      <div class="revTop">
-        <span class="revStars">${stars}</span>
-        <span class="revDate">${dateStr}</span>
-      </div>
-      <div class="revText">${text.replace(/</g,'&lt;')}</div>
-      <span class="revBadge ${sent}">${SENT_LABEL[sent]||sent}</span>
-    </div>`;
-  }).join('');
+  const sisa = revRows.length - revShown;
+  container.innerHTML =
+    `<div class="revCount">${revRows.length} ulasan | ${PLABEL[cur]}</div>` +
+    revRows.slice(0, revShown).map(revCard).join('') +
+    (sisa > 0 ? `<button class="revMore" onclick="revShown += REV_PAGE; renderReviewList(null, false)">
+                   Tampilkan ${Math.min(REV_PAGE, sisa)} lagi (sisa ${sisa})</button>` : '');
+  if (!reset) container.scrollTop = scroll;
 }
 
 function filterByPeriod(rows, p) {
@@ -559,10 +581,7 @@ loadData();
 </div>
 
 <script>
-  // FIX: tidak ada API key di sini lagi -- semua panggilan AI (Groq) lewat
-  // backend Render kamu sendiri (endpoint /chat), supaya tidak ada secret
-  // yang ter-expose di kode publik (sama seperti kasus Mapbox & Gemini
-  // sebelumnya yang kena GitHub push protection).
+  // Tidak ada API key di sini. Semua panggilan AI lewat backend Render (/chat).
   const CHAT_URL = "https://sentimen-api.onrender.com/chat";
   const SVM_PREDICT_URL = "https://sentimen-api.onrender.com/predict";
 
@@ -588,13 +607,6 @@ loadData();
     return div;
   }
 
-  function looksLikeReviewText(text) {
-    const lower = text.toLowerCase();
-    const searchWords = ['cari', 'rekomendasi', 'bandingkan', 'rs mana', 'rumah sakit mana', 'dimana', 'akurasi', 'berapa'];
-    if (searchWords.some(w => lower.includes(w))) return false;
-    return text.trim().split(/\s+/).length >= 4;
-  }
-
   async function classifyWithSVM(text) {
     try {
       const resp = await fetch(SVM_PREDICT_URL, {
@@ -609,11 +621,85 @@ loadData();
     }
   }
 
-  function buildHospitalContext() {
-    if (!AGG_ALL || !AGG_ALL.length) return "Data RS belum termuat.";
-    return AGG_ALL.map(d =>
-      `${d['Nama RS']}: rating ${d.Avg_Rating}, ${d.Total} ulasan (${d.Pct_Pos}% positif, ${d.Pct_Net}% netral, ${d.Pct_Neg}% negatif)`
-    ).join('\n');
+  /* ---------- Konteks dari reviews.json untuk chatbot ---------- */
+  const TOPIK = {
+    persalinan: ["persalinan","lahiran","melahirkan","bersalin","bidan","caesar","sesar","sc",
+                 "kandungan","obgyn","obsgyn","hamil","kehamilan","antenatal","prenatal","usg","spog"],
+    igd:        ["igd","ugd","darurat"],
+    farmasi:    ["farmasi","obat","apotek","resep"],
+    antre:      ["antre","antri","antrian","tunggu"],
+    bpjs:       ["bpjs","jkn","kis"],
+    gigi:       ["gigi"],
+    anak:       ["anak","bayi","nicu","balita"],
+    bedah:      ["operasi","bedah"],
+    radiologi:  ["radiologi","rontgen","usg","ct","mri"],
+    parkir:     ["parkir"],
+    kebersihan: ["bersih","kotor","bau"],
+  };
+  const STOP = new Set(["yang","dan","di","ke","dari","untuk","rs","rumah","sakit","apa","ada","yg","mana",
+    "bagaimana","dengan","atau","saya","mau","cari","bisa","tolong","dong","ya","itu","ini","terbaik","dimana"]);
+
+  function kataKunci(pertanyaan) {
+    const kata = pertanyaan.toLowerCase().split(/[^a-z0-9]+/).filter(w => w.length >= 3 && !STOP.has(w));
+    const hasil = new Set();
+    for (const [topik, sinonim] of Object.entries(TOPIK)) {
+      if (kata.includes(topik) ||
+          kata.some(w => sinonim.some(s => w === s || (s.length >= 5 && w.includes(s))))) {
+        sinonim.forEach(s => hasil.add(s));
+      }
+    }
+    if (hasil.size === 0) kata.forEach(w => hasil.add(w));
+    return [...hasil];
+  }
+
+  function buatKonteks(pertanyaan) {
+    if (!RAW || !RAW.length) return "Data ulasan belum termuat.";
+    const sentOf = r => (r.Sentimen_Prediksi || '').toLowerCase();
+
+    const per = {};
+    RAW.forEach(r => {
+      const p = per[r['Nama RS']] ??= { n:0, rating:0, pos:0, net:0, neg:0 };
+      p.n++; p.rating += Number(r.Rating) || 0;
+      const s = sentOf(r);
+      if (s === 'positif') p.pos++; else if (s === 'netral') p.net++; else if (s === 'negatif') p.neg++;
+    });
+    let teks = "RINGKASAN RS (nama | jumlah ulasan | rating rata-rata | positif/netral/negatif):\n";
+    Object.entries(per).forEach(([n, p]) => {
+      teks += `- ${n} | ${p.n} | ${(p.rating / p.n).toFixed(2)} | ${p.pos}/${p.net}/${p.neg}\n`;
+    });
+
+    const kunci = kataKunci(pertanyaan);
+    if (kunci.length) {
+      const pola = kunci.map(k => {
+        const aman = k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        return k.length >= 5 ? aman : "\\b" + aman + "\\b";
+      });
+      const re = new RegExp("(" + pola.join("|") + ")", "i");
+      const topik = {};
+      RAW.filter(r => re.test(r['Isi Ulasan'] || '')).forEach(r => {
+        const t = topik[r['Nama RS']] ??= { n:0, pos:0, net:0, neg:0, contoh:[] };
+        t.n++;
+        const s = sentOf(r);
+        if (s === 'positif') t.pos++; else if (s === 'netral') t.net++; else if (s === 'negatif') t.neg++;
+        if (t.contoh.length < 3) t.contoh.push(`[${s} | ${r.Rating}★] ${(r['Isi Ulasan'] || '').slice(0, 200)}`);
+      });
+      teks += `\nKATA KUNCI DICARI: ${kunci.join(', ')}\nULASAN YANG MENYEBUT TOPIK, per RS (jumlah | positif/netral/negatif):\n`;
+      const urut = Object.entries(topik).sort((a, b) => b[1].n - a[1].n).slice(0, 8);
+      if (!urut.length) teks += "- Tidak ada ulasan yang menyebut topik ini.\n";
+      urut.forEach(([n, t]) => {
+        teks += `- ${n} | ${t.n} | ${t.pos}/${t.net}/${t.neg}\n`;
+        t.contoh.forEach(c => teks += `    * ${c}\n`);
+      });
+    }
+    return teks;   // Username sengaja tidak dikirim
+  }
+
+  function looksLikeReviewText(text) {
+    const lower = text.toLowerCase();
+    if (text.includes('?')) return false;
+    const searchWords = ['cari','rekomendasi','bandingkan','rs mana','rumah sakit mana','dimana','akurasi','berapa','terbaik'];
+    if (searchWords.some(w => lower.includes(w))) return false;
+    return text.trim().split(/\s+/).length >= 4;
   }
 
   async function sendChatMessage() {
@@ -627,15 +713,14 @@ loadData();
     chatHistory.push({ role: 'user', text });
     const typingBubble = addBubble('bot', 'Mengetik...', 'typing');
 
-    let promptText = text;
-
+    let promptText = text, context = "";
     if (looksLikeReviewText(text)) {
       const svmResult = await classifyWithSVM(text);
       if (svmResult && svmResult.sentimen) {
         promptText = `[Konteks: ulasan berikut sudah diklasifikasi oleh model SVM dengan hasil Sentimen="${svmResult.sentimen}", Confidence=${svmResult.confidence}]\n\nAnalisis ulasan ini: "${text}"`;
       }
     } else {
-      promptText = `[Data RS saat ini di dashboard:\n${buildHospitalContext()}]\n\nPertanyaan user: ${text}`;
+      context = buatKonteks(text);
     }
 
     try {
@@ -644,11 +729,15 @@ loadData();
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: promptText,
-          history: chatHistory.slice(0, -1).map(m => ({ role: m.role, text: m.text }))
+          history: chatHistory.slice(0, -1).slice(-6).map(m => ({ role: m.role, text: m.text })),
+          context
         })
       });
-      const data = await resp.json();
-      const replyText = data.reply || 'Maaf, terjadi kesalahan saat memproses jawaban.';
+      const data = await resp.json().catch(() => ({}));
+      let replyText;
+      if (resp.ok) replyText = data.reply || 'Maaf, terjadi kesalahan saat memproses jawaban.';
+      else if (resp.status === 429) replyText = data.detail || 'Layanan chatbot sedang ramai. Coba lagi sekitar satu menit.';
+      else replyText = 'Maaf, asisten AI sedang bermasalah. Coba lagi nanti.';
       typingBubble.remove();
       addBubble('bot', replyText);
       chatHistory.push({ role: 'model', text: replyText });

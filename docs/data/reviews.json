@@ -2263,7 +2263,7 @@
     "Longitude": 109.2431658,
     "Isi Ulasan": "Pelayanan ny bagus..ramah..",
     "id": "bdc68e9c57c7ef1d",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3633,
     "Processed_At": "2026-10-03T00:27:16.927459",
     "Teks_Bersih": "layan ny bagusramah"
@@ -2368,7 +2368,7 @@
     "Longitude": 109.2618184,
     "Isi Ulasan": "sakit aja ada parkir 2 rb",
     "id": "a8d90628508aad02",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Netral",
     "Confidence": 1.2503,
     "Processed_At": "2026-10-03T00:27:28.255372",
     "Teks_Bersih": "sakit saja ada parkir 2 rb"
@@ -3045,7 +3045,7 @@
     "Longitude": 109.2726441,
     "Isi Ulasan": "saya kasih bintang",
     "id": "21d4470a7a008f4e",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Netral",
     "Confidence": 1.069,
     "Processed_At": "2026-10-03T00:28:30.823169",
     "Teks_Bersih": "saya beri bintang"
@@ -4530,7 +4530,7 @@
     "Longitude": 109.2397481,
     "Isi Ulasan": "Sangat baik sekali pelayanan ny",
     "id": "704c0859c03ac0e8",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.931,
     "Processed_At": "2026-10-03T00:31:40.018095",
     "Teks_Bersih": "sangat baik sekali layan ny"
@@ -4802,7 +4802,7 @@
     "Longitude": 109.258164,
     "Isi Ulasan": "Pelayanan klinik laktasinya kerenn bgtt minnn. Recommended buat ibu baruuuu",
     "id": "5cf54bf30bc33c9a",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.012,
     "Processed_At": "2026-10-03T00:32:13.317598",
     "Teks_Bersih": "layan klinik laktasi kerenn bgtt min rekomendasi untuk ibu baru"
@@ -8208,7 +8208,7 @@
     "Longitude": 109.274308,
     "Isi Ulasan": "Mantap. RS JIH memang top Mantap",
     "id": "e256107680ecf67f",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9501,
     "Teks_Bersih": "sangat baik rumah sakit jih memang sangat baik sangat baik",
     "Processed_At": "2026-10-06T10:03:46.123431"
