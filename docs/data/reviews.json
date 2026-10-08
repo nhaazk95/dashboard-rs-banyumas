@@ -60863,7 +60863,7 @@
     "Confidence": null,
     "Teks_Bersih": null,
     "Processed_At": "2026-10-08T03:30:23.640377",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RS Dummy A",
@@ -60880,7 +60880,7 @@
     "Confidence": null,
     "Teks_Bersih": null,
     "Processed_At": "2026-10-08T03:30:23.640377",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RS Dummy B",
@@ -60897,7 +60897,7 @@
     "Confidence": null,
     "Teks_Bersih": null,
     "Processed_At": "2026-10-08T03:30:23.640377",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RS Dummy C",
@@ -60914,7 +60914,7 @@
     "Confidence": null,
     "Teks_Bersih": null,
     "Processed_At": "2026-10-08T03:30:23.640377",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RS Dummy A",
@@ -60931,7 +60931,7 @@
     "Confidence": null,
     "Teks_Bersih": null,
     "Processed_At": "2026-10-08T03:30:23.640377",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RS Dummy B",
@@ -60948,7 +60948,7 @@
     "Confidence": null,
     "Teks_Bersih": null,
     "Processed_At": "2026-10-08T03:30:23.640377",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -60964,7 +60964,7 @@
     "Confidence": 1.2474,
     "Teks_Bersih": "pasien dari arinton ryang tulip 13 layan dokter dan awat baiksaran pak dokter kalau meriksa jangan terlalu cepatkamar bersihmakanan enak dari rsmks",
     "Processed_At": "2026-10-08T03:42:07.975855",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -60980,7 +60980,7 @@
     "Confidence": 1.3153,
     "Teks_Bersih": "alhamdulillah hari ini sudah rumah kemaren 3 hari anak bayi rawat sini ketemu dokter dicky yang enak sekali ajak konsulhal sepele pun jawab dengan senang hati sama beliau awat alhamdulillah sangat ramah",
     "Processed_At": "2026-10-08T03:42:10.174610",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -60996,7 +60996,7 @@
     "Confidence": 1.0939,
     "Teks_Bersih": "hari ini lama saya di rawat di kamar salin bu bidan awat baik sangat ramah kamar mandi semua bersih2",
     "Processed_At": "2026-10-08T03:42:11.572708",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -61012,7 +61012,7 @@
     "Confidence": 1.2511,
     "Teks_Bersih": "lama rumah sakit ajibarang ruang salin untuk bu bidan ramahramah",
     "Processed_At": "2026-10-08T03:42:13.573074",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -61028,7 +61028,7 @@
     "Confidence": 1.2715,
     "Teks_Bersih": "saya tunggu bapak supriyono di kenari bawah layan bagus dokter dan awat ramah",
     "Processed_At": "2026-10-08T03:42:15.077141",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -61044,7 +61044,7 @@
     "Confidence": 1.379,
     "Teks_Bersih": "layan sangat ramahruangannya enak",
     "Processed_At": "2026-10-08T03:42:17.500025",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -61060,7 +61060,7 @@
     "Confidence": 1.3615,
     "Teks_Bersih": "layan baik",
     "Processed_At": "2026-10-08T03:42:18.294208",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -61076,7 +61076,7 @@
     "Confidence": 1.3632,
     "Teks_Bersih": "sudah jam operasional tapi dokter belum dateng coba pihak management rumah sakit di ketat lagi soal kasi yang bawa anak kecil tidak bisa tunggu dokter yang telat",
     "Processed_At": "2026-10-08T03:42:20.892267",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -61092,7 +61092,7 @@
     "Confidence": 1.1183,
     "Teks_Bersih": "saya pernah mandi jenazah di rumah sakit islam tugas baik sekali gercep bantu saya sehingga proses mandi jalan lancar",
     "Processed_At": "2026-10-08T03:42:22.482909",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSU Siaga Medika Banyumas",
@@ -61108,7 +61108,7 @@
     "Confidence": 1.4315,
     "Teks_Bersih": "layan baikperawat dan dokter ramah",
     "Processed_At": "2026-10-08T03:42:23.881588",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -61124,7 +61124,7 @@
     "Confidence": 1.162,
     "Teks_Bersih": "tempat bersihpelayanan bagusrekomended",
     "Processed_At": "2026-10-08T03:42:26.393438",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -61140,7 +61140,7 @@
     "Confidence": 1.3871,
     "Teks_Bersih": "saya lumayan bantu dengan layan yang beri oleh staf rumah sakit ini karena sangat informatif dan ramah",
     "Processed_At": "2026-10-08T03:42:27.183165",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -61156,7 +61156,7 @@
     "Confidence": 1.484,
     "Teks_Bersih": "saya dar banjarmasin obat d rumah sakit sini muas layan baik dan ramah tugas bantu dari nya enak di ajak ngobrol tugas informsi ramah sekali terima kasih",
     "Processed_At": "2026-10-08T03:42:30.173686",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -61172,7 +61172,7 @@
     "Confidence": 1.4844,
     "Teks_Bersih": "sangat muas sekali layan nya rumah sakit margono adalah rumah sakit baik dalam layan dna bersih terima kasih semua ramah",
     "Processed_At": "2026-10-08T03:42:31.483105",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -61188,7 +61188,7 @@
     "Confidence": 1.4843,
     "Teks_Bersih": "layan bagus dan muas",
     "Processed_At": "2026-10-08T03:42:32.275210",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSU Hidayah Purwokerto",
@@ -61204,7 +61204,7 @@
     "Confidence": 1.4542,
     "Teks_Bersih": "bersih dan nyaman",
     "Processed_At": "2026-10-08T03:42:33.110285",
-    "Notified": false
+    "Notified": true
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -61284,6 +61284,54 @@
     "Confidence": 1.4875,
     "Teks_Bersih": "layan bagus dan cepat dari anak sangat ramah",
     "Processed_At": "2026-10-08T03:53:45.788002",
+    "Notified": true
+  },
+  {
+    "Nama RS": "RSU Medika Lestari",
+    "Username": "Priskila",
+    "Rating": 5,
+    "Waktu Ulasan": "2026-10-08T02:26:24.559Z",
+    "Lokasi Tempat": "Jl. Raya Buntu, Gombong, Pageralang, Kec. Kemranjen, Kabupaten Banyumas, Jawa Tengah 53194, Indonesia",
+    "Latitude": -7.5925669,
+    "Longitude": 109.2747121,
+    "Isi Ulasan": "Pelayanan sangat memuaskan",
+    "id": "8e4543414bb4cdae",
+    "Sentimen_Prediksi": "Positif",
+    "Confidence": 1.4053,
+    "Teks_Bersih": "layan sangat muas",
+    "Processed_At": "2026-10-08T03:56:46.443121",
+    "Notified": true
+  },
+  {
+    "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
+    "Username": "putri andhan azzahra",
+    "Rating": 5,
+    "Waktu Ulasan": "2026-10-08T01:47:04.061Z",
+    "Lokasi Tempat": "Jl. Dr. Gumbreg No.1, Kebontebu, Berkoh, Kec. Purwokerto Sel., Kabupaten Banyumas, Jawa Tengah 53146, Indonesia",
+    "Latitude": -7.4374273,
+    "Longitude": 109.2673789,
+    "Isi Ulasan": "Selama mendapatkan pelayanan di RS Margono, saya merasa cukup terbantu. Proses pemeriksaan berjalan dengan baik dan petugas memberikan informasi yang diperlukan.",
+    "id": "0125492d57c2ee2c",
+    "Sentimen_Prediksi": "Positif",
+    "Confidence": 1.4153,
+    "Teks_Bersih": "lama dapat layan di rumah sakit margono saya rasa cukup bantu proses periksa jalan dengan baik dan tugas beri informasi yang perlu",
+    "Processed_At": "2026-10-08T03:56:47.546659",
+    "Notified": true
+  },
+  {
+    "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
+    "Username": "salmoyy moy",
+    "Rating": 5,
+    "Waktu Ulasan": "2026-10-08T01:37:37.745Z",
+    "Lokasi Tempat": "Jl. Dr. Gumbreg No.1, Kebontebu, Berkoh, Kec. Purwokerto Sel., Kabupaten Banyumas, Jawa Tengah 53146, Indonesia",
+    "Latitude": -7.4374273,
+    "Longitude": 109.2673789,
+    "Isi Ulasan": "RS Margono menjadi salah satu rumah sakit rujukan yang cukup lengkap di Purwokerto. Petugas cukup informatif ketika ditanya mengenai alur pelayanan. Namun, perlu lebih banyak informasi mengenai antrean agar pasien tidak terlalu lama menunggu",
+    "id": "8225cd3d07e5843e",
+    "Sentimen_Prediksi": "Negatif",
+    "Confidence": 1.0344,
+    "Teks_Bersih": "rumah sakit margono jadi salah satu rumah sakit rujuk yang cukup lengkap di purwokerto tugas cukup informatif ketika tanya kena alur layan namun perlu lebih banyak informasi kena antre agar pasien tidak terlalu lama tunggu",
+    "Processed_At": "2026-10-08T03:56:50.552342",
     "Notified": true
   }
 ]
