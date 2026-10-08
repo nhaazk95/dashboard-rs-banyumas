@@ -4,7 +4,7 @@ on:
   schedule:
     # Tiap 6 jam -- near-live, tapi MAX_REVIEWS_PER_RS di scrape_update.py
     # sudah dikecilkan supaya tetap hemat kredit Apify.
-    - cron: "0 */6 * * *"
+    - cron: "17 */2 * * *"
   workflow_dispatch: {}   # bisa di-trigger manual dari tab "Actions"
 
 permissions:

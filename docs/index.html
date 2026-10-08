@@ -34,6 +34,11 @@
   #refreshBtn { background:#eef2ff; color:#6366f1; border:1px solid #c7d2fe;
                 padding:5px 12px; border-radius:8px; cursor:pointer; font-size:11px; }
   #refreshBtn:hover { background:#e0e7ff; }
+  #updateBtn { background:#fdf2f8; color:#c026d3; border:1px solid #f5d0fe;
+               padding:5px 12px; border-radius:8px; cursor:pointer; font-size:11px; }
+  #updateBtn:hover { background:#fae8ff; }
+  #updateBtn:disabled { opacity:.6; cursor:not-allowed; }
+  #updateStatus { font-size:11px; color:#94a3b8; }
 
   #main { flex:1; display:flex; overflow:hidden; }
   #mapWrap { flex:1; position:relative; }
@@ -133,7 +138,9 @@
 <div id="controls">
   <span class="ctrl-label">Periode</span>
   <div id="btnWrap" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
-  <button id="refreshBtn" onclick="loadData()">↻ Refresh Data</button>
+  <button id="refreshBtn" onclick="loadData()">↻ Muat Ulang Tampilan</button>
+  <button id="updateBtn" onclick="requestUpdate()">⟳ Ambil Ulasan Terbaru</button>
+  <span id="updateStatus"></span>
 </div>
 
 <div id="main">
@@ -225,6 +232,15 @@ function formatDateTimeID(d) {
 }
 function monthKey(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
 function monthLabelID(d) { return d.toLocaleDateString('id-ID', { month:'short', year:'numeric' }); }
+
+// Waktu tanpa tanda zona (mis. Processed_At) dianggap UTC supaya tampil benar dalam WIB
+function toDate(v) {
+  const s = String(v);
+  return new Date(/(Z|[+-]\d\d:\d\d)$/.test(s) ? s : s + 'Z');
+}
+function formatWIB(d) {
+  return d.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + ' WIB';
+}
 
 function buildTrend(rowsRS, period) {
   if (period === '7D') {
@@ -375,17 +391,68 @@ async function loadData() {
     const resp = await fetch('data/reviews.json?_=' + Date.now());
     RAW = await resp.json();
     RAW = RAW.filter(r => r.Latitude && r.Longitude);
-    const latest = RAW.reduce((max,r) => {
-      const t = new Date(r.Processed_At || r['Waktu Ulasan']);
+
+    const latest = RAW.reduce((max, r) => {
+      const t = toDate(r.Processed_At || r['Waktu Ulasan']);
       return t > max ? t : max;
     }, new Date(0));
+
+    // Opsional: data/meta.json (waktu pengecekan terakhir oleh workflow). Aman bila belum ada.
+    let metaTxt = '';
+    try {
+      const mr = await fetch('data/meta.json?_=' + Date.now());
+      if (mr.ok) {
+        const m = await mr.json();
+        if (m.last_run_utc) metaTxt = ` | Dicek terakhir: ${formatWIB(toDate(m.last_run_utc))}`;
+      }
+    } catch (e) {}
+
     document.getElementById('lastUpdate').textContent =
-      `Update terakhir: ${latest.toLocaleString('id-ID')} | Total ulasan: ${RAW.length}`;
+      `Ulasan terbaru diproses: ${formatWIB(latest)} | Total ulasan: ${RAW.length}${metaTxt}`;
     recompute();
   } catch (e) {
     document.getElementById('lastUpdate').textContent = 'Gagal memuat data: ' + e.message;
   } finally {
     document.getElementById('loadingOverlay').style.display = 'none';
+  }
+}
+
+/* ---------- Tombol "Ambil Ulasan Terbaru": memicu workflow GitHub lewat backend ---------- */
+const REFRESH_URL = "https://sentimen-api.onrender.com/refresh";
+const sleep = ms => new Promise(res => setTimeout(res, ms));
+
+async function requestUpdate() {
+  const btn = document.getElementById('updateBtn');
+  const st = document.getElementById('updateStatus');
+  btn.disabled = true;
+  const t0 = Date.now();
+  try {
+    st.textContent = 'Menghubungi server (bisa 30-50 detik jika server tertidur)...';
+    const r = await fetch(REFRESH_URL, { method: 'POST' });
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 429) { st.textContent = d.detail || 'Update baru saja dijalankan.'; return; }
+    if (!r.ok) throw new Error(d.detail || ('HTTP ' + r.status));
+
+    st.textContent = 'Mengambil ulasan di GitHub (sekitar 3-5 menit)...';
+    let hasil = null;
+    for (let i = 0; i < 40; i++) {
+      await sleep(15000);
+      try {
+        const s = await (await fetch(REFRESH_URL + '/status')).json();
+        if (s.status === 'completed' && new Date(s.created_at).getTime() >= t0 - 30000) { hasil = s; break; }
+      } catch (e) { /* server mungkin sibuk, coba lagi */ }
+    }
+    if (!hasil) { st.textContent = 'Update belum selesai. Coba "Muat Ulang Tampilan" beberapa menit lagi.'; return; }
+    if (hasil.conclusion !== 'success') { st.textContent = 'Update di GitHub gagal (' + hasil.conclusion + '). Cek tab Actions.'; return; }
+
+    st.textContent = 'Menunggu GitHub Pages menayangkan data baru (±1 menit)...';
+    await sleep(60000);
+    await loadData();
+    st.textContent = 'Selesai. Data sudah dimuat ulang.';
+  } catch (e) {
+    st.textContent = 'Gagal memulai update: ' + e.message;
+  } finally {
+    btn.disabled = false;
   }
 }
 
