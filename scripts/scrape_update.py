@@ -16,15 +16,16 @@ from apify_client.errors import ApifyApiError
 # ============================================================
 # KONFIGURASI
 # ============================================================
-API_TOKEN = os.environ["APIFY_TOKEN"]  
+API_TOKEN = os.environ.get("APIFY_TOKEN")   # hanya wajib saat scraping
 SVM_API_URL = "https://sentimen-api.onrender.com/predict"
 SVM_WAKEUP_URL = "https://sentimen-api.onrender.com/"
 
 OUTPUT_FILE = Path("docs/data/reviews.json")
 
-MAX_REVIEWS_PER_RS = 5          
-MAX_CHARGE_USD = Decimal("50")  
-REQUEST_TIMEOUT = 90              
+MAX_REVIEWS_PER_RS = 5
+MAX_CHARGE_USD = Decimal("50")
+REQUEST_TIMEOUT = 90
+NOTIFY_MAX_AGE_DAYS = 14   # email hanya untuk ulasan yang ditulis dalam N hari terakhir
 
 daftar_rs_url = [
     "https://www.google.com/maps/search/?api=1&query=Rumah+Sakit+Umum+Bunda+Purwokerto",
@@ -77,6 +78,11 @@ def load_existing() -> list[dict]:
     return []
 
 
+def save(rows: list[dict]):
+    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_FILE.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def last_review_date(rows: list[dict], margin_days: int = 7) -> str | None:
     dates = [r["Waktu Ulasan"] for r in rows if r.get("Waktu Ulasan")]
     if not dates:
@@ -107,47 +113,6 @@ def classify_sentiment(text: str) -> dict:
         print(f"  Gagal klasifikasi: {e}")
         return {}
 
-NOTIFY_MAX_AGE_DAYS = 14   # hanya ulasan yang baru ditulis, bukan data lama dari backfill
-
-def _tgl(row):
-    try:
-        return datetime.fromisoformat(str(row["Waktu Ulasan"]).replace("Z", "+00:00")).replace(tzinfo=None)
-    except Exception:
-        return datetime.min
-
-
-def kirim_notifikasi_negatif(rows):
-    user = os.environ.get("GMAIL_USER")
-    pwd = os.environ.get("GMAIL_APP_PASSWORD")
-    tujuan = os.environ.get("NOTIFY_TO")
-    if not rows:
-        return
-    if not (user and pwd and tujuan):
-        print("Notifikasi email dilewati: GMAIL_USER / GMAIL_APP_PASSWORD / NOTIFY_TO belum diset.")
-        return
-
-    rows = sorted(rows, key=lambda r: (r["Nama RS"] or "", _tgl(r)), reverse=False)
-    baris = []
-    for r in rows[:30]:
-        tgl = _tgl(r).strftime("%d %b %Y")
-        baris.append(f"- {r['Nama RS']} | {r.get('Rating')}★ | {tgl}\n"
-                     f"  {(r['Isi Ulasan'] or '').strip()[:500]}\n")
-    sisa = len(rows) - 30
-    if sisa > 0:
-        baris.append(f"... dan {sisa} ulasan negatif lainnya (lihat dashboard).")
-
-    msg = EmailMessage()
-    msg["Subject"] = f"[Dashboard RS] {len(rows)} ulasan negatif baru"
-    msg["From"] = user
-    msg["To"] = tujuan
-    msg.set_content(
-        "Ulasan berikut diprediksi NEGATIF oleh model SVM. Prediksi bisa keliru, "
-        "cek isi ulasannya.\n\n" + "\n".join(baris)
-    )
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as s:
-        s.login(user, pwd)
-        s.send_message(msg)
-    print(f"Email notifikasi terkirim: {len(rows)} ulasan negatif.")
 
 def arg_value(name, default=None):
     if name in sys.argv:
@@ -156,25 +121,109 @@ def arg_value(name, default=None):
             return sys.argv[i + 1]
     return default
 
+
+# ============================================================
+# NOTIFIKASI EMAIL (ulasan negatif)
+# ============================================================
+def _tgl(row):
+    try:
+        return datetime.fromisoformat(str(row["Waktu Ulasan"]).replace("Z", "+00:00")).replace(tzinfo=None)
+    except Exception:
+        return datetime.min
+
+
+def kirim_notifikasi_negatif(rows) -> bool:
+    """True = terkirim (atau memang tidak ada yang dikirim). False = gagal/dilewati."""
+    if not rows:
+        return True
+    user = os.environ.get("GMAIL_USER")
+    pwd = (os.environ.get("GMAIL_APP_PASSWORD") or "").replace(" ", "").strip()
+    tujuan = os.environ.get("NOTIFY_TO")
+    if not (user and pwd and tujuan):
+        print("Notifikasi email dilewati: GMAIL_USER / GMAIL_APP_PASSWORD / NOTIFY_TO belum diset.")
+        return False
+
+    rows = sorted(rows, key=lambda r: (r.get("Nama RS") or "", _tgl(r)))
+    baris = []
+    for r in rows[:30]:
+        baris.append(f"- {r.get('Nama RS')} | {r.get('Rating')}★ | {_tgl(r).strftime('%d %b %Y')}\n"
+                     f"  {(r.get('Isi Ulasan') or '').strip()[:500]}\n")
+    if len(rows) > 30:
+        baris.append(f"... dan {len(rows) - 30} ulasan negatif lainnya (lihat dashboard).")
+
+    msg = EmailMessage()
+    msg["Subject"] = f"[Dashboard RS] {len(rows)} ulasan negatif baru"
+    msg["From"] = user
+    msg["To"] = tujuan
+    msg.set_content("Ulasan berikut diprediksi NEGATIF oleh model SVM. Prediksi bisa keliru, "
+                    "cek isi ulasannya.\n\n" + "\n".join(baris))
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as s:
+            s.login(user, pwd)
+            s.send_message(msg)
+    except Exception as e:
+        print(f"⚠️ Email notifikasi gagal dikirim: {e}")
+        return False
+    print(f"Email notifikasi terkirim: {len(rows)} ulasan negatif.")
+    return True
+
+
+def kirim_pending(rows) -> bool:
+    """Kirim email untuk baris Notified=False, lalu tandai True.
+    Return True kalau ada baris yang berubah (file perlu disimpan)."""
+    pending = [r for r in rows if r.get("Notified") is False]
+    if not pending:
+        return False
+    batas = datetime.utcnow() - timedelta(days=NOTIFY_MAX_AGE_DAYS)
+    kirim = [r for r in pending
+             if r.get("Sentimen_Prediksi") == "Negatif" and _tgl(r) >= batas]
+    if not kirim_notifikasi_negatif(kirim):
+        return False          # gagal: tetap False, dicoba lagi di run berikutnya
+    for r in pending:
+        r["Notified"] = True
+    return True
+
+
+# ============================================================
+# MAIN
+# ============================================================
 def main():
     existing = load_existing()
     existing_ids = {r["id"] for r in existing}
 
     if "--reclassify" in sys.argv:
         wake_up_svm_api()
+        dilewati = 0
         for row in existing:
+            if row.get("Label_Manual"):
+                row["Sentimen_Prediksi"] = row["Label_Manual"]   # pertahankan koreksi manual
+                dilewati += 1
+                continue
             res = classify_sentiment(row["Isi Ulasan"])
             if res.get("sentimen"):
                 row["Sentimen_Prediksi"] = res["sentimen"]
                 row["Confidence"] = res.get("confidence")
                 row["Teks_Bersih"] = res.get("clean_text")
             time.sleep(0.5)
-        OUTPUT_FILE.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"Klasifikasi ulang selesai: {len(existing)} ulasan")
+        save(existing)
+        print(f"Klasifikasi ulang selesai: {len(existing)} ulasan ({dilewati} label manual dipertahankan)")
         return
-    
+
     print(f"Data lama: {len(existing)} ulasan (ID unik: {len(existing_ids)})")
 
+    # Email dimatikan saat backfill (--since) atau dengan --no-email
+    notif_aktif = "--no-email" not in sys.argv and "--since" not in sys.argv
+
+    # Kirim email untuk baris yang sudah ada tapi belum diberitahukan (Notified=False)
+    if notif_aktif or "--notify-only" in sys.argv:
+        if kirim_pending(existing):
+            save(existing)
+    if "--notify-only" in sys.argv:
+        print("Mode --notify-only selesai.")
+        return
+
+    if not API_TOKEN:
+        raise SystemExit("APIFY_TOKEN belum diset (dibutuhkan untuk scraping).")
     client = ApifyClient(API_TOKEN)
 
     max_reviews = int(arg_value("--max-reviews", MAX_REVIEWS_PER_RS))
@@ -183,13 +232,12 @@ def main():
     run_input = {
         "startUrls": [{"url": u} for u in daftar_rs_url],
         "language": "id",
-        "countryCode": "id",              
-        "maxCrawledPlacesPerSearch": 1,   
+        "countryCode": "id",
+        "maxCrawledPlacesPerSearch": 1,
         "maxReviews": max_reviews,
         "reviewsSort": "newest",
         "maxImages": 0,
         "maxQuestions": 0,
-
     }
 
     start_date = arg_value("--since") or last_review_date(existing)
@@ -202,7 +250,7 @@ def main():
     try:
         run = client.actor("compass/crawler-google-places").call(
             run_input=run_input,
-            max_total_charge_usd=max_charge,   # <- ganti dari MAX_CHARGE_USD
+            max_total_charge_usd=max_charge,
         )
     except ApifyApiError as e:
         print(f"⚠️ Apify gagal dijalankan: {e}")
@@ -213,7 +261,6 @@ def main():
     print(f"Selesai scraping. Dataset: {dataset_id}")
 
     # --- Flatten hasil scraping ---
-    # iterate_items() selalu mengembalikan dict biasa, jadi .get() aman di sini.
     scraped_rows = []
     for place in client.dataset(dataset_id).iterate_items():
         nama_rs = place.get("title")
@@ -276,8 +323,9 @@ def main():
             continue
         row["Sentimen_Prediksi"] = result.get("sentimen")
         row["Confidence"] = result.get("confidence")
-        row["Teks_Bersih"] = result.get("clean_text")   # BARU: None jika API belum di-deploy ulang
+        row["Teks_Bersih"] = result.get("clean_text")
         row["Processed_At"] = datetime.utcnow().isoformat()
+        row["Notified"] = False if notif_aktif else True
         processed_new.append(row)
         time.sleep(0.5)  # jaga-jaga rate limit
 
@@ -286,16 +334,13 @@ def main():
 
     # --- Gabungkan dengan data lama, simpan ---
     combined = existing + processed_new
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_FILE.write_text(json.dumps(combined, ensure_ascii=False, indent=2), encoding="utf-8")
-    if "--no-email" not in sys.argv and "--since" not in sys.argv:
-        batas = datetime.utcnow() - timedelta(days=NOTIFY_MAX_AGE_DAYS)
-        negatif = [r for r in processed_new
-                   if r.get("Sentimen_Prediksi") == "Negatif" and _tgl(r) >= batas]
-        try:
-            kirim_notifikasi_negatif(negatif)
-        except Exception as e:
-            print(f"⚠️ Email notifikasi gagal dikirim: {e}")   # tidak menggagalkan workflow
+    save(combined)
+
+    # --- Email untuk ulasan negatif yang baru masuk ---
+    # processed_new berisi objek yang sama dengan di combined, jadi flag Notified ikut berubah
+    if notif_aktif and kirim_pending(processed_new):
+        save(combined)
+
     print(f"\n✅ Selesai. Total ulasan sekarang: {len(combined)} "
           f"(+{len(processed_new)} baru) -> {OUTPUT_FILE}")
 
