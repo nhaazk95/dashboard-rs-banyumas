@@ -33,6 +33,9 @@ jobs:
       - name: Run scraper + classifier
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          NOTIFY_TO: ${{ secrets.NOTIFY_TO }}
         run: python scripts/scrape_update.py
 
       - name: Commit and push if changed

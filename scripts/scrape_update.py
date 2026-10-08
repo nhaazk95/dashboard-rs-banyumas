@@ -3,11 +3,12 @@ import json
 import os
 import time
 import sys
+import requests
+import smtplib
 from datetime import datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
-
-import requests
+from email.message import EmailMessage
 from apify_client import ApifyClient
 from apify_client.errors import ApifyApiError
 
@@ -105,6 +106,48 @@ def classify_sentiment(text: str) -> dict:
     except requests.exceptions.RequestException as e:
         print(f"  Gagal klasifikasi: {e}")
         return {}
+
+NOTIFY_MAX_AGE_DAYS = 14   # hanya ulasan yang baru ditulis, bukan data lama dari backfill
+
+def _tgl(row):
+    try:
+        return datetime.fromisoformat(str(row["Waktu Ulasan"]).replace("Z", "+00:00")).replace(tzinfo=None)
+    except Exception:
+        return datetime.min
+
+
+def kirim_notifikasi_negatif(rows):
+    user = os.environ.get("GMAIL_USER")
+    pwd = os.environ.get("GMAIL_APP_PASSWORD")
+    tujuan = os.environ.get("NOTIFY_TO")
+    if not rows:
+        return
+    if not (user and pwd and tujuan):
+        print("Notifikasi email dilewati: GMAIL_USER / GMAIL_APP_PASSWORD / NOTIFY_TO belum diset.")
+        return
+
+    rows = sorted(rows, key=lambda r: (r["Nama RS"] or "", _tgl(r)), reverse=False)
+    baris = []
+    for r in rows[:30]:
+        tgl = _tgl(r).strftime("%d %b %Y")
+        baris.append(f"- {r['Nama RS']} | {r.get('Rating')}★ | {tgl}\n"
+                     f"  {(r['Isi Ulasan'] or '').strip()[:500]}\n")
+    sisa = len(rows) - 30
+    if sisa > 0:
+        baris.append(f"... dan {sisa} ulasan negatif lainnya (lihat dashboard).")
+
+    msg = EmailMessage()
+    msg["Subject"] = f"[Dashboard RS] {len(rows)} ulasan negatif baru"
+    msg["From"] = user
+    msg["To"] = tujuan
+    msg.set_content(
+        "Ulasan berikut diprediksi NEGATIF oleh model SVM. Prediksi bisa keliru, "
+        "cek isi ulasannya.\n\n" + "\n".join(baris)
+    )
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as s:
+        s.login(user, pwd)
+        s.send_message(msg)
+    print(f"Email notifikasi terkirim: {len(rows)} ulasan negatif.")
 
 def arg_value(name, default=None):
     if name in sys.argv:
@@ -245,7 +288,14 @@ def main():
     combined = existing + processed_new
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_FILE.write_text(json.dumps(combined, ensure_ascii=False, indent=2), encoding="utf-8")
-
+    if "--no-email" not in sys.argv and "--since" not in sys.argv:
+        batas = datetime.utcnow() - timedelta(days=NOTIFY_MAX_AGE_DAYS)
+        negatif = [r for r in processed_new
+                   if r.get("Sentimen_Prediksi") == "Negatif" and _tgl(r) >= batas]
+        try:
+            kirim_notifikasi_negatif(negatif)
+        except Exception as e:
+            print(f"⚠️ Email notifikasi gagal dikirim: {e}")   # tidak menggagalkan workflow
     print(f"\n✅ Selesai. Total ulasan sekarang: {len(combined)} "
           f"(+{len(processed_new)} baru) -> {OUTPUT_FILE}")
 

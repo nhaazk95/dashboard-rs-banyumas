@@ -5349,7 +5349,7 @@
     "Longitude": 109.2436674,
     "Isi Ulasan": "Suka sekali dengan pelayanan dr. Dwi dokternya ramah, pelayanannya sat set dan ngga sakit sama sekali",
     "id": "695d15062dec2698",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0183,
     "Processed_At": "2026-10-03T00:33:10.924127",
     "Teks_Bersih": "suka sekali dengan layan dari dwi dokter ramah layan sat set dan tidak sakit sama sekali"
@@ -47058,7 +47058,7 @@
     "Longitude": 109.2397481,
     "Isi Ulasan": "RSU bagus",
     "id": "a0c42478b1b792b9",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0118,
     "Teks_Bersih": "rumah sakit umum bagus",
     "Processed_At": "2026-10-07T12:36:58.412730"
@@ -47163,7 +47163,7 @@
     "Longitude": 109.2397481,
     "Isi Ulasan": "Dear elisabeth hospital\nIm a student who is far from my mom.\nI have to go to doctor and doing my rutine fisiotherapy twice a week. Thank you for a very good very friendly service, its helping me a lot even i use BPJS. I am very grateful to all the staff who helped me and kindly asked about me.",
     "id": "49b8da151cceffad",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1257,
     "Teks_Bersih": "dear elisabeth hospital im a student who is far from my mom i have to go to doctor and doing my rutine fisiotherapy twice a week thank you for a very good very friendly service its helping me a lot even i use bpjs sehat i am very grateful to all the staff who helped me and kindly asked about me",
     "Processed_At": "2026-10-07T12:37:17.074788"
