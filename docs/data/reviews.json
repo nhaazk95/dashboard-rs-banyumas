@@ -61361,11 +61361,12 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Pelayanan di rsud Ajibarang memuaskan,saya baru menunggu bapak diruang kenari bawah, terimakasih  atas pelayanan perawat dan dokternya yang baik semoga semakin meningkat pelayanannya",
     "id": "1d3fe0f71e51397d",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9519,
     "Teks_Bersih": "layan di rsud ajibarang memuaskansaya baru tunggu bapak ruang kenari bawah terima kasih atas layan awat dan dokter yang baik moga makin tingkat layan",
     "Processed_At": "2026-10-08T10:31:39.968637",
-    "Notified": true
+    "Notified": true,
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Ajibarang",
