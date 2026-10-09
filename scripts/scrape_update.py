@@ -1,14 +1,16 @@
 import hashlib
 import json
 import os
-import time
-import sys
-import requests
+import re
 import smtplib
+import sys
+import time
 from datetime import datetime, timedelta
 from decimal import Decimal
-from pathlib import Path
 from email.message import EmailMessage
+from pathlib import Path
+
+import requests
 from apify_client import ApifyClient
 from apify_client.errors import ApifyApiError
 
@@ -19,13 +21,16 @@ from apify_client.errors import ApifyApiError
 API_TOKEN = os.environ.get("APIFY_TOKEN")   # hanya wajib saat scraping
 SVM_API_URL = "https://sentimen-api.onrender.com/predict"
 SVM_WAKEUP_URL = "https://sentimen-api.onrender.com/"
+SARAN_URL = "https://sentimen-api.onrender.com/saran"
 
 OUTPUT_FILE = Path("docs/data/reviews.json")
+META_FILE = Path("docs/data/meta.json")
 
 MAX_REVIEWS_PER_RS = 5
-MAX_CHARGE_USD = Decimal("50")
+MAX_CHARGE_USD = Decimal("2")     # batas biaya per run (minimal $0.50 menurut Apify)
 REQUEST_TIMEOUT = 90
-NOTIFY_MAX_AGE_DAYS = 14   # email hanya untuk ulasan yang ditulis dalam N hari terakhir
+NOTIFY_MAX_AGE_DAYS = 14          # email hanya untuk ulasan yang ditulis dalam N hari terakhir
+MAX_SARAN_API = 8                 # maksimal panggilan AI per run untuk bagian Masukan
 
 daftar_rs_url = [
     "https://www.google.com/maps/search/?api=1&query=Rumah+Sakit+Umum+Bunda+Purwokerto",
@@ -83,6 +88,15 @@ def save(rows: list[dict]):
     OUTPUT_FILE.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def tulis_meta(baru: int):
+    """Catat kapan terakhir workflow berjalan (dipakai dashboard untuk 'Dicek terakhir')."""
+    META_FILE.parent.mkdir(parents=True, exist_ok=True)
+    META_FILE.write_text(json.dumps({
+        "last_run_utc": datetime.utcnow().isoformat() + "Z",
+        "new_reviews": baru,
+    }), encoding="utf-8")
+
+
 def last_review_date(rows: list[dict], margin_days: int = 7) -> str | None:
     dates = [r["Waktu Ulasan"] for r in rows if r.get("Waktu Ulasan")]
     if not dates:
@@ -123,8 +137,39 @@ def arg_value(name, default=None):
 
 
 # ============================================================
-# NOTIFIKASI EMAIL (ulasan negatif)
+# NOTIFIKASI EMAIL (ulasan negatif) -- satu email per RS, format surat
 # ============================================================
+BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
+         "Agustus", "September", "Oktober", "November", "Desember"]
+
+DEFAULT_MASUKAN = ("Diharapkan pihak rumah sakit meninjau kembali pengalaman yang disampaikan "
+                   "pasien pada ulasan ini dan melakukan perbaikan layanan yang diperlukan.")
+
+# Cadangan bila /saran (AI) tidak tersedia: pola kata kunci -> saran umum sesuai topik
+_ATURAN_MASUKAN = [
+    (r"antre|antri|antrian|tunggu|menunggu|lama|lambat|lelet",
+     "Diharapkan waktu tunggu dan informasi antrean dapat dikelola lebih baik agar pasien "
+     "mengetahui perkiraan waktu pelayanan."),
+    (r"igd|ugd|darurat",
+     "Diharapkan penanganan di IGD dapat lebih cepat dan informasi kepada keluarga pasien lebih jelas."),
+    (r"obat|farmasi|apotek|resep",
+     "Diharapkan pelayanan farmasi dan pengambilan obat dapat dipercepat serta disertai penjelasan yang jelas."),
+    (r"judes|kasar|ketus|galak|cuek|tidak ramah|kurang ramah|sikap",
+     "Diharapkan petugas dapat melayani pasien dengan lebih ramah, sopan, dan responsif."),
+    (r"biaya|tarif|mahal|bayar|pembayaran|qris|tagihan|kasir",
+     "Diharapkan informasi biaya dan proses pembayaran dapat disampaikan lebih transparan dan mudah."),
+    (r"bpjs|administrasi|pendaftaran|daftar|berkas|rujukan|prosedur|alur",
+     "Diharapkan alur pendaftaran dan administrasi dapat disederhanakan dan dijelaskan dengan lebih jelas."),
+    (r"parkir",
+     "Diharapkan penataan area parkir dapat diperbaiki agar lebih nyaman dan mudah bagi pengunjung."),
+    (r"kotor|bau|toilet|kamar mandi|kebersihan",
+     "Diharapkan kebersihan dan kenyamanan fasilitas, seperti ruang tunggu, kamar, dan toilet, dapat lebih dijaga."),
+    (r"dokter|spesialis|jadwal praktik|visit",
+     "Diharapkan dokter dapat memberikan penjelasan yang lebih jelas kepada pasien dan jadwal praktik "
+     "dapat lebih tepat waktu."),
+]
+
+
 def _tgl(row):
     try:
         return datetime.fromisoformat(str(row["Waktu Ulasan"]).replace("Z", "+00:00")).replace(tzinfo=None)
@@ -132,56 +177,129 @@ def _tgl(row):
         return datetime.min
 
 
-def kirim_notifikasi_negatif(rows) -> bool:
-    """True = terkirim (atau memang tidak ada yang dikirim). False = gagal/dilewati."""
+def masukan_fallback(teks: str) -> str:
+    t = (teks or "").lower()
+    for pola, saran in _ATURAN_MASUKAN:
+        if re.search(r"\b(?:" + pola + r")\b", t):
+            return saran
+    return DEFAULT_MASUKAN
+
+
+def buat_masukan(row: dict, pakai_api: bool = True) -> str:
+    teks = " ".join((row.get("Isi Ulasan") or "").split())
+    if pakai_api:
+        try:
+            r = requests.post(SARAN_URL, timeout=45, json={
+                "rs": row.get("Nama RS") or "", "text": teks, "rating": row.get("Rating")})
+            if r.status_code == 200:
+                m = " ".join((r.json().get("masukan") or "").split())
+                if m:
+                    return m
+        except requests.exceptions.RequestException as e:
+            print(f"  Masukan via AI gagal, pakai aturan kata kunci: {e}")
+    return masukan_fallback(teks)
+
+
+def _fmt_tanggal(row: dict) -> str:
+    d = _tgl(row)
+    return "-" if d == datetime.min else f"{d.day:02d} {BULAN[d.month - 1]} {d.year}"
+
+
+def _fmt_rating(v) -> str:
+    try:
+        f = float(v)
+        return f"{int(f) if f.is_integer() else f}/5"
+    except (TypeError, ValueError):
+        return "-"
+
+
+def _susun_email(rs: str, rows: list, masukan: dict) -> str:
+    n = len(rows)
+    kepala = f"Yth. Pihak {rs},\n\n" + (
+        "Terdapat ulasan yang terdeteksi sebagai sentimen negatif:\n" if n == 1
+        else f"Terdapat {n} ulasan yang terdeteksi sebagai sentimen negatif:\n")
+    blok = []
+    for r in rows:
+        teks = " ".join((r.get("Isi Ulasan") or "").split())[:1500]
+        blok.append(f"\n⭐ Rating: {_fmt_rating(r.get('Rating'))}\n"
+                    f"📅 Tanggal: {_fmt_tanggal(r)}\n"
+                    f"“{teks}”\n"
+                    f"Masukan: {masukan[id(r)]}\n")
+    penutup = ("\nCatatan: Prediksi sentimen oleh model SVM dapat mengandung kesalahan. "
+               "Mohon melakukan pengecekan terhadap isi ulasan.\n\n"
+               "Terima kasih atas perhatian dan tindak lanjutnya.")
+    return kepala + "\n──────────\n".join(blok) + penutup
+
+
+def kirim_notifikasi_negatif(rows) -> set:
+    """Kirim satu email per RS. Return set id(row) yang berhasil terkirim."""
+    terkirim = set()
     if not rows:
-        return True
-    user = os.environ.get("GMAIL_USER")
+        return terkirim
+    user = (os.environ.get("GMAIL_USER") or "").strip()
     pwd = (os.environ.get("GMAIL_APP_PASSWORD") or "").replace(" ", "").strip()
-    tujuan = os.environ.get("NOTIFY_TO")
-    if not (user and pwd and tujuan):
-        print("Notifikasi email dilewati: GMAIL_USER / GMAIL_APP_PASSWORD / NOTIFY_TO belum diset.")
-        return False
+    tujuan = (os.environ.get("NOTIFY_TO") or "").strip()
+    kosong = [n for n, v in (("GMAIL_USER", user), ("GMAIL_APP_PASSWORD", pwd), ("NOTIFY_TO", tujuan)) if not v]
+    if kosong:
+        print(f"Notifikasi email dilewati: secret kosong -> {', '.join(kosong)}")
+        return terkirim
 
-    rows = sorted(rows, key=lambda r: (r.get("Nama RS") or "", _tgl(r)))
-    baris = []
-    for r in rows[:30]:
-        baris.append(f"- {r.get('Nama RS')} | {r.get('Rating')}★ | {_tgl(r).strftime('%d %b %Y')}\n"
-                     f"  {(r.get('Isi Ulasan') or '').strip()[:500]}\n")
-    if len(rows) > 30:
-        baris.append(f"... dan {len(rows) - 30} ulasan negatif lainnya (lihat dashboard).")
+    per_rs = {}
+    for r in sorted(rows, key=_tgl):
+        per_rs.setdefault(r.get("Nama RS") or "RS tidak diketahui", []).append(r)
 
-    msg = EmailMessage()
-    msg["Subject"] = f"[Dashboard RS] {len(rows)} ulasan negatif baru"
-    msg["From"] = user
-    msg["To"] = tujuan
-    msg.set_content("Ulasan berikut diprediksi NEGATIF oleh model SVM. Prediksi bisa keliru, "
-                    "cek isi ulasannya.\n\n" + "\n".join(baris))
+    wake_up_svm_api()          # endpoint /saran ada di server yang sama
+    dipakai_api = 0
+    paket = []
+    for rs, daftar in per_rs.items():
+        masukan = {}
+        for r in daftar:
+            if dipakai_api < MAX_SARAN_API:
+                masukan[id(r)] = buat_masukan(r, True)
+                dipakai_api += 1
+            else:
+                masukan[id(r)] = masukan_fallback(r.get("Isi Ulasan"))
+        paket.append((rs, daftar, _susun_email(rs, daftar, masukan)))
+
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as s:
             s.login(user, pwd)
-            s.send_message(msg)
+            for rs, daftar, isi in paket:
+                msg = EmailMessage()
+                msg["Subject"] = f"[Dashboard RS] Ulasan negatif baru - {rs}" + (
+                    f" ({len(daftar)})" if len(daftar) > 1 else "")
+                msg["From"] = user
+                msg["To"] = tujuan
+                msg.set_content(isi)
+                try:
+                    s.send_message(msg)
+                    terkirim.update(id(r) for r in daftar)
+                    print(f"Email terkirim: {rs} ({len(daftar)} ulasan)")
+                except Exception as e:
+                    print(f"⚠️ Email untuk {rs} gagal: {e}")
     except Exception as e:
         print(f"⚠️ Email notifikasi gagal dikirim: {e}")
-        return False
-    print(f"Email notifikasi terkirim: {len(rows)} ulasan negatif.")
-    return True
+    return terkirim
 
 
 def kirim_pending(rows) -> bool:
-    """Kirim email untuk baris Notified=False, lalu tandai True.
-    Return True kalau ada baris yang berubah (file perlu disimpan)."""
+    """Kirim email untuk baris Notified=False. Hanya baris yang berhasil terkirim
+    (atau memang tidak perlu dikirim) yang ditandai True; sisanya dicoba lagi di run berikutnya.
+    Return True bila ada baris yang berubah (file perlu disimpan)."""
     pending = [r for r in rows if r.get("Notified") is False]
     if not pending:
         return False
     batas = datetime.utcnow() - timedelta(days=NOTIFY_MAX_AGE_DAYS)
-    kirim = [r for r in pending
-             if r.get("Sentimen_Prediksi") == "Negatif" and _tgl(r) >= batas]
-    if not kirim_notifikasi_negatif(kirim):
-        return False          # gagal: tetap False, dicoba lagi di run berikutnya
+    layak = [r for r in pending if r.get("Sentimen_Prediksi") == "Negatif" and _tgl(r) >= batas]
+    layak_ids = {id(r) for r in layak}
+    terkirim = kirim_notifikasi_negatif(layak) if layak else set()
+
+    berubah = False
     for r in pending:
-        r["Notified"] = True
-    return True
+        if id(r) not in layak_ids or id(r) in terkirim:
+            r["Notified"] = True
+            berubah = True
+    return berubah
 
 
 # ============================================================
@@ -213,8 +331,10 @@ def main():
 
     # Email dimatikan saat backfill (--since) atau dengan --no-email
     notif_aktif = "--no-email" not in sys.argv and "--since" not in sys.argv
+    menunggu = sum(1 for r in existing if r.get("Notified") is False)
+    print(f"Notifikasi aktif: {notif_aktif} | baris menunggu notifikasi (Notified=False): {menunggu}")
 
-    # Kirim email untuk baris yang sudah ada tapi belum diberitahukan (Notified=False)
+    # Kirim email untuk baris yang sudah ada tapi belum diberitahukan
     if notif_aktif or "--notify-only" in sys.argv:
         if kirim_pending(existing):
             save(existing)
@@ -305,7 +425,8 @@ def main():
     print(f"Ulasan BARU yang perlu diklasifikasi: {len(new_rows)}")
 
     if not new_rows:
-        print("Tidak ada ulasan baru. Selesai, tidak ada perubahan file.")
+        print("Tidak ada ulasan baru. Selesai, tidak ada perubahan file ulasan.")
+        tulis_meta(0)
         return
 
     # --- Klasifikasi sentimen untuk ulasan baru saja ---
@@ -341,6 +462,7 @@ def main():
     if notif_aktif and kirim_pending(processed_new):
         save(combined)
 
+    tulis_meta(len(processed_new))
     print(f"\n✅ Selesai. Total ulasan sekarang: {len(combined)} "
           f"(+{len(processed_new)} baru) -> {OUTPUT_FILE}")
 
