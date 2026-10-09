@@ -10424,7 +10424,8 @@
     "Sentimen_Prediksi": "Netral",
     "Confidence": 1.2909,
     "Teks_Bersih": "pasien dari wahyu riso terima kasih atas perawatanya",
-    "Processed_At": "2026-10-07T11:39:08.804736"
+    "Processed_At": "2026-10-07T11:39:08.804736",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -15569,7 +15570,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2139,
     "Teks_Bersih": "igdnya cukup baik",
-    "Processed_At": "2026-10-07T11:45:49.607311"
+    "Processed_At": "2026-10-07T11:45:49.607311",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -36458,10 +36460,11 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "Ruang melati",
     "id": "d70a58e1d5ade5bc",
-    "Sentimen_Prediksi": "Positif",
+    "Sentimen_Prediksi": "Netral",
     "Confidence": 1.2186,
     "Teks_Bersih": "ruang melati",
-    "Processed_At": "2026-10-07T12:24:16.479940"
+    "Processed_At": "2026-10-07T12:24:16.479940",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSU Siaga Medika Banyumas",
@@ -41800,10 +41803,11 @@
     "Longitude": 109.2530153,
     "Isi Ulasan": "Rumah sakit ok",
     "id": "bac6f0d2f8f67bb8",
-    "Sentimen_Prediksi": "Positif",
+    "Sentimen_Prediksi": "Netral",
     "Confidence": 1.2188,
     "Teks_Bersih": "rumah sakit baik",
-    "Processed_At": "2026-10-07T12:30:20.800872"
+    "Processed_At": "2026-10-07T12:30:20.800872",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSU Dadi Keluarga Purwokerto",
@@ -46667,7 +46671,8 @@
     "Sentimen_Prediksi": "Netral",
     "Confidence": 1.1125,
     "Teks_Bersih": "layan moga makin manfaat untuk masyarakat banyumas",
-    "Processed_At": "2026-10-07T12:36:31.099196"
+    "Processed_At": "2026-10-07T12:36:31.099196",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSUD Banyumas",
@@ -52466,10 +52471,11 @@
     "Longitude": 109.2747121,
     "Isi Ulasan": "Pelayanan poli nya baik",
     "id": "19373c725ad5db18",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0276,
     "Teks_Bersih": "layan poliklinik nya baik",
-    "Processed_At": "2026-10-07T12:43:35.226304"
+    "Processed_At": "2026-10-07T12:43:35.226304",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -52677,10 +52683,11 @@
     "Longitude": 109.2747121,
     "Isi Ulasan": "Baik dengan segi pelayanan dan tindakan",
     "id": "701b9cdba56539ff",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0561,
     "Teks_Bersih": "baik dengan segi layan dan tindak",
-    "Processed_At": "2026-10-07T12:43:44.395579"
+    "Processed_At": "2026-10-07T12:43:44.395579",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -52692,10 +52699,11 @@
     "Longitude": 109.2747121,
     "Isi Ulasan": "Excellen",
     "id": "9b9d0831a911c2d4",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1945,
     "Teks_Bersih": "excellen",
-    "Processed_At": "2026-10-07T12:43:45.472817"
+    "Processed_At": "2026-10-07T12:43:45.472817",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -52797,10 +52805,11 @@
     "Longitude": 109.2747121,
     "Isi Ulasan": "Pelayanan poli sarafbgs",
     "id": "77c340cea9c17242",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3287,
     "Teks_Bersih": "layan poliklinik sarafbgs",
-    "Processed_At": "2026-10-07T12:43:50.885239"
+    "Processed_At": "2026-10-07T12:43:50.885239",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -55413,10 +55422,11 @@
     "Longitude": 109.2673789,
     "Isi Ulasan": "Terima kasih",
     "id": "785f9e8b6af21639",
-    "Sentimen_Prediksi": "Positif",
+    "Sentimen_Prediksi": "Netral",
     "Confidence": 1.0917,
     "Teks_Bersih": "terima beri",
-    "Processed_At": "2026-10-07T12:46:14.782853"
+    "Processed_At": "2026-10-07T12:46:14.782853",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -61088,11 +61098,12 @@
     "Longitude": 109.2747121,
     "Isi Ulasan": "Tempat bersih,pelayanan bagus,rekomended",
     "id": "18a0bf600d28d440",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.162,
     "Teks_Bersih": "tempat bersihpelayanan bagusrekomended",
     "Processed_At": "2026-10-08T03:42:26.393438",
-    "Notified": true
+    "Notified": true,
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
