@@ -57,7 +57,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3492,
     "Processed_At": "2026-10-03T00:22:57.437278",
-    "Teks_Bersih": "langgan bunda sudah lamapasien dokter arinton ruang melatipelayanan dokter dan awat baikanak cucu sudah langgan rumah sakit umum bunda lamaamks rumah sakit bunda"
+    "Teks_Bersih": "langgan bunda sudah lamapasien dokter arinton ruang melatipelayanan dokter dan awat baikanak cucu sudah langgan rumah sakit umum bunda lamaamks rumah sakit bunda",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -1598,7 +1599,7 @@
     "Longitude": 109.2239929,
     "Isi Ulasan": "RS Swasta terbaik.....",
     "id": "02e5a04560c64452",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.008,
     "Processed_At": "2026-10-03T00:26:16.546118",
     "Label_Manual": "Positif",
@@ -2266,7 +2267,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3633,
     "Processed_At": "2026-10-03T00:27:16.927459",
-    "Teks_Bersih": "layan ny bagusramah"
+    "Teks_Bersih": "layan ny bagusramah",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSIA Bunda Arif",
@@ -2356,7 +2358,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Processed_At": "2026-10-03T00:27:27.420933",
-    "Teks_Bersih": "bagus"
+    "Teks_Bersih": "bagus",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Sinar Kasih Purwokerto",
@@ -2371,7 +2374,8 @@
     "Sentimen_Prediksi": "Netral",
     "Confidence": 1.2503,
     "Processed_At": "2026-10-03T00:27:28.255372",
-    "Teks_Bersih": "sakit saja ada parkir 2 rb"
+    "Teks_Bersih": "sakit saja ada parkir 2 rb",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSU Sinar Kasih Purwokerto",
@@ -2446,7 +2450,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Processed_At": "2026-10-03T00:27:34.521896",
-    "Teks_Bersih": "sangat baik"
+    "Teks_Bersih": "sangat baik",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Sinar Kasih Purwokerto",
@@ -2611,7 +2616,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.004,
     "Processed_At": "2026-10-03T00:27:47.190655",
-    "Teks_Bersih": "pernah rawat di situ layan sangat baik"
+    "Teks_Bersih": "pernah rawat di situ layan sangat baik",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -3048,7 +3054,8 @@
     "Sentimen_Prediksi": "Netral",
     "Confidence": 1.069,
     "Processed_At": "2026-10-03T00:28:30.823169",
-    "Teks_Bersih": "saya beri bintang"
+    "Teks_Bersih": "saya beri bintang",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "Rumah Sakit Orthopaedi Purwokerto",
@@ -4533,7 +4540,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 0.931,
     "Processed_At": "2026-10-03T00:31:40.018095",
-    "Teks_Bersih": "sangat baik sekali layan ny"
+    "Teks_Bersih": "sangat baik sekali layan ny",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSIA Budhi Asih",
@@ -4805,7 +4813,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 0.012,
     "Processed_At": "2026-10-03T00:32:13.317598",
-    "Teks_Bersih": "layan klinik laktasi kerenn bgtt min rekomendasi untuk ibu baru"
+    "Teks_Bersih": "layan klinik laktasi kerenn bgtt min rekomendasi untuk ibu baru",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Hidayah Purwokerto",
@@ -5030,7 +5039,7 @@
     "Longitude": 109.258164,
     "Isi Ulasan": "Rumah sakite tah pelayanane apik, bersih, tapi sayang satpame kurang RAMAH,",
     "id": "00d6179bf9c42ad3",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1476,
     "Processed_At": "2026-10-03T00:32:46.615305",
     "Label_Manual": "Positif",
@@ -5261,7 +5270,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Processed_At": "2026-10-03T00:33:01.224418",
-    "Teks_Bersih": "sangat baik"
+    "Teks_Bersih": "sangat baik",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -5352,7 +5362,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0183,
     "Processed_At": "2026-10-03T00:33:10.924127",
-    "Teks_Bersih": "suka sekali dengan layan dari dwi dokter ramah layan sat set dan tidak sakit sama sekali"
+    "Teks_Bersih": "suka sekali dengan layan dari dwi dokter ramah layan sat set dan tidak sakit sama sekali",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Jatiwinangun",
@@ -6242,7 +6253,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Processed_At": "2026-10-03T10:57:02.978179",
-    "Teks_Bersih": "bagus"
+    "Teks_Bersih": "bagus",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -6919,7 +6931,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Processed_At": "2026-10-04T11:37:43.067552",
-    "Teks_Bersih": "bagus"
+    "Teks_Bersih": "bagus",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -6934,7 +6947,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3527,
     "Processed_At": "2026-10-04T11:37:43.866484",
-    "Teks_Bersih": "bagus tempat"
+    "Teks_Bersih": "bagus tempat",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -6979,7 +6993,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1626,
     "Processed_At": "2026-10-04T11:37:46.472831",
-    "Teks_Bersih": "layan senang"
+    "Teks_Bersih": "layan senang",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -7266,7 +7281,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2346,
     "Teks_Bersih": "layan di instalasi gawat darurat sudah baik",
-    "Processed_At": "2026-10-06T10:01:48.656623"
+    "Processed_At": "2026-10-06T10:01:48.656623",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -7311,7 +7327,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3685,
     "Teks_Bersih": "radiologi baik",
-    "Processed_At": "2026-10-06T10:01:54.948628"
+    "Processed_At": "2026-10-06T10:01:54.948628",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -7371,7 +7388,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2615,
     "Teks_Bersih": "sya pasien de sutrisno ibu raniyah sya puasa dengan pelyannya",
-    "Processed_At": "2026-10-06T10:02:01.438463"
+    "Processed_At": "2026-10-06T10:02:01.438463",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -8616,7 +8634,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2251,
     "Teks_Bersih": "layan sangat bagus tidak ada kurang",
-    "Processed_At": "2026-10-06T10:04:16.872122"
+    "Processed_At": "2026-10-06T10:04:16.872122",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -8628,10 +8647,11 @@
     "Longitude": 109.0835341,
     "Isi Ulasan": "Perfect",
     "id": "08ea477d81538b06",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1945,
     "Teks_Bersih": "perfect",
-    "Processed_At": "2026-10-06T10:04:18.037832"
+    "Processed_At": "2026-10-06T10:04:18.037832",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -8661,7 +8681,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4729,
     "Teks_Bersih": "baik",
-    "Processed_At": "2026-10-06T10:04:19.643518"
+    "Processed_At": "2026-10-06T10:04:19.643518",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -8676,7 +8697,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3527,
     "Teks_Bersih": "bagus tempat",
-    "Processed_At": "2026-10-06T10:04:20.948253"
+    "Processed_At": "2026-10-06T10:04:20.948253",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -9381,7 +9403,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3558,
     "Teks_Bersih": "pasien dokter arinton ruang tulip 12 layan dokter dan awat sangat baik rekomendasi",
-    "Processed_At": "2026-10-07T11:37:00.007064"
+    "Processed_At": "2026-10-07T11:37:00.007064",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -16551,7 +16574,8 @@
     "Sentimen_Prediksi": "Netral",
     "Confidence": 1.2959,
     "Teks_Bersih": "moga makin amanah",
-    "Processed_At": "2026-10-07T11:46:55.525904"
+    "Processed_At": "2026-10-07T11:46:55.525904",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -17211,7 +17235,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.393,
     "Teks_Bersih": "layan dengan sepenuh hati",
-    "Processed_At": "2026-10-07T11:48:41.305077"
+    "Processed_At": "2026-10-07T11:48:41.305077",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -17286,7 +17311,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3319,
     "Teks_Bersih": "lingkung bersih",
-    "Processed_At": "2026-10-07T11:48:44.756868"
+    "Processed_At": "2026-10-07T11:48:44.756868",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -18741,7 +18767,8 @@
     "Sentimen_Prediksi": "Netral",
     "Confidence": 1.3228,
     "Teks_Bersih": "andal keluarga kami dalam obat dan kontrol sehat keluarga kami",
-    "Processed_At": "2026-10-07T11:50:32.606371"
+    "Processed_At": "2026-10-07T11:50:32.606371",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSU Wiradadi Husada Banyumas",
@@ -19341,7 +19368,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2175,
     "Teks_Bersih": "layan nya sudah bagus tolong tingkat lagi y",
-    "Processed_At": "2026-10-07T11:51:17.205108"
+    "Processed_At": "2026-10-07T11:51:17.205108",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -19641,7 +19669,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0404,
     "Teks_Bersih": "alam saya oprasi hemoroid di rumah sakit medika lestari awal takut karena kata orang oprasi hemoroid itu sakit sekali dan lain - lain tapi nyata tidak sakit yang kata orang2 kalau kalian punya keluh hemoroid boleh itu konsul sama dokter bedah di sini nyata oprasinya tidak sakit hanya sakit sedikit saja pasca oprasinya tambah lagi semua tugas ramah dokter dokter spesialis nyata juga ramah breeperawatnya cekat juga tugas bersih juga peduli dengan lingkung pasien juru masak juga enak masakan saat dengan kondisi pasien manteplah makin bagus rumah sakit nya moga bisa tolong lebih banyak orang lagi dan rezeki limpah terus baik karyawanya ownernya atau pasienamiin",
-    "Processed_At": "2026-10-07T11:52:11.502789"
+    "Processed_At": "2026-10-07T11:52:11.502789",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Jatiwinangun",
@@ -20421,7 +20450,8 @@
     "Sentimen_Prediksi": "Netral",
     "Confidence": 1.2537,
     "Teks_Bersih": "beri nomor antri ambil obat di farmasi jiwabiar ada pasti sudah sampai nomor berapa",
-    "Processed_At": "2026-10-07T11:53:28.003950"
+    "Processed_At": "2026-10-07T11:53:28.003950",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSUD Banyumas",
@@ -21141,7 +21171,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.109,
     "Teks_Bersih": "layan satset bisa langsung oeprasi telah dapat rujuk maantapp pasien safety",
-    "Processed_At": "2026-10-07T11:54:41.596372"
+    "Processed_At": "2026-10-07T11:54:41.596372",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSIA Bunda Arif",
@@ -22746,7 +22777,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3685,
     "Teks_Bersih": "radiologi baik",
-    "Processed_At": "2026-10-07T12:05:30.222656"
+    "Processed_At": "2026-10-07T12:05:30.222656",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -23061,7 +23093,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3685,
     "Teks_Bersih": "radiologi baik",
-    "Processed_At": "2026-10-07T12:05:53.909357"
+    "Processed_At": "2026-10-07T12:05:53.909357",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -23976,7 +24009,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3792,
     "Teks_Bersih": "sudah baik",
-    "Processed_At": "2026-10-07T12:06:48.217190"
+    "Processed_At": "2026-10-07T12:06:48.217190",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -25116,7 +25150,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4053,
     "Teks_Bersih": "layan sangat muas",
-    "Processed_At": "2026-10-07T12:08:01.697767"
+    "Processed_At": "2026-10-07T12:08:01.697767",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -39726,7 +39761,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Teks_Bersih": "bagus",
-    "Processed_At": "2026-10-07T12:28:25.632697"
+    "Processed_At": "2026-10-07T12:28:25.632697",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -41016,7 +41052,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9963,
     "Teks_Bersih": "good",
-    "Processed_At": "2026-10-07T12:29:36.664203"
+    "Processed_At": "2026-10-07T12:29:36.664203",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -42201,7 +42238,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:30:44.121552"
+    "Processed_At": "2026-10-07T12:30:44.121552",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Dadi Keluarga Purwokerto",
@@ -45396,7 +45434,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Teks_Bersih": "bagus",
-    "Processed_At": "2026-10-07T12:34:44.705473"
+    "Processed_At": "2026-10-07T12:34:44.705473",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Orthopaedi Purwokerto",
@@ -45726,7 +45765,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:35:11.043384"
+    "Processed_At": "2026-10-07T12:35:11.043384",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSGMP UNSOED PURWOKERTO",
@@ -45771,7 +45811,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4053,
     "Teks_Bersih": "layan sangat muas",
-    "Processed_At": "2026-10-07T12:35:14.017375"
+    "Processed_At": "2026-10-07T12:35:14.017375",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSGMP UNSOED PURWOKERTO",
@@ -47061,7 +47102,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0118,
     "Teks_Bersih": "rumah sakit umum bagus",
-    "Processed_At": "2026-10-07T12:36:58.412730"
+    "Processed_At": "2026-10-07T12:36:58.412730",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Santa Elisabeth Purwokerto",
@@ -47166,7 +47208,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1257,
     "Teks_Bersih": "dear elisabeth hospital im a student who is far from my mom i have to go to doctor and doing my rutine fisiotherapy twice a week thank you for a very good very friendly service its helping me a lot even i use bpjs sehat i am very grateful to all the staff who helped me and kindly asked about me",
-    "Processed_At": "2026-10-07T12:37:17.074788"
+    "Processed_At": "2026-10-07T12:37:17.074788",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Santa Elisabeth Purwokerto",
@@ -47526,7 +47569,8 @@
     "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.0769,
     "Teks_Bersih": "untuk semua bagus baik dokter sama suster serta layan saat kontrol tapi sangat di sayang untuk layan ambil obat entah kenapa kok sangat tidak ramah dan tidak bisa jelas kendala sangat di sayang sekali",
-    "Processed_At": "2026-10-07T12:37:45.480907"
+    "Processed_At": "2026-10-07T12:37:45.480907",
+    "Label_Manual": "Negatif"
   },
   {
     "Nama RS": "RSU Santa Elisabeth Purwokerto",
@@ -48861,7 +48905,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Teks_Bersih": "bagus",
-    "Processed_At": "2026-10-07T12:39:50.991442"
+    "Processed_At": "2026-10-07T12:39:50.991442",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit \"JIH\" Purwokerto",
@@ -49158,10 +49203,11 @@
     "Longitude": 109.212873,
     "Isi Ulasan": "WA slow respon bangetttt,\nNyediain kontak WA biar bisa daftar online tp balesnya bisa 1 hari kemudian..",
     "id": "8eb1121493d8faf9",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.0601,
     "Teks_Bersih": "wa slow respon sekali nyediain kontak wa biar bisa daftar online tetapi balesnya bisa 1 hari kemudian",
-    "Processed_At": "2026-10-07T12:40:16.291671"
+    "Processed_At": "2026-10-07T12:40:16.291671",
+    "Label_Manual": "Negatif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -49671,7 +49717,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Teks_Bersih": "bagus",
-    "Processed_At": "2026-10-07T12:40:56.341281"
+    "Processed_At": "2026-10-07T12:40:56.341281",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -49746,7 +49793,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:41:00.581631"
+    "Processed_At": "2026-10-07T12:41:00.581631",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -51396,7 +51444,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4729,
     "Teks_Bersih": "baik",
-    "Processed_At": "2026-10-07T12:42:39.624670"
+    "Processed_At": "2026-10-07T12:42:39.624670",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -51486,7 +51535,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4729,
     "Teks_Bersih": "baik",
-    "Processed_At": "2026-10-07T12:42:44.635356"
+    "Processed_At": "2026-10-07T12:42:44.635356",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -51546,7 +51596,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Teks_Bersih": "bagus",
-    "Processed_At": "2026-10-07T12:42:47.050576"
+    "Processed_At": "2026-10-07T12:42:47.050576",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -51561,7 +51612,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4729,
     "Teks_Bersih": "baik",
-    "Processed_At": "2026-10-07T12:42:47.685317"
+    "Processed_At": "2026-10-07T12:42:47.685317",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -51771,7 +51823,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4729,
     "Teks_Bersih": "baik",
-    "Processed_At": "2026-10-07T12:42:58.875379"
+    "Processed_At": "2026-10-07T12:42:58.875379",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -52476,7 +52529,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0411,
     "Teks_Bersih": "layan poliklinik rumah sakit umum medika lestari sangat baik",
-    "Processed_At": "2026-10-07T12:43:37.778855"
+    "Processed_At": "2026-10-07T12:43:37.778855",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -53406,7 +53460,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.028,
     "Teks_Bersih": "bagus layan tidak di ragukann",
-    "Processed_At": "2026-10-07T12:44:25.680057"
+    "Processed_At": "2026-10-07T12:44:25.680057",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -53451,7 +53506,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:44:27.553028"
+    "Processed_At": "2026-10-07T12:44:27.553028",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -53751,7 +53807,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0606,
     "Teks_Bersih": "kemarin anak sakit muntah serta diare saya niat mau rawat jalan tapi nyata sama dokter anak di suruh rawat inap karena sudah tunjuk gejala dehidrasi dan segera masuk igdpadahal ana pakai bpjstapi tangan cepat dan tidak rumit sama sekalikamar pasien juga nyaman dan bersihterimakasih rumah sakit umum medika lestari",
-    "Processed_At": "2026-10-07T12:44:45.982579"
+    "Processed_At": "2026-10-07T12:44:45.982579",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -54681,7 +54738,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3792,
     "Teks_Bersih": "sudah baik",
-    "Processed_At": "2026-10-07T12:45:31.084400"
+    "Processed_At": "2026-10-07T12:45:31.084400",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -54816,7 +54874,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Teks_Bersih": "bagus",
-    "Processed_At": "2026-10-07T12:45:36.602741"
+    "Processed_At": "2026-10-07T12:45:36.602741",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -54921,7 +54980,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4149,
     "Teks_Bersih": "layan sudah baik",
-    "Processed_At": "2026-10-07T12:45:44.687670"
+    "Processed_At": "2026-10-07T12:45:44.687670",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -56106,7 +56166,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:46:59.291945"
+    "Processed_At": "2026-10-07T12:46:59.291945",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -56226,7 +56287,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9963,
     "Teks_Bersih": "good",
-    "Processed_At": "2026-10-07T12:47:05.291644"
+    "Processed_At": "2026-10-07T12:47:05.291644",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -56316,7 +56378,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.5026,
     "Teks_Bersih": "bagus",
-    "Processed_At": "2026-10-07T12:47:09.066172"
+    "Processed_At": "2026-10-07T12:47:09.066172",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -57201,7 +57264,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4053,
     "Teks_Bersih": "layan sangat muas",
-    "Processed_At": "2026-10-07T12:48:05.170507"
+    "Processed_At": "2026-10-07T12:48:05.170507",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -58176,7 +58240,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4053,
     "Teks_Bersih": "layan sangat muas",
-    "Processed_At": "2026-10-07T12:48:58.192792"
+    "Processed_At": "2026-10-07T12:48:58.192792",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -58566,7 +58631,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4149,
     "Teks_Bersih": "layan sudah baik",
-    "Processed_At": "2026-10-07T12:49:20.680045"
+    "Processed_At": "2026-10-07T12:49:20.680045",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -60246,7 +60312,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.4149,
     "Teks_Bersih": "layan sudah baik",
-    "Processed_At": "2026-10-07T12:50:48.801714"
+    "Processed_At": "2026-10-07T12:50:48.801714",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -60786,7 +60853,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T18:16:28.593648"
+    "Processed_At": "2026-10-07T18:16:28.593648",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
@@ -60846,7 +60914,8 @@
     "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T18:16:32.782436"
+    "Processed_At": "2026-10-07T18:16:32.782436",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -60906,11 +60975,12 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Selama dirumah sakit Ajibarang (ruang bersalin) untuk Bu bidannya ramah-ramah",
     "id": "0e1abb9f00334696",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2511,
     "Teks_Bersih": "lama rumah sakit ajibarang ruang salin untuk bu bidan ramahramah",
     "Processed_At": "2026-10-08T03:42:13.573074",
-    "Notified": true
+    "Notified": true,
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -61198,7 +61268,8 @@
     "Confidence": 1.4053,
     "Teks_Bersih": "layan sangat muas",
     "Processed_At": "2026-10-08T03:56:46.443121",
-    "Notified": true
+    "Notified": true,
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -61598,7 +61669,8 @@
     "Confidence": 1.1184,
     "Teks_Bersih": "layan muas tidak ada kurang",
     "Processed_At": "2026-10-08T18:56:28.932896",
-    "Notified": true
+    "Notified": true,
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSKB MITRA ARIVA",
