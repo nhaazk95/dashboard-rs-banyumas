@@ -61615,5 +61615,37 @@
     "Teks_Bersih": "layan muas",
     "Processed_At": "2026-10-08T18:56:30.027057",
     "Notified": true
+  },
+  {
+    "Nama RS": "RSUD Ajibarang",
+    "Username": "Soni Devanda Riyawan",
+    "Rating": 5,
+    "Waktu Ulasan": "2026-10-08T23:39:02.368Z",
+    "Lokasi Tempat": "Jl. Raya Pancasan, Kaliumbul, Pancurendang, Kec. Ajibarang, Kabupaten Banyumas, Jawa Tengah 53163, Indonesia",
+    "Latitude": -7.412809,
+    "Longitude": 109.0792511,
+    "Isi Ulasan": "kamar bersalin pelayanan nya sangat baik, bidan sangat cekatan dan ramah yg membantu persalinan isteri saya",
+    "id": "e551e5716ef49129",
+    "Sentimen_Prediksi": "Positif",
+    "Confidence": 1.4017,
+    "Teks_Bersih": "kamar salin layan nya sangat baik bidan sangat cekat dan ramah yang bantu salin isteri saya",
+    "Processed_At": "2026-10-09T00:29:55.519694",
+    "Notified": true
+  },
+  {
+    "Nama RS": "RSUD Ajibarang",
+    "Username": "Restu Rere",
+    "Rating": 5,
+    "Waktu Ulasan": "2026-10-08T23:27:09.563Z",
+    "Lokasi Tempat": "Jl. Raya Pancasan, Kaliumbul, Pancurendang, Kec. Ajibarang, Kabupaten Banyumas, Jawa Tengah 53163, Indonesia",
+    "Latitude": -7.412809,
+    "Longitude": 109.0792511,
+    "Isi Ulasan": "Alhamdulillah di ruangan elang kamar 2 bed 2 D bp saya di rawat dengan baik suster ramah semuanya.",
+    "id": "c0ea76f1a753e207",
+    "Sentimen_Prediksi": "Positif",
+    "Confidence": 1.3819,
+    "Teks_Bersih": "alhamdulillah di ruang elang kamar 2 bed 2 d bp saya di rawat dengan baik suster ramah semua",
+    "Processed_At": "2026-10-09T00:29:56.402174",
+    "Notified": true
   }
 ]
