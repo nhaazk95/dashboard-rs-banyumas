@@ -2,3 +2,8 @@
 __pycache__/
 *.pyc
 tes_*.py
+
+docs/data/reviews_backup.json
+__pycache__/
+*.pyc
+terapkan_koreksi.py
