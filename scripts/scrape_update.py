@@ -291,6 +291,7 @@ def kirim_pending(rows) -> bool:
         return False
     batas = datetime.utcnow() - timedelta(days=NOTIFY_MAX_AGE_DAYS)
     layak = [r for r in pending if r.get("Sentimen_Prediksi") == "Negatif" and _tgl(r) >= batas]
+    print(f"Menunggu notifikasi: {len(pending)} | negatif layak dikirim: {len(layak)}")    
     layak_ids = {id(r) for r in layak}
     terkirim = kirim_notifikasi_negatif(layak) if layak else set()
 
@@ -333,6 +334,9 @@ def main():
     notif_aktif = "--no-email" not in sys.argv and "--since" not in sys.argv
     menunggu = sum(1 for r in existing if r.get("Notified") is False)
     print(f"Notifikasi aktif: {notif_aktif} | baris menunggu notifikasi (Notified=False): {menunggu}")
+    print("Secret email terpasang: " + ", ".join(
+        f"{n}={bool((os.environ.get(n) or '').strip())}"
+        for n in ("GMAIL_USER", "GMAIL_APP_PASSWORD", "NOTIFY_TO")))
 
     # Kirim email untuk baris yang sudah ada tapi belum diberitahukan
     if notif_aktif or "--notify-only" in sys.argv:
@@ -456,7 +460,7 @@ def main():
     # --- Gabungkan dengan data lama, simpan ---
     combined = existing + processed_new
     save(combined)
-
+    print(f"Sentimen {len(processed_new)} ulasan baru: {dict(Counter(r.get('Sentimen_Prediksi') for r in processed_new))}")
     # --- Email untuk ulasan negatif yang baru masuk ---
     # processed_new berisi objek yang sama dengan di combined, jadi flag Notified ikut berubah
     if notif_aktif and kirim_pending(processed_new):
