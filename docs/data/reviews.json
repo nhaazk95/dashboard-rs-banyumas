@@ -7746,10 +7746,11 @@
     "Longitude": 109.2530153,
     "Isi Ulasan": "Pelayanan cepat,ramah,,semoga amanah slalu",
     "id": "fd26ee62ae816d63",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2215,
     "Teks_Bersih": "layan cepatramahsemoga amanah slalu",
-    "Processed_At": "2026-10-06T10:02:48.250453"
+    "Processed_At": "2026-10-06T10:02:48.250453",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Siaga Medika Banyumas",
