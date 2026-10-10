@@ -466,12 +466,29 @@ function recompute() {
   if (selRS) pick(selRS, true);
 }
 
+const API_BASE = 'https://sentimen-api.onrender.com';
+
+// Ambil data dari server agen (selalu terbaru). Server Render gratis bisa butuh ~1 menit untuk bangun.
+// Bila gagal, jatuh ke file statis lama supaya dashboard tidak kosong.
+async function fetchReviews() {
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 70000);
+    const r = await fetch(API_BASE + '/reviews.json', { signal: ctl.signal });
+    clearTimeout(timer);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    if (Array.isArray(data) && data.length) return { data, sumber: 'api' };
+  } catch (e) { console.warn('API agen gagal, memakai file statis:', e); }
+  const r = await fetch('data/reviews.json?_=' + Date.now());
+  return { data: await r.json(), sumber: 'statis' };
+}
+
 async function loadData() {
   document.getElementById('loadingOverlay').style.display = 'flex';
   try {
-    const resp = await fetch('data/reviews.json?_=' + Date.now());
-    RAW = await resp.json();
-    RAW = RAW.filter(r => r.Latitude && r.Longitude);
+    const { data, sumber } = await fetchReviews();
+    RAW = data.filter(r => r.Latitude && r.Longitude);
 
     const latest = RAW.reduce((max, r) => {
       const t = toDate(r.Processed_At || r['Waktu Ulasan']);
@@ -481,14 +498,15 @@ async function loadData() {
     // Opsional: data/meta.json (waktu pengecekan terakhir oleh workflow). Aman bila belum ada.
     let metaTxt = '';
     try {
-      const mr = await fetch('data/meta.json?_=' + Date.now());
+      const mr = await fetch(API_BASE + '/refresh/status');
       if (mr.ok) {
         const m = await mr.json();
         if (m.last_run_utc) metaTxt = ` | Dicek terakhir: ${formatWIB(toDate(m.last_run_utc))}`;
       }
     } catch (e) {}
 
-    const infoTxt = `Ulasan terbaru diproses: ${formatWIB(latest)} | Total ulasan: ${RAW.length}${metaTxt}`;
+    const infoTxt = `Ulasan terbaru diproses: ${formatWIB(latest)} | Total ulasan: ${RAW.length}${metaTxt}`
+                  + (sumber === 'api' ? '' : ' | data cadangan');
     const infoEl = document.getElementById('lastUpdate');
     infoEl.textContent = infoTxt; infoEl.title = infoTxt;
     recompute();
@@ -515,7 +533,7 @@ async function requestUpdate() {
     if (r.status === 429) { st.textContent = d.detail || 'Update baru saja dijalankan.'; return; }
     if (!r.ok) throw new Error(d.detail || ('HTTP ' + r.status));
 
-    st.textContent = 'Mengambil ulasan di GitHub (sekitar 3-5 menit)...';
+    st.textContent = 'Agen sedang mengambil ulasan baru (sekitar 3-8 menit)...';
     let hasil = null;
     for (let i = 0; i < 40; i++) {
       await sleep(15000);
@@ -525,10 +543,9 @@ async function requestUpdate() {
       } catch (e) { /* server mungkin sibuk, coba lagi */ }
     }
     if (!hasil) { st.textContent = 'Update belum selesai. Coba "Muat Ulang Tampilan" beberapa menit lagi.'; return; }
-    if (hasil.conclusion !== 'success') { st.textContent = 'Update di GitHub gagal (' + hasil.conclusion + '). Cek tab Actions.'; return; }
+    if (hasil.conclusion !== 'success') { st.textContent = 'Update gagal. Coba lagi beberapa menit lagi.'; return; }
 
-    st.textContent = 'Menunggu GitHub Pages menayangkan data baru (±1 menit)...';
-    await sleep(60000);
+    st.textContent = 'Memuat data terbaru...';
     await loadData();
     st.textContent = 'Selesai. Data sudah dimuat ulang.';
   } catch (e) {
