@@ -965,10 +965,11 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Selama anak kami d rwat d ruang kepondang anak lumayan.anak kami merasa terhibur krna bnyak mainan dan dengan perawatnya ox",
     "id": "bf476529d3e4663d",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Netral",
     "Confidence": 1.0442,
     "Processed_At": "2026-10-03T00:25:07.910951",
-    "Teks_Bersih": "lama anak kami d rwat d ruang kepondang anak lumayananak kami rasa hibur krna bnyak main dan dengan awat ox"
+    "Teks_Bersih": "lama anak kami d rwat d ruang kepondang anak lumayananak kami rasa hibur krna bnyak main dan dengan awat ox",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -3233,10 +3234,11 @@
     "Longitude": 109.2726441,
     "Isi Ulasan": "Saya ingin menyampaikan apresiasi kepada RSOP Purwokerto. Selama kurang lebih 5 bulan bolak-balik untuk menjalani pengobatan dan kontrol, saya merasa pelayanan yang diberikan sudah sangat baik, informatif, jelas, dan ramah.\nNamun, sangat disayangkan pelayanan di bagian informasi pada hari ini kurang memuaskan. Petugas yang berjaga terkesan kurang ramah dan kurang sabar dalam menghadapi keluhan pasien.\nMenurut saya, bagian informasi adalah salah satu layanan yang paling sering didatangi pasien, terutama pasien lanjut usia yang masih kesulitan menggunakan teknologi. Karena itu, sikap yang lebih ramah dan sabar tentu akan sangat membantu.\nSaya menuliskan ulasan ini bukan untuk menjatuhkan siapa pun, melainkan sebagai bentuk masukan agar pelayanan ke depannya bisa menjadi lebih baik. Apalagi, hari ini saya mendengar cukup banyak keluhan dari pasien lain setelah saya sendiri menyampaikan keluhan yang saya alami. Terima Kasih 🙏🏻",
     "id": "317435e8765faa64",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3053,
     "Processed_At": "2026-10-03T00:28:57.935067",
-    "Teks_Bersih": "saya ingin sampai apresiasi kepada rsop purwokerto lama kurang lebih 5 bulan bolakbalik untuk jalan obat dan kontrol saya rasa layan yang beri sudah sangat baik informatif jelas dan ramah namun sangat sayang layan di bagi informasi pada hari ini kurang muas tugas yang jaga kes kurang ramah dan kurang sabar dalam hadap keluh pasien turut saya bagi informasi adalah salah satu layan yang paling sering datang pasien utama pasien lanjut usia yang masih sulit guna teknologi karena itu sikap yang lebih ramah dan sabar tentu akan sangat bantu saya tulis ulas ini bukan untuk jatuh siapa pun lain bagai bentuk masuk agar layan ke depan bisa jadi lebih baik apalagi hari ini saya dengar cukup banyak keluh dari pasien lain telah saya sendiri sampai keluh yang saya alami terima beri"
+    "Teks_Bersih": "saya ingin sampai apresiasi kepada rsop purwokerto lama kurang lebih 5 bulan bolakbalik untuk jalan obat dan kontrol saya rasa layan yang beri sudah sangat baik informatif jelas dan ramah namun sangat sayang layan di bagi informasi pada hari ini kurang muas tugas yang jaga kes kurang ramah dan kurang sabar dalam hadap keluh pasien turut saya bagi informasi adalah salah satu layan yang paling sering datang pasien utama pasien lanjut usia yang masih sulit guna teknologi karena itu sikap yang lebih ramah dan sabar tentu akan sangat bantu saya tulis ulas ini bukan untuk jatuh siapa pun lain bagai bentuk masuk agar layan ke depan bisa jadi lebih baik apalagi hari ini saya dengar cukup banyak keluh dari pasien lain telah saya sendiri sampai keluh yang saya alami terima beri",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSGMP UNSOED PURWOKERTO",
@@ -4326,10 +4328,11 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "Pelayanan bagus,bersih,memuaskan",
     "id": "7ceb355e0ca42fd4",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1175,
     "Processed_At": "2026-10-03T00:31:24.016609",
-    "Teks_Bersih": "layan bagusbersihmemuaskan"
+    "Teks_Bersih": "layan bagusbersihmemuaskan",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -4446,10 +4449,11 @@
     "Longitude": 109.2397481,
     "Isi Ulasan": "Benerapa hari yang lalu saya ke rs elisabeth,saran saya mohon adanya unit informasi tersendiri, jadi kalau mau bertanya tidak bingung, masa mau bertanya harus nebeng di unit lain, sedangkan unit - unit yang lainnya sibuk semua, setau saya di rmh sakit manapun begitu masuk lobby sudah langsung ada unit informasi tersendiri, sayang loh rs yg begitu megah tidak punya unit informasi, terimakasih",
     "id": "473c0d4469442a33",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.211,
     "Processed_At": "2026-10-03T00:31:33.711777",
-    "Teks_Bersih": "benerapa hari yang lalu saya ke rumah sakit elisabethsaran saya mohon ada unit informasi sendiri jadi kalau mau tanya tidak bingung masa mau tanya harus nebeng di unit lain sedang unit unit yang lain sibuk semua tau saya di rmh sakit mana begitu masuk lobby sudah langsung ada unit informasi sendiri sayang lho rumah sakit yang begitu megah tidak punya unit informasi terima kasih"
+    "Teks_Bersih": "benerapa hari yang lalu saya ke rumah sakit elisabethsaran saya mohon ada unit informasi sendiri jadi kalau mau tanya tidak bingung masa mau tanya harus nebeng di unit lain sedang unit unit yang lain sibuk semua tau saya di rmh sakit mana begitu masuk lobby sudah langsung ada unit informasi sendiri sayang lho rumah sakit yang begitu megah tidak punya unit informasi terima kasih",
+    "Label_Manual": "Negatif"
   },
   {
     "Nama RS": "RSU Santa Elisabeth Purwokerto",
@@ -8921,10 +8925,11 @@
     "Longitude": 109.2726441,
     "Isi Ulasan": "Praktek dokter iman rekomended tuh👍",
     "id": "d244e03ebe569677",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1637,
     "Teks_Bersih": "praktek dokter iman rekomendasi itu",
-    "Processed_At": "2026-10-07T11:36:06.022170"
+    "Processed_At": "2026-10-07T11:36:06.022170",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Orthopaedi Purwokerto",
@@ -8936,10 +8941,11 @@
     "Longitude": 109.2726441,
     "Isi Ulasan": "dokternya beneran nerangin dengan detail, jawab pertanyaannya jg detail, pasien jadi lebih tau terkait penyakitnya",
     "id": "0408fac301ffde3b",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0882,
     "Teks_Bersih": "dokter beneran nerangin dengan detail jawab tanya juga detail pasien jadi lebih tau kait sakit",
-    "Processed_At": "2026-10-07T11:36:09.310605"
+    "Processed_At": "2026-10-07T11:36:09.310605",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Orthopaedi Purwokerto",
@@ -9176,10 +9182,11 @@
     "Longitude": 109.2726441,
     "Isi Ulasan": "Tempat nya luas banget. Bagian belakang nyaman banget, banyak spot buat ngadem",
     "id": "713739c5448325a7",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0111,
     "Teks_Bersih": "tempat nya luas sekali bagi belakang nyaman sekali banyak spot untuk ngadem",
-    "Processed_At": "2026-10-07T11:36:31.602187"
+    "Processed_At": "2026-10-07T11:36:31.602187",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Orthopaedi Purwokerto",
@@ -9507,10 +9514,11 @@
     "Longitude": 109.2535107,
     "Isi Ulasan": "Pelayananya sungguh memuaskan,dan bikin betah.",
     "id": "21935a8c56707715",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9873,
     "Teks_Bersih": "pelayananya sungguh memuaskandan bikin betah",
-    "Processed_At": "2026-10-07T11:37:22.309380"
+    "Processed_At": "2026-10-07T11:37:22.309380",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -10287,10 +10295,11 @@
     "Longitude": 109.2535107,
     "Isi Ulasan": "Pasien Dr Heppy Kamar Dahlia 4\nSelama Di rawat di sini perawatnya baik-baik, konsekuensi dalam bertugas,ramah terhadap pasien",
     "id": "34c41ac581254c3a",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0481,
     "Teks_Bersih": "pasien dari heppy kamar dahlia 4 lama di rawat di sini awat baikbaik konsekuensi dalam bertugasramah hadap pasien",
-    "Processed_At": "2026-10-07T11:39:01.298342"
+    "Processed_At": "2026-10-07T11:39:01.298342",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -11488,10 +11497,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Utk radiologi\nTidak takut buat di USG dr ya ramah bgt",
     "id": "863e7f6c7613c0bf",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0045,
     "Teks_Bersih": "untuk radiologi tidak takut untuk di usg dari ya ramah banget",
-    "Processed_At": "2026-10-07T11:40:42.305233"
+    "Processed_At": "2026-10-07T11:40:42.305233",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -11518,10 +11528,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Pelayan naik",
     "id": "75f8d69be2312855",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0078,
     "Teks_Bersih": "layan naik",
-    "Processed_At": "2026-10-07T11:40:44.705610"
+    "Processed_At": "2026-10-07T11:40:44.705610",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -11863,10 +11874,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Perawatan di pantai 4 padma bagus,bersih,rapi",
     "id": "90b6b9c50988023e",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1453,
     "Teks_Bersih": "awat di pantai 4 padma bagusbersihrapi",
-    "Processed_At": "2026-10-07T11:41:11.799122"
+    "Processed_At": "2026-10-07T11:41:11.799122",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -12088,10 +12100,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "pelayanan rekam medis RS.HERMINA Ramah & cantik 👍",
     "id": "bd354c57667e8741",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0963,
     "Teks_Bersih": "layan rekam medis rshermina ramah cantik",
-    "Processed_At": "2026-10-07T11:41:27.498355"
+    "Processed_At": "2026-10-07T11:41:27.498355",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -12208,10 +12221,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "pelayanan hd sangat memuaskannnn\nmas cipto, suster triana, suster indi, suster sofi suster aini, mas dinar dan mas wiwit sangat baik",
     "id": "aea1e757781c139c",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9111,
     "Teks_Bersih": "layan hd sangat muas mas cipto suster triana suster indi suster sofi suster ain mas dinar dan mas wiwit sangat baik",
-    "Processed_At": "2026-10-07T11:41:38.598218"
+    "Processed_At": "2026-10-07T11:41:38.598218",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -12793,10 +12807,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "ktk pelayanan baik..terimakasih hermina pwt.",
     "id": "609d2c9aee40d66f",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.0882,
     "Teks_Bersih": "ktk layan baikterimakasih hermina pwt",
-    "Processed_At": "2026-10-07T11:42:23.498238"
+    "Processed_At": "2026-10-07T11:42:23.498238",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -13318,10 +13333,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Perawatan di lantai 4 Padma MEMUASKAN",
     "id": "51048254ed31ba33",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0102,
     "Teks_Bersih": "awat di lantai 4 padma muas",
-    "Processed_At": "2026-10-07T11:42:51.436675"
+    "Processed_At": "2026-10-07T11:42:51.436675",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -13648,10 +13664,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Kamar no 405 perawat mba rosa\nRumah sakit untuk lahiran yang sangat nyaman",
     "id": "39b1cab9ae59dbb2",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9979,
     "Teks_Bersih": "kamar no 405 awat mba rosa rumah sakit untuk lahir yang sangat nyaman",
-    "Processed_At": "2026-10-07T11:43:17.706662"
+    "Processed_At": "2026-10-07T11:43:17.706662",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -13783,10 +13800,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Radiologi RS Hermina sangat baik",
     "id": "2b4016b9bfdecc12",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9514,
     "Teks_Bersih": "radiologi rumah sakit hermina sangat baik",
-    "Processed_At": "2026-10-07T11:43:23.206656"
+    "Processed_At": "2026-10-07T11:43:23.206656",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -14188,10 +14206,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "dr rumah sdh panik liat keadaan anak, bgtu smpe RS bingung n untung nya ada pak securiti langsung d arahin,, bgtu masuk ruang IGD langsung d tanganin dokter tidak ada drama nunggu atau lambat penanganan,,dokter n staf ramah², ruangan nya nyaman, bersih n sejuk",
     "id": "58973fa5659aff29",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0006,
     "Teks_Bersih": "dari rumah sudah panik liat ada anak bgtu smpe rumah sakit bingung n untung nya ada pak securiti langsung d arahin bgtu masuk ruang instalasi gawat darurat langsung d tanganin dokter tidak ada drama tunggu atau lambat penanganandokter n staf ramah ruang nya nyaman bersih n sejuk",
-    "Processed_At": "2026-10-07T11:43:53.721159"
+    "Processed_At": "2026-10-07T11:43:53.721159",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -15944,10 +15963,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Dirawat d kamar 512\nPelayanan cukup memuaskan,perawat sopan,dokter sopan,memuaskan",
     "id": "346a496a0714fcc8",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0813,
     "Teks_Bersih": "rawat d kamar 512 layan cukup memuaskanperawat sopandokter sopanmemuaskan",
-    "Processed_At": "2026-10-07T11:46:18.300347"
+    "Processed_At": "2026-10-07T11:46:18.300347",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -16409,10 +16429,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "radiologi sangat baik",
     "id": "30ca533953ce1d47",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9482,
     "Teks_Bersih": "radiologi sangat baik",
-    "Processed_At": "2026-10-07T11:46:46.065102"
+    "Processed_At": "2026-10-07T11:46:46.065102",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -16514,10 +16535,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Alhamdulillah  sangat ouas pelayanan polikliniknya sangat baik",
     "id": "7b55cb9eceb02892",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0306,
     "Teks_Bersih": "alhamdulillah sangat ouas layan poliklinik sangat baik",
-    "Processed_At": "2026-10-07T11:46:51.002047"
+    "Processed_At": "2026-10-07T11:46:51.002047",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -17537,10 +17559,11 @@
     "Longitude": 109.2673789,
     "Isi Ulasan": "hebat",
     "id": "e11a765bd3adb141",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.0329,
     "Teks_Bersih": "hebat",
-    "Processed_At": "2026-10-07T11:49:08.281315"
+    "Processed_At": "2026-10-07T11:49:08.281315",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -18167,10 +18190,11 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "Pelayanan cepat\ntidak di perlambat\nRamah",
     "id": "eab6277b8b152299",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9814,
     "Teks_Bersih": "layan cepat tidak di lambat ramah",
-    "Processed_At": "2026-10-07T11:49:56.707056"
+    "Processed_At": "2026-10-07T11:49:56.707056",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Wiradadi Husada Banyumas",
@@ -18347,10 +18371,11 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "Pelayanan administrasinya tidak ribet bagi pengguna Bpjs",
     "id": "5152c4cfa6ce7050",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.109,
     "Teks_Bersih": "layan administrasi tidak rumit bagi guna bpjs sehat",
-    "Processed_At": "2026-10-07T11:50:09.095612"
+    "Processed_At": "2026-10-07T11:50:09.095612",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Wiradadi Husada Banyumas",
@@ -18497,10 +18522,11 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "Pelayanann kepercayaaan anak anak didiknya saya",
     "id": "b90a7d0fcfde54b6",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0702,
     "Teks_Bersih": "pelayanann kepercayan anak anak didik saya",
-    "Processed_At": "2026-10-07T11:50:17.611987"
+    "Processed_At": "2026-10-07T11:50:17.611987",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Wiradadi Husada Banyumas",
@@ -18752,10 +18778,11 @@
     "Longitude": 109.2718392,
     "Isi Ulasan": "pelayanan kesehatan yang ga pake ribet kalo pake BPJS",
     "id": "e3648340764a8cbe",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3591,
     "Teks_Bersih": "layan sehat yang tidak pake rumit kalo pake bpjs sehat",
-    "Processed_At": "2026-10-07T11:50:32.012872"
+    "Processed_At": "2026-10-07T11:50:32.012872",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Wiradadi Husada Banyumas",
@@ -20015,10 +20042,11 @@
     "Longitude": 109.2530153,
     "Isi Ulasan": "Sangat baik",
     "id": "4f069ec54001c73d",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T11:52:33.073272"
+    "Processed_At": "2026-10-07T11:52:33.073272",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Dadi Keluarga Purwokerto",
@@ -20255,10 +20283,11 @@
     "Longitude": 109.2239929,
     "Isi Ulasan": "Ke UGD mau minta surat keterangan sehat, sayang pasien UGD sedang penuh jadi ga bisa dilayani. Tapi petugas penerimanya baik menawarkan tunggu tapi ga tau sampai jam berapa, atau cari ke RS lain dan kasih pilihan RS yang kemungkinan besar bisa.\nBersyukur pindah rs mengikutibsaran beliau langsung dapat yang bisa melayani.\nMakasih kakak❤️❤️",
     "id": "c6932064a87e18a0",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1813,
     "Teks_Bersih": "ke ugd mau minta surat terang sehat sayang pasien ugd sedang penuh jadi tidak bisa layan tapi tugas terima baik tawar tunggu tapi tidak tau sampai jam berapa atau cari ke rumah sakit lain dan beri pilih rumah sakit yang mungkin besar bisa syukur pindah rumah sakit mengikutibsaran beliau langsung dapat yang bisa layan terima kasih kakak",
-    "Processed_At": "2026-10-07T11:53:08.508165"
+    "Processed_At": "2026-10-07T11:53:08.508165",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Ananda Purwokerto",
@@ -20916,10 +20945,11 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Overall bagus,saluta pelayanan n keramahanya,untuk perawat thank SDH penuh dedikasi n sabar menghadapi pasien.thank a lot n good job#ruang camar",
     "id": "99aee62016e8285c",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9856,
     "Teks_Bersih": "overall bagussaluta layan n keramahanyauntuk awat thank sudah penuh dedikasi n sabar hadap pasienthank a lot n good jobruang camar",
-    "Processed_At": "2026-10-07T11:54:14.904587"
+    "Processed_At": "2026-10-07T11:54:14.904587",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -21427,10 +21457,11 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "aku dirawat selama 1 minggu\nemang sangat baik pelayanannya",
     "id": "84b3c689157c877a",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0297,
     "Teks_Bersih": "saya rawat lama 1 minggu memang sangat baik layan",
-    "Processed_At": "2026-10-07T11:55:08.891804"
+    "Processed_At": "2026-10-07T11:55:08.891804",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Siaga Medika Banyumas",
@@ -21532,10 +21563,11 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "Saya pernah tunggu pasien selama kurang lebih 3 hari,waktu itu cucu saya dirawat ..sakitnya suhu badan tinggi ..susah buang air kecil\nPelayanan sangat baik..kamar inapnya nyaman,bersih..lingkungannya juga asri\nbanyak tamannya,tempat ibadahnya juga bagus banget..parkiran aman ,luas,gratis lagi",
     "id": "6de64de644d98344",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2627,
     "Teks_Bersih": "saya pernah tunggu pasien lama kurang lebih 3 hariwaktu itu cucu saya rawat sakit suhu badan tinggi susah buang air kecil layan sangat baikkamar inap nyamanbersihlingkungannya juga asri banyak tamannyatempat ibadah juga bagus bangetparkiran aman luasgratis lagi",
-    "Processed_At": "2026-10-07T11:55:20.708480"
+    "Processed_At": "2026-10-07T11:55:20.708480",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit \"JIH\" Purwokerto",
@@ -21592,10 +21624,11 @@
     "Longitude": 109.274308,
     "Isi Ulasan": "Kalo konsultasi ke Sp.kj\nKita kira berapa yaa...mohon dijawab",
     "id": "a03a003ef4ab0eb4",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Netral",
     "Confidence": 1.0461,
     "Teks_Bersih": "kalo konsultasi ke spkj kita kira berapa yaamohon jawab",
-    "Processed_At": "2026-10-07T11:55:24.605551"
+    "Processed_At": "2026-10-07T11:55:24.605551",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "Rumah Sakit \"JIH\" Purwokerto",
@@ -21817,10 +21850,11 @@
     "Longitude": 109.274308,
     "Isi Ulasan": "Nice place..nice support system 🥰",
     "id": "5e9adc609ecab4ca",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1524,
     "Teks_Bersih": "nice placenice support system",
-    "Processed_At": "2026-10-07T11:55:42.200085"
+    "Processed_At": "2026-10-07T11:55:42.200085",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit \"JIH\" Purwokerto",
@@ -22162,10 +22196,11 @@
     "Longitude": 109.212873,
     "Isi Ulasan": "Pelayanan lambatt",
     "id": "04871817bc0be1cf",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.1175,
     "Teks_Bersih": "layan lambatt",
-    "Processed_At": "2026-10-07T11:56:10.198129"
+    "Processed_At": "2026-10-07T11:56:10.198129",
+    "Label_Manual": "Negatif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -24070,10 +24105,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "pelayanan UGD sudah 👌",
     "id": "cf0365cb930d91ef",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Netral",
     "Confidence": 1.1812,
     "Teks_Bersih": "layan ugd sudah",
-    "Processed_At": "2026-10-07T12:06:51.017391"
+    "Processed_At": "2026-10-07T12:06:51.017391",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -24445,10 +24481,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Ibu saya dirawat d 506 prwat ramh2 ,cekatan",
     "id": "c9507d5f5ac60ea5",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1485,
     "Teks_Bersih": "ibu saya rawat d 506 prwat ramh2 cekat",
-    "Processed_At": "2026-10-07T12:07:09.089186"
+    "Processed_At": "2026-10-07T12:07:09.089186",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -25481,10 +25518,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Pelayanan memuskan",
     "id": "68f5bf07b148f4be",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1175,
     "Teks_Bersih": "layan mus",
-    "Processed_At": "2026-10-07T12:08:22.286890"
+    "Processed_At": "2026-10-07T12:08:22.286890",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -25766,10 +25804,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "pelayanan radiologi sangat baik👍👍👍",
     "id": "211d9e24ba418890",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.95,
     "Teks_Bersih": "layan radiologi sangat baik",
-    "Processed_At": "2026-10-07T12:08:43.812094"
+    "Processed_At": "2026-10-07T12:08:43.812094",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -26501,10 +26540,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Pelayanannya udah oke bgt, tempat juga udah nyaman. Cuman saya gasuka orang2 yg diruang operasi kurang ramah, harusnya bikin suasana nyaman dengan posisi pasien yang stress karna mau operasi. Dan mereka berisik bgt, ada yg ngomongin makan lah, bercandalah kaya bukan di RS. Tapi overall udah josjisss bgt sii terutama nurse yg di lantai 4, terbantu bgt.\nOiya, masih heran kenapa antri obat itu lama pake bgt ya?\nDan saya berterima kasih bgt sama mas mas cleaning service dia terajin sii karna yg lainnya cewek tapi yg paling bersih & telaten si mas mas the only one.\nGa sabar pengin hamil & lahiran di hermina!!!!",
     "id": "50effca339f5638f",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1181,
     "Teks_Bersih": "layan sudah baik banget tempat juga sudah nyaman hanya saya gasuka orang2 yang ruang operasi kurang ramah harus bikin suasana nyaman dengan posisi pasien yang stress karena mau operasi dan mereka berisik banget ada yang ngomongin makan lah canda kaya bukan di rumah sakit tapi overall sudah josjis banget sii utama nurse yang di lantai 4 bantu banget oiya masih heran kenapa antre obat itu lama pake banget ya dan saya terima beri banget sama mas mas cleaning service dia rajin sii karena yang lain cewek tapi yang paling bersih telaten si mas mas the only one tidak sabar pengin hamil lahir di hermina",
-    "Processed_At": "2026-10-07T12:09:30.198578"
+    "Processed_At": "2026-10-07T12:09:30.198578",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Hermina Hospital Purwokerto",
@@ -26516,10 +26556,11 @@
     "Longitude": 109.202639,
     "Isi Ulasan": "Rawat inap di kamar 508..pelayanan susternya gercep,komunikatif.. dokternya informatif, obat2an manjur..",
     "id": "1a1da1f352ea865e",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.0754,
     "Teks_Bersih": "rawat inap di kamar 508pelayanan suster gercepkomunikatif dokter informatif obat2an manjur",
-    "Processed_At": "2026-10-07T12:09:33.398770"
+    "Processed_At": "2026-10-07T12:09:33.398770",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSIA Bunda Arif",
@@ -26771,10 +26812,11 @@
     "Longitude": 109.2431658,
     "Isi Ulasan": "Cari vaksin untuk anak kesana kemari susah responnya lama,karena saya memastikan dahulu sebelum datang kerumah sakitnya untuk kesediannya, cuman di bunda arif tanya admin langsung di respon cepat, harga vaksin juga masih sangat affordable price.\nPertahankan bunda arif untuk pelayanan nya yang fast dan clear",
     "id": "e230f15f8c26146b",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0996,
     "Teks_Bersih": "cari vaksin untuk anak kesana kemari susah responnya lamakarena saya pasti dahulu belum datang rumah sakit untuk dian hanya di bunda arif tanya admin langsung di respon cepat harga vaksin juga masih sangat affordable price tahan bunda arif untuk layan nya yang fast dan clear",
-    "Processed_At": "2026-10-07T12:09:58.100786"
+    "Processed_At": "2026-10-07T12:09:58.100786",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSIA Bunda Arif",
@@ -27161,10 +27203,11 @@
     "Longitude": 109.2535107,
     "Isi Ulasan": "Pasien atas nama tnnyusup pasien dr arinton ruang anyelir 1 pelayanan baik, terus tingkatkan.. terimakasih",
     "id": "883d82305f1ddb21",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0196,
     "Teks_Bersih": "pasien atas nama tnnyusup pasien dari arinton ruang anyelir 1 layan baik terus tingkat terima kasih",
-    "Processed_At": "2026-10-07T12:10:47.597533"
+    "Processed_At": "2026-10-07T12:10:47.597533",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -29201,10 +29244,11 @@
     "Longitude": 109.2535107,
     "Isi Ulasan": "Pasien dengan dokter Anton. Untuk Pelayanan  ramah dan tepat, tidak mengecewakan. Dari kamar tulip 1",
     "id": "47a61c1a3bbe5759",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9817,
     "Teks_Bersih": "pasien dengan dokter anton untuk layan ramah dan tepat tidak kecewa dari kamar tulip 1",
-    "Processed_At": "2026-10-07T12:13:53.595766"
+    "Processed_At": "2026-10-07T12:13:53.595766",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -30221,10 +30265,11 @@
     "Longitude": 109.2535107,
     "Isi Ulasan": "Pasien dokter happy, pasien kamar Dahlia 4.",
     "id": "870a4093bed569bb",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.0672,
     "Teks_Bersih": "pasien dokter happy pasien kamar dahlia 4",
-    "Processed_At": "2026-10-07T12:16:05.020387"
+    "Processed_At": "2026-10-07T12:16:05.020387",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -30371,10 +30416,11 @@
     "Longitude": 109.2535107,
     "Isi Ulasan": "Pengalaman saya pada saat mau kontrol nomor surat rujukan terkunci, kemudian saya di arahkan untuk minta nomor rujukan baru ke faskes 1,...dan surat rujukan tersebut tidak bisa langsung di pakai,,nunggu hari berikutnya.sangat menghambat banget...mohon untuk di perbaiki lagi untuk pelayanan khususnya di bagian pendaftaran.",
     "id": "9f001d48f313f289",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.0179,
     "Teks_Bersih": "alam saya pada saat mau kontrol nomor surat rujuk kunci kemudian saya di arah untuk minta nomor rujuk baru ke faskes 1dan surat rujuk sebut tidak bisa langsung di pakainunggu hari berikutnyasangat hambat bangetmohon untuk di baik lagi untuk layan khusus di bagi daftar",
-    "Processed_At": "2026-10-07T12:16:28.384727"
+    "Processed_At": "2026-10-07T12:16:28.384727",
+    "Label_Manual": "Negatif"
   },
   {
     "Nama RS": "Rumah Sakit Umum Bunda",
@@ -31106,10 +31152,11 @@
     "Longitude": 109.2239929,
     "Isi Ulasan": "rs swasta dengan pelayanan terrr ramahh 🥰",
     "id": "15cf5a80e25ab63d",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.957,
     "Teks_Bersih": "rumah sakit swasta dengan layan ter ramahh",
-    "Processed_At": "2026-10-07T12:17:24.315158"
+    "Processed_At": "2026-10-07T12:17:24.315158",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Ananda Purwokerto",
@@ -32606,10 +32653,11 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Sangat baik pelayanannya",
     "id": "05af144966bc2559",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9251,
     "Teks_Bersih": "sangat baik layan",
-    "Processed_At": "2026-10-07T12:19:22.146647"
+    "Processed_At": "2026-10-07T12:19:22.146647",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -32711,10 +32759,11 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Untuk kamar bersalin,Alhamdulillah pelayanannya memuaskan,sopan,,,",
     "id": "b063aa2f3e43ad41",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2225,
     "Teks_Bersih": "untuk kamar bersalinalhamdulillah layan memuaskansopan",
-    "Processed_At": "2026-10-07T12:19:29.690174"
+    "Processed_At": "2026-10-07T12:19:29.690174",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -33731,10 +33780,11 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "Pelayanan di RSUD Ajibarang kamar bersalin mantap👍",
     "id": "97a7497c74d98365",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9516,
     "Teks_Bersih": "layan di rsud ajibarang kamar salin sangat baik",
-    "Processed_At": "2026-10-07T12:20:59.591486"
+    "Processed_At": "2026-10-07T12:20:59.591486",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -34631,10 +34681,11 @@
     "Longitude": 109.0792511,
     "Isi Ulasan": "sangat baik",
     "id": "46395db6728251c8",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:22:01.843784"
+    "Processed_At": "2026-10-07T12:22:01.843784",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Ajibarang",
@@ -35726,10 +35777,11 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "Kamar mawar 15",
     "id": "60ebe8757a8cda4d",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Netral",
     "Confidence": 0.0829,
     "Teks_Bersih": "kamar mawar 15",
-    "Processed_At": "2026-10-07T12:23:21.133705"
+    "Processed_At": "2026-10-07T12:23:21.133705",
+    "Label_Manual": "Netral"
   },
   {
     "Nama RS": "RSU Siaga Medika Banyumas",
@@ -35996,10 +36048,11 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "Cepat respon saat pasien butuh bantuan atau cepat bertindak saat di mintai tolong oleh penunggu pasien",
     "id": "37256728d45a33fd",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1913,
     "Teks_Bersih": "cepat respon saat pasien butuh bantu atau cepat tindak saat di minta tolong oleh tunggu pasien",
-    "Processed_At": "2026-10-07T12:23:42.992802"
+    "Processed_At": "2026-10-07T12:23:42.992802",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Siaga Medika Banyumas",
@@ -36101,10 +36154,11 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "Pelayan ruang perinatologi amah+cepat\nTidak mengecewakan",
     "id": "8abf940fa5894239",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2627,
     "Teks_Bersih": "layan ruang perinatologi amahcepat tidak kecewa",
-    "Processed_At": "2026-10-07T12:23:48.382374"
+    "Processed_At": "2026-10-07T12:23:48.382374",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Siaga Medika Banyumas",
@@ -37752,10 +37806,11 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "Perawat nya ramah baik bangeetttt, bersih, kamar anak udah 1kamar 1pasien 👍 tidak mengecewakan",
     "id": "37ad33d4c3e22920",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0479,
     "Teks_Bersih": "awat nya ramah baik bangeet bersih kamar anak sudah 1kamar 1pasien tidak kecewa",
-    "Processed_At": "2026-10-07T12:26:11.693549"
+    "Processed_At": "2026-10-07T12:26:11.693549",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Siaga Medika Banyumas",
@@ -38082,10 +38137,11 @@
     "Longitude": 109.2934088,
     "Isi Ulasan": "pelayanananya bagus,amanah",
     "id": "295f4f9210a677ed",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1945,
     "Teks_Bersih": "pelayanananya bagusamanah",
-    "Processed_At": "2026-10-07T12:26:28.089396"
+    "Processed_At": "2026-10-07T12:26:28.089396",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Siaga Medika Banyumas",
@@ -39117,10 +39173,11 @@
     "Longitude": 109.3552698,
     "Isi Ulasan": "Selama hamil sllu rutin USG & daftar online via whatsapp awal2 fast respon,tp pas CS pendaftaran nomor WA nya ganti ya ampunnn pelayananya slowrespon sekali !! Balas chatnya plenger bgt ! Udh jelas2 mau daftar online mnyrtakan NIK,nama pasien,poli tujuan,hari & tanggal,malah disuruh lgsg datang ke RS ! Minta nomor antrian online ga dikasih ! Grgr cs plenger aku jd antre dr jam 2 smpe jam 5 sore !! Kecewa bangetttttt",
     "id": "7e5166c1e16086c8",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.1232,
     "Teks_Bersih": "lama hamil sllu rutin usg daftar online via whatsapp awal2 fast respontp saat cs daftar nomor wa nya ganti ya ampun pelayananya slowrespon sekali balas chatnya plenger banget udh jelas2 mau daftar online mnyrtakan niknama pasienpoli tujuanhari tanggalmalah suruh lgsg datang ke rumah sakit minta nomor antri online tidak kasih grgr cs plenger saya jadi antre dari jam 2 smpe jam 5 sore kecewa sekali",
-    "Processed_At": "2026-10-07T12:27:44.788398"
+    "Processed_At": "2026-10-07T12:27:44.788398",
+    "Label_Manual": "Negatif"
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -39207,10 +39264,11 @@
     "Longitude": 109.3552698,
     "Isi Ulasan": "Terimakasih untuk pelayanan. Hanya diperbaiki supaya lebih sigap dan cepat tanggap. Jangan jutek klo dipanggil sama pasien.",
     "id": "0f7011432fd68969",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.3558,
     "Teks_Bersih": "terima kasih untuk layan hanya baik supaya lebih sigap dan cepat tanggap jangan jutek kalau panggil sama pasien",
-    "Processed_At": "2026-10-07T12:27:49.566968"
+    "Processed_At": "2026-10-07T12:27:49.566968",
+    "Label_Manual": "Negatif"
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -39507,10 +39565,11 @@
     "Longitude": 109.3552698,
     "Isi Ulasan": "Memuaskan,bagus",
     "id": "38033d53292a0558",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1945,
     "Teks_Bersih": "memuaskanbagus",
-    "Processed_At": "2026-10-07T12:28:09.092123"
+    "Processed_At": "2026-10-07T12:28:09.092123",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -39612,10 +39671,11 @@
     "Longitude": 109.3552698,
     "Isi Ulasan": "Sangan mudah untuk pelayanan dan kerjasamanya",
     "id": "516c308025d0daba",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9526,
     "Teks_Bersih": "sangan mudah untuk layan dan kerjasamanya",
-    "Processed_At": "2026-10-07T12:28:14.714128"
+    "Processed_At": "2026-10-07T12:28:14.714128",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -40813,10 +40873,11 @@
     "Longitude": 109.3552698,
     "Isi Ulasan": "Pelayanannya optimal banget RSU ini, rekomen lah",
     "id": "3ed3aa7f39999755",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2553,
     "Teks_Bersih": "layan optimal sekali rumah sakit umum ini rekomen lah",
-    "Processed_At": "2026-10-07T12:29:22.879643"
+    "Processed_At": "2026-10-07T12:29:22.879643",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -41023,10 +41084,11 @@
     "Longitude": 109.3552698,
     "Isi Ulasan": "Sangat baik",
     "id": "098df0373e3107b2",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:29:35.465872"
+    "Processed_At": "2026-10-07T12:29:35.465872",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU PKU MUHAMMADIYAH AMANAH SUMPIUH",
@@ -41985,10 +42047,11 @@
     "Longitude": 109.2530153,
     "Isi Ulasan": "Pelayanannya memuasksn",
     "id": "7424a6c534bd9be8",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1175,
     "Teks_Bersih": "layan memuasksn",
-    "Processed_At": "2026-10-07T12:30:28.777360"
+    "Processed_At": "2026-10-07T12:30:28.777360",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Dadi Keluarga Purwokerto",
@@ -45166,10 +45229,11 @@
     "Longitude": 109.2726441,
     "Isi Ulasan": "Istri saya 2x dirawat disini, dan bagi istri yg seorang nakes, dia kagum juga dg nakes tetap tersenyum menghadapi pasien yg banyak smp mlm hari... Dia temukan di RSOP ini...\nSelamat Ulang Tahun ke 20th mudah2an makin okey dalam melayani pasien....\nKonsep tanpa lift nya bagus buat penunggu dan penjenguk pasien utk rajin jalan....\nBuat nakesnya juga jalan ya?",
     "id": "3f049eb146c1e5df",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0348,
     "Teks_Bersih": "istri saya 2x rawat sini dan bagi istri yang orang nakes dia kagum juga dengan nakes tetap senyum hadap pasien yang banyak smp mlm hari dia temu di rsop ini selamat ulang tahun ke 20th mudah2an makin okey dalam layan pasien konsep tanpa lift nya bagus untuk tunggu dan jenguk pasien untuk rajin jalan untuk nakesnya juga jalan ya",
-    "Processed_At": "2026-10-07T12:34:21.492309"
+    "Processed_At": "2026-10-07T12:34:21.492309",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Orthopaedi Purwokerto",
@@ -46084,10 +46148,11 @@
     "Longitude": 109.2536386,
     "Isi Ulasan": "dokternya enakan , pelayanan ramah pokoknya jangan lupa datang ke rsgpm Unsoed ya klo mau periksa gigi ya",
     "id": "6a1ea2cf8c4703fc",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1557,
     "Teks_Bersih": "dokter enak layan ramah pokok jangan lupa datang ke rsgpm unsoed ya kalau mau periksa gigi ya",
-    "Processed_At": "2026-10-07T12:35:29.690705"
+    "Processed_At": "2026-10-07T12:35:29.690705",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSGMP UNSOED PURWOKERTO",
@@ -46594,10 +46659,11 @@
     "Longitude": 109.2924346,
     "Isi Ulasan": "Sangat baik",
     "id": "fe398f42b151f19f",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:36:25.683931"
+    "Processed_At": "2026-10-07T12:36:25.683931",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Banyumas",
@@ -46790,10 +46856,11 @@
     "Longitude": 109.2924346,
     "Isi Ulasan": "Joosss",
     "id": "cfae701b617a115b",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1945,
     "Teks_Bersih": "joos",
-    "Processed_At": "2026-10-07T12:36:37.625440"
+    "Processed_At": "2026-10-07T12:36:37.625440",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Banyumas",
@@ -46805,10 +46872,11 @@
     "Longitude": 109.2924346,
     "Isi Ulasan": "nice",
     "id": "863d397bcefad17a",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1945,
     "Teks_Bersih": "nice",
-    "Processed_At": "2026-10-07T12:36:38.249554"
+    "Processed_At": "2026-10-07T12:36:38.249554",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Banyumas",
@@ -47377,10 +47445,11 @@
     "Longitude": 109.2397481,
     "Isi Ulasan": "Sangat baik",
     "id": "088a6367a540cb62",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:37:35.105781"
+    "Processed_At": "2026-10-07T12:37:35.105781",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Santa Elisabeth Purwokerto",
@@ -47527,10 +47596,11 @@
     "Longitude": 109.2397481,
     "Isi Ulasan": "Ketemu perawat yang buat sakit hati cara ngomongnya. Almh ibu sy masuk kondisi kesadaran menurun msh diblg gak bs kooperatif. Gmn mau kooperatif kondisinya kesadarannya jg menurun. Kedua, dy perawat tp sdh langsung bilang ini telat udah susah, maksudnya? Kalau sy sebagai anak pasien kita tau kondisinya memang sdg krg baik si pasien almh ibu sy tp sy memohon utk disampaikan kekeluarga sj jgn di dpn pasien tp si perawat masih blg dokter jg akan blg gt, ini jg gak akan dgr jg sy ngmg. Disitu sy makin naik darah dan langsung marah krn meski gmn pun sy yakin almh tetap bs mendengar hny sj tdk bs merespon. Saat itu yg sy butuhkan adlh semangat baik utk sy ataupun pasien bukan dgn kata2 yg menurut sy tdk pantas sbg seorang perawat. Yg bs menentukan jg seharusnya dokter bukan perawat.",
     "id": "928fc0b1881f887c",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Negatif",
     "Confidence": 1.1573,
     "Teks_Bersih": "ketemu awat yang untuk sakit hati cara ngomongnya almh ibu saya masuk kondisi sadar turun msh diblg tidak bs kooperatif gmn mau kooperatif kondisi sadar juga turun dua dy awat tetapi sudah langsung bilang ini telat sudah susah maksud kalau saya bagai anak pasien kita tau kondisi memang sdg krg baik si pasien almh ibu saya tetapi saya mohon untuk sampai keluarga sj jangan di dpn pasien tetapi si awat masih blg dokter juga akan blg gt ini juga tidak akan dgr juga saya ngmg situ saya makin naik darah dan langsung marah karena meski gmn pun saya yakin almh tetap bs dengar hny sj tidak bs merespon saat itu yang saya butuh adlh semangat baik untuk saya atau pasien bukan dgn kata2 yang turut saya tidak pantas bagai orang awat yang bs tentu juga harus dokter bukan awat",
-    "Processed_At": "2026-10-07T12:37:43.080441"
+    "Processed_At": "2026-10-07T12:37:43.080441",
+    "Label_Manual": "Negatif"
   },
   {
     "Nama RS": "RSU Santa Elisabeth Purwokerto",
@@ -48323,10 +48393,11 @@
     "Longitude": 109.274308,
     "Isi Ulasan": "Rekam medis mantul",
     "id": "b765431b4f7ffdbb",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0319,
     "Teks_Bersih": "rekam medis sangat baik",
-    "Processed_At": "2026-10-07T12:39:12.161824"
+    "Processed_At": "2026-10-07T12:39:12.161824",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit \"JIH\" Purwokerto",
@@ -49465,10 +49536,11 @@
     "Longitude": 109.212873,
     "Isi Ulasan": "Layanan bagus,  antrian teratur dan tidak membedakan sy sebagai pasien BPJS",
     "id": "0daf5dd5fcefa401",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0464,
     "Teks_Bersih": "layan bagus antri atur dan tidak beda saya bagai pasien bpjs sehat",
-    "Processed_At": "2026-10-07T12:40:36.425518"
+    "Processed_At": "2026-10-07T12:40:36.425518",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -49540,10 +49612,11 @@
     "Longitude": 109.212873,
     "Isi Ulasan": "Kami menjenguk rekan yg sakit diklas 1 dn kagum ..ruangannya seperti vip sangat hnya kurang kulkas saja wajarlah...ad rak sepatu ad tmpat jemuran handuk dn lmari pakaian disain ruangannya jg bagus kombinasi kayu..ad sofa yg besar dn empuk  bsa bt tidur.dn ad ruangan  bt sholat dn jg bt istirahat yg lumayan cukuplah....ad al qur'an dn buku dzukir pagi dan petang...Ma syaa Allooh.....sehingga ketika suami sakit minta dirawat disitu padahal harusnya di rs.lain..",
     "id": "0df61718566bfef0",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.032,
     "Teks_Bersih": "kami jenguk rekan yang sakit diklas 1 dalam negeri kagum ruang seperti vip sangat hnya kurang kulkas saja wajarlahad rak sepatu ad tmpat jemur handuk dalam negeri lmari pakai disain ruang juga bagus kombinasi kayuad sofa yang besar dalam negeri empuk bsa bt tidurdn ad ruang bt sholat dalam negeri juga bt istirahat yang lumayan cukuplahad al quran dalam negeri buku dzukir pagi dan petangma syaa alloohsehingga ketika suami sakit minta rawat situ padahal harus di rslain",
-    "Processed_At": "2026-10-07T12:40:46.480473"
+    "Processed_At": "2026-10-07T12:40:46.480473",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -49932,10 +50005,11 @@
     "Longitude": 109.212873,
     "Isi Ulasan": "Secara keseluruhan  RSI Purwokerto sangat baik, dari segi pelayanan, tenaga medis dan sarana prasrananya",
     "id": "76f60552403903ac",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.941,
     "Teks_Bersih": "cara seluruh rumah sakit islam purwokerto sangat baik dari segi layan tenaga medis dan sarana prasrananya",
-    "Processed_At": "2026-10-07T12:41:08.679181"
+    "Processed_At": "2026-10-07T12:41:08.679181",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -50232,10 +50306,11 @@
     "Longitude": 109.212873,
     "Isi Ulasan": "Alhamdulillah, istri lahiran di RSI pelayanannya sangat baik",
     "id": "970b24e48bd2979d",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 0.9684,
     "Teks_Bersih": "alhamdulillah istri lahir di rumah sakit islam layan sangat baik",
-    "Processed_At": "2026-10-07T12:41:24.027254"
+    "Processed_At": "2026-10-07T12:41:24.027254",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -52337,10 +52412,11 @@
     "Longitude": 109.212873,
     "Isi Ulasan": "Udah beberapa kali ke RSI Purwokerto dan nggak pernah kecewa sama pelayanannya. Mulai dari satpam, bagian pendaftaran, perawat, sampai apotek semuanya informatif dan ramah. Fasilitasnya lengkap, parkiran luas, dan nuansa Islaminya bikin adem.",
     "id": "55a617b16841bd93",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0167,
     "Teks_Bersih": "sudah beberapa kali ke rumah sakit islam purwokerto dan tidak pernah kecewa sama layan mulai dari satpam bagi daftar awat sampai apotek semua informatif dan ramah fasilitas lengkap parkir luas dan nuansa islami bikin adem",
-    "Processed_At": "2026-10-07T12:43:29.687442"
+    "Processed_At": "2026-10-07T12:43:29.687442",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "Rumah Sakit Islam Purwokerto",
@@ -54385,10 +54461,11 @@
     "Longitude": 109.2747121,
     "Isi Ulasan": "Di RS Medika Lestari buntu nunggunya ngga kelamaan,jadi pulangnya tidak kesiangan",
     "id": "77eb13efe500c856",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2339,
     "Teks_Bersih": "di rumah sakit medika lestari buntu nunggunya tidak kelamaanjadi pulang tidak siang",
-    "Processed_At": "2026-10-07T12:45:11.773068"
+    "Processed_At": "2026-10-07T12:45:11.773068",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
@@ -55318,10 +55395,11 @@
     "Longitude": 109.2673789,
     "Isi Ulasan": "Pelayanan untuk specialis mata dan bedah mulut sangat lah ramah",
     "id": "3898b68756dbe924",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.27,
     "Teks_Bersih": "layan untuk specialis mata dan bedah mulut sangat lah ramah",
-    "Processed_At": "2026-10-07T12:46:07.572489"
+    "Processed_At": "2026-10-07T12:46:07.572489",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -55814,10 +55892,11 @@
     "Longitude": 109.2673789,
     "Isi Ulasan": "Love the vibes of this hospital",
     "id": "6532b3bd03fc30a4",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0442,
     "Teks_Bersih": "love the vibes of this hospital",
-    "Processed_At": "2026-10-07T12:46:42.282858"
+    "Processed_At": "2026-10-07T12:46:42.282858",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -56402,10 +56481,11 @@
     "Longitude": 109.2673789,
     "Isi Ulasan": "Sangat baik",
     "id": "65ba708527c1977f",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0391,
     "Teks_Bersih": "sangat baik",
-    "Processed_At": "2026-10-07T12:47:09.679852"
+    "Processed_At": "2026-10-07T12:47:09.679852",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -56417,10 +56497,11 @@
     "Longitude": 109.2673789,
     "Isi Ulasan": "tempatnya nya luas, ruangan lengkap, Tempat parkir nya luas",
     "id": "8e08154ada0d412d",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1603,
     "Teks_Bersih": "tempat nya luas ruang lengkap tempat parkir nya luas",
-    "Processed_At": "2026-10-07T12:47:10.285677"
+    "Processed_At": "2026-10-07T12:47:10.285677",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSUD Prof. Dr. Margono Soekarjo",
@@ -57558,10 +57639,11 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "pelayanan sdh bagus,Ramah",
     "id": "9b21ee8104c90497",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1911,
     "Teks_Bersih": "layan sudah bagusramah",
-    "Processed_At": "2026-10-07T12:48:21.595059"
+    "Processed_At": "2026-10-07T12:48:21.595059",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -58038,10 +58120,11 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "Petugas tidak membeda-bedakan pasien JKn dengan pasien umum",
     "id": "c6e6370663c99d65",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.3282,
     "Teks_Bersih": "tugas tidak membedabedakan pasien jkn dengan pasien umum",
-    "Processed_At": "2026-10-07T12:48:46.576227"
+    "Processed_At": "2026-10-07T12:48:46.576227",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -58158,10 +58241,11 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "Bukan hanya pelayanan namun nyaman",
     "id": "c49b634b851488ad",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2178,
     "Teks_Bersih": "bukan hanya layan namun nyaman",
-    "Processed_At": "2026-10-07T12:48:54.501680"
+    "Processed_At": "2026-10-07T12:48:54.501680",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -58264,10 +58348,11 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "Pelayanan SDH bagus,Tingkatkan LG untuk pekayanan",
     "id": "6b8337ec2154fc22",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0092,
     "Teks_Bersih": "layan sudah bagustingkatkan lagi untuk kayan",
-    "Processed_At": "2026-10-07T12:49:00.578790"
+    "Processed_At": "2026-10-07T12:49:00.578790",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -58700,10 +58785,11 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "Pelanyanan sudah bagys, tolong ditingkatkan lagi",
     "id": "b9f663d278c2e3c5",
-    "Sentimen_Prediksi": "Negatif",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.2945,
     "Teks_Bersih": "pelanyanan sudah bagys tolong tingkat lagi",
-    "Processed_At": "2026-10-07T12:49:24.386524"
+    "Processed_At": "2026-10-07T12:49:24.386524",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -58760,10 +58846,11 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "Pelayanan SDH cukup baik,pertahankan",
     "id": "02bf735349f196e6",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0202,
     "Teks_Bersih": "layan sudah cukup baikpertahankan",
-    "Processed_At": "2026-10-07T12:49:28.775165"
+    "Processed_At": "2026-10-07T12:49:28.775165",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -59180,10 +59267,11 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "pelayanan memuaskan,ruangan bersih,nyaman",
     "id": "5d5b1ef56fed3573",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.1175,
     "Teks_Bersih": "layan memuaskanruangan bersihnyaman",
-    "Processed_At": "2026-10-07T12:49:52.081926"
+    "Processed_At": "2026-10-07T12:49:52.081926",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
@@ -59735,10 +59823,11 @@
     "Longitude": 109.232536,
     "Isi Ulasan": "Pelayanan sdh cukup baik, Tingkatkan lagi biar tambah Joos",
     "id": "aab30ef75efa9461",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0097,
     "Teks_Bersih": "layan sudah cukup baik tingkat lagi biar tambah joos",
-    "Processed_At": "2026-10-07T12:50:16.319573"
+    "Processed_At": "2026-10-07T12:50:16.319573",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RS Khusus Mata Purwokerto",
