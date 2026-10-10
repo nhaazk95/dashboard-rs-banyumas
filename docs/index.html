@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,192 +8,263 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
+  :root {
+    --bg:#f1f5f9; --card:#ffffff; --line:#e2e8f0; --text:#334155; --muted:#94a3b8; --muted2:#64748b;
+    --brand:#6366f1; --brand-d:#4f46e5; --brand-l:#eef2ff; --brand-b:#c7d2fe;
+    --pos:#16a34a; --neu:#d97706; --neg:#e11d48;
+    --side-w:360px;
+  }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Segoe UI',Arial,sans-serif; background:#f8fafc; color:#334155;
-         height:100vh; overflow:hidden; display:flex; flex-direction:column; }
+  body { font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif; background:var(--bg); color:var(--text);
+         height:100vh; height:100dvh; overflow:hidden; display:flex; flex-direction:column; }
+  button { font-family:inherit; }
 
-  #header { background:linear-gradient(135deg,#e0e7ff,#ede9fe);
-             border-bottom:1px solid #ddd6fe; padding:12px 20px;
-             display:flex; align-items:center; justify-content:space-between;
-             flex-shrink:0; box-shadow:0 1px 6px rgba(99,102,241,.08); }
-  #header h1 { font-size:16px; font-weight:700; color:#4338ca; }
+  /* ---------- Header ---------- */
+  #header { background:linear-gradient(135deg,#eef2ff,#f5f3ff); border-bottom:1px solid #ddd6fe;
+            padding:10px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+            flex-shrink:0; }
+  .brand { display:flex; align-items:center; gap:12px; min-width:0; }
+  .logo { width:38px; height:38px; border-radius:12px; background:#fff; display:flex; align-items:center;
+          justify-content:center; font-size:20px; box-shadow:0 2px 8px rgba(99,102,241,.18); flex-shrink:0; }
+  .brandtext { min-width:0; }
+  #header h1 { font-size:16px; font-weight:700; color:#4338ca; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   #header h1 span { color:#c026d3; }
-  .badge { background:#fff; padding:4px 12px; border-radius:20px;
-            font-size:11px; color:#6366f1; border:1px solid #c7d2fe; }
-  #lastUpdate { font-size:10px; color:#94a3b8; margin-top:2px; }
+  #lastUpdate { font-size:11px; color:var(--muted2); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .badge { background:#fff; padding:5px 12px; border-radius:20px; font-size:11px; color:var(--brand);
+           border:1px solid var(--brand-b); white-space:nowrap; flex-shrink:0; }
 
-  #controls { background:#ffffff; padding:10px 20px; display:flex;
-               align-items:center; gap:14px; flex-wrap:wrap;
-               border-bottom:1px solid #e2e8f0; flex-shrink:0; }
-  .ctrl-label { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
-  .btn-p { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0;
-            padding:5px 12px; border-radius:8px; cursor:pointer;
-            font-size:11px; transition:all .2s; }
-  .btn-p:hover { background:#e0e7ff; }
-  .btn-p.active { background:#6366f1; color:#fff; border-color:#6366f1; }
-  #refreshBtn { background:#eef2ff; color:#6366f1; border:1px solid #c7d2fe;
-                padding:5px 12px; border-radius:8px; cursor:pointer; font-size:11px; }
-  #refreshBtn:hover { background:#e0e7ff; }
-  #updateBtn { background:#fdf2f8; color:#c026d3; border:1px solid #f5d0fe;
-               padding:5px 12px; border-radius:8px; cursor:pointer; font-size:11px; }
-  #updateBtn:hover { background:#fae8ff; }
-  #updateBtn:disabled { opacity:.6; cursor:not-allowed; }
-  #updateStatus { font-size:11px; color:#94a3b8; }
+  /* ---------- Toolbar ---------- */
+  #controls { background:#fff; padding:8px 20px; display:flex; align-items:center; justify-content:space-between;
+              gap:12px; flex-wrap:wrap; border-bottom:1px solid var(--line); flex-shrink:0; }
+  .ctrlgroup { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .ctrl-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+  .seg { display:inline-flex; gap:2px; background:var(--bg); border-radius:10px; padding:3px; }
+  .btn-p { background:transparent; color:var(--muted2); border:none; padding:6px 14px; border-radius:8px;
+           cursor:pointer; font-size:12px; font-weight:600; transition:all .15s; }
+  .btn-p:hover { color:var(--brand-d); }
+  .btn-p.active { background:#fff; color:var(--brand-d); box-shadow:0 1px 4px rgba(15,23,42,.12); }
+  .btn { padding:7px 13px; border-radius:9px; cursor:pointer; font-size:12px; font-weight:600; transition:all .15s; }
+  .btn.ghost { background:#fff; color:var(--brand-d); border:1px solid var(--brand-b); }
+  .btn.ghost:hover { background:var(--brand-l); }
+  .btn.primary { background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; border:1px solid transparent; }
+  .btn.primary:hover { filter:brightness(1.07); }
+  .btn:disabled { opacity:.55; cursor:not-allowed; filter:none; }
+  #updateStatus { font-size:11.5px; color:var(--brand-d); background:var(--brand-l); border:1px solid var(--brand-b);
+                  padding:4px 10px; border-radius:14px; max-width:420px; }
+  #updateStatus:empty { display:none; }
 
-  #main { flex:1; display:flex; overflow:hidden; }
-  #mapWrap { flex:1; position:relative; }
+  /* ---------- Area utama ---------- */
+  #main { flex:1; display:flex; overflow:hidden; position:relative; min-height:0; }
+  #mapWrap { flex:1; position:relative; min-width:0; }
   #map { width:100%; height:100%; }
 
-  #legend { position:absolute; bottom:20px; left:12px; z-index:1000;
-             background:rgba(255,255,255,.95); border:1px solid #e2e8f0;
-             border-radius:10px; padding:10px 14px; font-size:11px;
-             backdrop-filter:blur(6px); box-shadow:0 4px 16px rgba(15,23,42,.08); }
+  #legend { position:absolute; bottom:20px; left:12px; z-index:1000; background:rgba(255,255,255,.96);
+            border:1px solid var(--line); border-radius:12px; padding:10px 14px; font-size:11px;
+            backdrop-filter:blur(6px); box-shadow:0 4px 16px rgba(15,23,42,.1); }
   #legend b { color:#475569; font-size:12px; display:block; margin-bottom:6px; }
-  .leg { display:flex; align-items:center; gap:6px; margin:3px 0; color:#64748b; }
+  .leg { display:flex; align-items:center; gap:7px; margin:4px 0; color:var(--muted2); }
   .ldot { width:10px; height:10px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); }
+  #loadingOverlay { position:absolute; inset:0; background:rgba(248,250,252,.9); display:flex; align-items:center;
+                    justify-content:center; font-size:13px; color:var(--brand); z-index:1500; }
 
-  #side { width:320px; background:#ffffff; border-left:1px solid #e2e8f0;
-           display:flex; flex-direction:column; overflow-y:auto; overflow-x:hidden; flex-shrink:0; }
+  #sideToggle { position:absolute; top:12px; right:12px; z-index:1100; background:#fff; color:var(--brand-d);
+                border:1px solid var(--brand-b); border-radius:20px; padding:7px 14px; font-size:12px; font-weight:600;
+                cursor:pointer; box-shadow:0 3px 12px rgba(15,23,42,.14); }
+  #sideToggle:hover { background:var(--brand-l); }
 
-  #stats { padding:12px; border-bottom:1px solid #e2e8f0; flex-shrink:0; }
-  #stats h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
-  .sgrid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
-  .sc { background:#f8fafc; border-radius:10px; padding:8px 10px; border:1px solid #eef2f7; }
-  .sc .v { font-size:19px; font-weight:800; line-height:1; }
-  .sc .l { font-size:9px; color:#94a3b8; margin-top:3px; text-transform:uppercase; }
-  .sc.pos .v { color:#16a34a; } .sc.neg .v { color:#e11d48; }
-  .sc.net .v { color:#d97706; } .sc.tot .v { color:#6366f1; }
-  .sc.rat .v { color:#9333ea; } .sc.ul  .v { color:#0d9488; }
+  /* ---------- Sidebar ---------- */
+  #side { width:var(--side-w); background:var(--bg); border-left:1px solid var(--line); display:flex;
+          flex-direction:column; overflow:hidden auto; flex-shrink:0; position:relative;
+          transition:width .25s ease; }
+  #side.dragging, #side.dragging * { transition:none !important; user-select:none; }
+  .side-closed #side { width:0; border-left:0; }
+  #sideResizer { position:absolute; left:0; top:0; bottom:0; width:6px; cursor:col-resize; z-index:5; touch-action:none; }
+  #sideResizer:hover, #side.dragging #sideResizer { background:rgba(99,102,241,.25); }
+  .side-closed #sideResizer { display:none; }
 
-  #trend { flex:0 0 auto; padding:14px 10px 12px 12px; display:flex; flex-direction:column;
-            min-width:0; border-bottom:1px solid #e2e8f0; }
-  #trend h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
-  #rsName { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:8px;
-             white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  #chartWrap { position:relative; min-width:0; width:100%; height:230px; }
+  .panel { background:var(--card); display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+  .panel:not(.collapsed) { min-height:96px; }
+  .phead { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 14px;
+           cursor:pointer; user-select:none; flex-shrink:0; border-bottom:1px solid var(--line); }
+  .phead:hover { background:#fafbff; }
+  .phead h3 { font-size:11px; color:var(--muted2); text-transform:uppercase; letter-spacing:1px; font-weight:700; }
+  .pcollapse { background:none; border:none; color:var(--muted); font-size:13px; cursor:pointer; transition:transform .2s; }
+  .panel.collapsed .pcollapse { transform:rotate(-90deg); }
+  .panel.collapsed .phead { border-bottom:0; }
+  .panel.collapsed .pbody { display:none; }
+  .pbody { flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:10px 12px; }
+
+  .splitter { flex:0 0 9px; height:9px; background:var(--bg); cursor:row-resize; position:relative; touch-action:none; }
+  .splitter::after { content:''; position:absolute; left:50%; top:50%; width:36px; height:3px; margin:-1.5px 0 0 -18px;
+                     border-radius:2px; background:#cbd5e1; transition:background .15s, width .15s, margin .15s; }
+  .splitter:hover::after, .splitter.active::after { background:var(--brand); width:52px; margin-left:-26px; }
+
+  /* KPI */
+  .kgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .kpi { background:#f8fafc; border-radius:10px; padding:8px 9px; border:1px solid #eef2f7; border-top:3px solid var(--muted); }
+  .kpi .v { font-size:18px; font-weight:800; line-height:1.1; }
+  .kpi .l { font-size:9.5px; color:var(--muted2); margin-top:3px; line-height:1.25; }
+  .kpi.tot { border-top-color:#6366f1; } .kpi.tot .v { color:#6366f1; }
+  .kpi.ul  { border-top-color:#0d9488; } .kpi.ul .v { color:#0d9488; }
+  .kpi.rat { border-top-color:#9333ea; } .kpi.rat .v { color:#9333ea; }
+  .kpi.pos { border-top-color:#4ade80; } .kpi.pos .v { color:var(--pos); }
+  .kpi.net { border-top-color:#fbbf24; } .kpi.net .v { color:var(--neu); }
+  .kpi.neg { border-top-color:#fb7185; } .kpi.neg .v { color:var(--neg); }
+  .kcap { font-size:10px; color:var(--muted); margin-top:7px; }
+
+  /* Tren */
+  #pnlTrend .pbody { display:flex; flex-direction:column; padding-bottom:8px; }
+  #rsName { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px; flex-shrink:0;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #chartWrap { position:relative; flex:1; min-height:80px; min-width:0; width:100%; }
   #chartWrap canvas { max-width:100% !important; }
-  #empty { text-align:center; color:#94a3b8; font-size:12px; padding:30px 10px; }
+  #empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center;
+           color:var(--muted); font-size:12px; padding:10px; }
 
-  #rslist { padding:0 12px 12px; overflow-y:auto; overflow-x:hidden; flex:1; min-height:160px; }
-  #rslist h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px;
-               margin-bottom:6px; padding-top:8px; }
-  .rsi { display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:8px;
-          cursor:pointer; transition:background .15s; margin-bottom:2px; }
-  .rsi:hover { background:#f1f5f9; }
-  .rsi.sel { background:#eef2ff; border:1px solid #c7d2fe; }
-  .rdot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-  .ri { flex:1; min-width:0; }
-  .rn { font-size:11px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#334155; }
-  .rs { font-size:10px; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-  .pop { font-family:'Segoe UI',Arial,sans-serif; width:230px; }
-  .pop .pt { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px;
-              border-bottom:2px solid #c7d2fe; padding-bottom:4px; }
-  .pop .pr { display:flex; justify-content:space-between; font-size:11px; margin:2px 0; }
-  .pop .pk { color:#94a3b8; } .pop .pv { font-weight:600; color:#334155; }
-  .pop .pb { background:#eef2f7; border-radius:4px; height:6px; margin:6px 0 3px;
-              overflow:hidden; display:flex; }
-  .pop .pb span { height:100%; }
-  .pop .ps { font-size:11px; font-weight:700; padding:3px 8px; border-radius:12px;
-              display:inline-block; margin-top:6px; }
-  .pop .ps.Positif { background:#dcfce7; color:#15803d; }
-  .pop .ps.Netral  { background:#fef3c7; color:#b45309; }
-  .pop .ps.Negatif { background:#fee2e2; color:#be123c; }
-
-  .pin-icon { background: transparent; border: none; transition: opacity .2s; }
-
-  #reviewSection { flex:0 0 auto; padding:10px 12px 12px; border-bottom:1px solid #e2e8f0; }
-  #reviewSection h3 { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
-  #reviewListContent { max-height:380px; overflow-y:auto; overflow-x:hidden; }
-  .revItem { padding:8px; border-radius:8px; background:#f8fafc; border:1px solid #eef2f7; margin-bottom:6px; }
+  /* Ulasan */
+  .revItem { padding:9px 10px; border-radius:10px; background:#f8fafc; border:1px solid #eef2f7;
+             border-left:3px solid var(--muted); margin-bottom:7px; }
+  .revItem.Positif { border-left-color:#4ade80; } .revItem.Netral { border-left-color:#fbbf24; }
+  .revItem.Negatif { border-left-color:#fb7185; }
   .revItem .revTop { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
-  .revItem .revDate { font-size:9px; color:#94a3b8; }
-  .revItem .revStars { font-size:10px; color:#d97706; }
-  .revItem .revText { font-size:11px; color:#475569; line-height:1.4; white-space:pre-wrap; word-break:break-word; }
-  .revItem .revBadge { font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px; display:inline-block; margin-top:5px; }
+  .revItem .revDate { font-size:9.5px; color:var(--muted); }
+  .revItem .revStars { font-size:10.5px; color:#d97706; }
+  .revItem .revText { font-size:11.5px; color:#475569; line-height:1.45; white-space:pre-wrap; word-break:break-word; }
+  .revItem .revBadge { font-size:9.5px; font-weight:700; padding:2px 8px; border-radius:10px; display:inline-block; margin-top:6px; }
   .revItem .revBadge.Positif { background:#dcfce7; color:#15803d; }
   .revItem .revBadge.Netral  { background:#fef3c7; color:#b45309; }
   .revItem .revBadge.Negatif { background:#fee2e2; color:#be123c; }
-  .revCount { font-size:10px; color:#94a3b8; margin-bottom:6px; }
-  .revMore { width:100%; padding:6px; margin:2px 0 6px; border:1px solid #c7d2fe; background:#eef2ff;
-             color:#6366f1; border-radius:8px; font-size:11px; cursor:pointer; }
+  .revCount { font-size:10.5px; color:var(--muted); margin-bottom:7px; }
+  .revMore { width:100%; padding:7px; margin:2px 0 6px; border:1px solid var(--brand-b); background:var(--brand-l);
+             color:var(--brand-d); border-radius:9px; font-size:11.5px; font-weight:600; cursor:pointer; }
   .revMore:hover { background:#e0e7ff; }
-  #revEmpty { text-align:center; color:#94a3b8; font-size:11px; padding:16px 10px; }
+  #revEmpty { text-align:center; color:var(--muted); font-size:12px; padding:22px 10px; }
 
-  #loadingOverlay { position:absolute; inset:0; background:rgba(248,250,252,.9);
-                    display:flex; align-items:center; justify-content:center;
-                    font-size:13px; color:#6366f1; z-index:1500; }
+  /* Daftar RS */
+  #pnlList .pbody { padding-bottom:76px; }   /* ruang agar item terakhir tidak tertutup tombol chat */
+  .rsi { display:flex; align-items:center; gap:9px; padding:7px 8px; border-radius:10px; cursor:pointer;
+         transition:background .15s; margin-bottom:3px; border:1px solid transparent; }
+  .rsi:hover { background:#f1f5f9; }
+  .rsi.sel { background:var(--brand-l); border-color:var(--brand-b); }
+  .rank { width:22px; height:22px; border-radius:50%; background:#f1f5f9; color:var(--muted2); font-size:10.5px;
+          font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .rsi.sel .rank { background:var(--brand); color:#fff; }
+  .ri { flex:1; min-width:0; }
+  .rn { font-size:12px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text); }
+  .rs { font-size:10.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px; }
+  .rs .rdot { display:inline-block; width:7px; height:7px; border-radius:50%; margin:0 4px 0 6px; }
+  .rrate { font-size:12px; font-weight:700; color:#9333ea; flex-shrink:0; }
+
+  /* Popup peta */
+  .pop { font-family:'Segoe UI',system-ui,Arial,sans-serif; width:230px; }
+  .pop .pt { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px; border-bottom:2px solid var(--brand-b); padding-bottom:4px; }
+  .pop .pr { display:flex; justify-content:space-between; font-size:11px; margin:2px 0; }
+  .pop .pk { color:var(--muted); } .pop .pv { font-weight:600; color:var(--text); }
+  .pop .pb { background:#eef2f7; border-radius:4px; height:6px; margin:6px 0 3px; overflow:hidden; display:flex; }
+  .pop .pb span { height:100%; }
+  .pop .ps { font-size:11px; font-weight:700; padding:3px 8px; border-radius:12px; display:inline-block; margin-top:6px; }
+  .pop .ps.Positif { background:#dcfce7; color:#15803d; }
+  .pop .ps.Netral  { background:#fef3c7; color:#b45309; }
+  .pop .ps.Negatif { background:#fee2e2; color:#be123c; }
+  .pin-icon { background:transparent; border:none; transition:opacity .2s; }
+
+  /* ---------- Layar kecil: sidebar menjadi laci di atas peta ---------- */
+  @media (max-width: 820px) {
+    #header { padding:8px 12px; } #controls { padding:8px 12px; } .badge { display:none; }
+    #side { position:absolute; right:0; top:0; bottom:0; z-index:1200; width:min(92vw,360px);
+            box-shadow:-8px 0 24px rgba(15,23,42,.18); }
+    .side-closed #side { width:0; box-shadow:none; }
+    #sideResizer { display:none; }
+  }
 </style>
 </head>
 <body>
 
-<div id="header">
-  <div>
-    <h1>🏥 <span>Banyumas</span> Hospital Sentiment Dashboard</h1>
-    <div id="lastUpdate">Memuat data...</div>
+<header id="header">
+  <div class="brand">
+    <div class="logo">🏥</div>
+    <div class="brandtext">
+      <h1><span>Banyumas</span> Hospital Sentiment Dashboard</h1>
+      <div id="lastUpdate">Memuat data...</div>
+    </div>
   </div>
-  <span class="badge">SVM | Realtime (near-live)</span>
-</div>
+  <span class="badge" title="Sentimen diklasifikasikan oleh model SVM dari ulasan Google Maps">SVM | Realtime (near-live)</span>
+</header>
 
 <div id="controls">
-  <span class="ctrl-label">Periode</span>
-  <div id="btnWrap" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
-  <button id="refreshBtn" onclick="loadData()">↻ Muat Ulang Tampilan</button>
-  <button id="updateBtn" onclick="requestUpdate()">⟳ Ambil Ulasan Terbaru</button>
-  <span id="updateStatus"></span>
+  <div class="ctrlgroup">
+    <span class="ctrl-label">Periode</span>
+    <div id="btnWrap" class="seg"></div>
+  </div>
+  <div class="ctrlgroup">
+    <span id="updateStatus"></span>
+    <button id="refreshBtn" class="btn ghost" onclick="loadData()" title="Muat ulang data yang sudah tayang di GitHub Pages">↻ Muat Ulang Tampilan</button>
+    <button id="updateBtn" class="btn primary" onclick="requestUpdate()" title="Ambil ulasan baru dari Google Maps lewat GitHub (3-5 menit)">⟳ Ambil Ulasan Terbaru</button>
+  </div>
 </div>
 
 <div id="main">
   <div id="mapWrap">
     <div id="map"></div>
     <div id="loadingOverlay">Memuat data ulasan...</div>
+    <button id="sideToggle" aria-expanded="true" title="Tampilkan / sembunyikan panel samping">Panel ▸</button>
     <div id="legend">
-      <b>Dominant Sentiment</b>
-      <div class="leg"><div class="ldot" style="background:#4ade80"></div>Positive</div>
-      <div class="leg"><div class="ldot" style="background:#fbbf24"></div>Neutral</div>
-      <div class="leg"><div class="ldot" style="background:#fb7185"></div>Negative</div>
-      <div style="margin-top:6px;font-size:10px;color:#94a3b8;">● Size = Total Reviews</div>
+      <b>Sentimen Dominan</b>
+      <div class="leg"><div class="ldot" style="background:#4ade80"></div>Positif</div>
+      <div class="leg"><div class="ldot" style="background:#fbbf24"></div>Netral</div>
+      <div class="leg"><div class="ldot" style="background:#fb7185"></div>Negatif</div>
+      <div style="margin-top:6px;font-size:10px;color:#94a3b8;">● Ukuran = jumlah ulasan</div>
     </div>
   </div>
 
-  <div id="side">
-    <div id="stats">
-      <h3>Period Statistics</h3>
-      <div class="sgrid">
-        <div class="sc pos"><div class="v" id="sPos">-</div><div class="l">Positive Hospitals</div></div>
-        <div class="sc neg"><div class="v" id="sNeg">-</div><div class="l">Negative Hospitals</div></div>
-        <div class="sc net"><div class="v" id="sNet">-</div><div class="l">Neutral Hospitals</div></div>
-        <div class="sc tot"><div class="v" id="sTot">-</div><div class="l">Total Hospitals</div></div>
-        <div class="sc rat"><div class="v" id="sRat">-</div><div class="l">Avg Rating</div></div>
-        <div class="sc ul" ><div class="v" id="sUl">-</div><div class="l">Total Reviews</div></div>
+  <aside id="side">
+    <div id="sideResizer" title="Tarik untuk mengubah lebar panel"></div>
+
+    <section class="panel" id="pnlStats" data-grow="130">
+      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Ringkasan Periode</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+      <div class="pbody">
+        <div class="kgrid">
+          <div class="kpi tot"><div class="v" id="sTot">-</div><div class="l">Total RS</div></div>
+          <div class="kpi ul"><div class="v" id="sUl">-</div><div class="l">Total Ulasan</div></div>
+          <div class="kpi rat"><div class="v" id="sRat">-</div><div class="l">Rata-rata Rating</div></div>
+          <div class="kpi pos"><div class="v" id="sPos">-</div><div class="l">RS Dominan Positif</div></div>
+          <div class="kpi net"><div class="v" id="sNet">-</div><div class="l">RS Dominan Netral</div></div>
+          <div class="kpi neg"><div class="v" id="sNeg">-</div><div class="l">RS Dominan Negatif</div></div>
+        </div>
+        <div class="kcap">RS dikelompokkan menurut sentimen terbanyak pada periode terpilih.</div>
       </div>
-    </div>
+    </section>
+    <div class="splitter" title="Tarik untuk mengatur tinggi"></div>
 
-    <div id="trend">
-      <h3>Rating Trend</h3>
-      <div id="rsName">Click a marker to see the trend</div>
-      <div id="chartWrap">
-        <canvas id="trendChart"></canvas>
-        <div id="empty">Select a hospital to view its weekly rating trend</div>
+    <section class="panel" id="pnlTrend" data-grow="250">
+      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Tren Rating</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+      <div class="pbody" id="trend">
+        <div id="rsName">Klik penanda di peta untuk melihat tren</div>
+        <div id="chartWrap">
+          <canvas id="trendChart"></canvas>
+          <div id="empty">Pilih sebuah RS untuk melihat tren rating</div>
+        </div>
       </div>
-    </div>
+    </section>
+    <div class="splitter" title="Tarik untuk mengatur tinggi"></div>
 
-    <div id="reviewSection">
-      <h3>Ulasan Terbaru</h3>
-      <div id="reviewListContent"><div id="revEmpty">Pilih RS untuk melihat ulasan</div></div>
-    </div>
+    <section class="panel" id="pnlReviews" data-grow="260">
+      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Ulasan Terbaru</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+      <div class="pbody"><div id="reviewListContent"><div id="revEmpty">Pilih RS untuk melihat ulasan</div></div></div>
+    </section>
+    <div class="splitter" title="Tarik untuk mengatur tinggi"></div>
 
-    <div id="rslist">
-      <h3>Hospital List (sorted by rating)</h3>
-      <div id="rsListContent"></div>
-    </div>
-  </div>
+    <section class="panel" id="pnlList" data-grow="220">
+      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Daftar RS (urut rating)</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+      <div class="pbody"><div id="rsListContent"></div></div>
+    </section>
+  </aside>
 </div>
 
 <script>
 const MAPBOX_TOKEN = "pk.eyJ1IjoibmhhYXprIiwiYSI6ImNtdW51Z3liajBkYmcyeHE3dHYwaW1wZmYifQ.CvBbuiQZHlSCpzni9EU-og";
 const COL = {Positif:'#4ade80', Netral:'#fbbf24', Negatif:'#fb7185'};
-const SENT_LABEL = {Positif:'Positive', Netral:'Neutral', Negatif:'Negative'};
+const SENT_LABEL = {Positif:'Positif', Netral:'Netral', Negatif:'Negatif'};
 
 let RAW = [];
 let AGG_ALL = [];
@@ -206,7 +277,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{
 }).addTo(map);
 
 const PERIODS = ['ALL', '7D', '30D'];
-const PLABEL  = { 'ALL':'All Time', '7D':'Last 7 Days', '30D':'Last 30 Days' };
+const PLABEL  = { 'ALL':'Semua Waktu', '7D':'7 Hari Terakhir', '30D':'30 Hari Terakhir' };
 
 const bw = document.getElementById('btnWrap');
 PERIODS.forEach(p => {
@@ -308,12 +379,15 @@ let revRows = [], revShown = REV_PAGE;
 function esc(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+function attrEsc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+}
 
 function revCard(r) {
   const n = Math.max(0, Math.min(5, Math.round(r.Rating || 0)));
   const stars = '★'.repeat(n) + '☆'.repeat(5 - n);
   const sent = r.Sentimen_Prediksi || 'Netral';
-  return `<div class="revItem">
+  return `<div class="revItem ${sent}">
     <div class="revTop">
       <span class="revStars">${stars}</span>
       <span class="revDate">${formatDateTimeID(new Date(r['Waktu Ulasan']))}</span>
@@ -325,10 +399,12 @@ function revCard(r) {
 
 function renderReviewList(rowsRS, reset = true) {
   const container = document.getElementById('reviewListContent');
-  const scroll = container.scrollTop;
+  const body = container.parentElement;            // area yang digulir sekarang adalah badan panel
+  const scroll = body.scrollTop;
   if (reset) {
     revRows = [...rowsRS].sort((a,b) => new Date(b['Waktu Ulasan']) - new Date(a['Waktu Ulasan']));
     revShown = REV_PAGE;
+    body.scrollTop = 0;
   }
   if (!revRows.length) {
     container.innerHTML = '<div id="revEmpty">Belum ada ulasan di periode ini</div>';
@@ -340,7 +416,7 @@ function renderReviewList(rowsRS, reset = true) {
     revRows.slice(0, revShown).map(revCard).join('') +
     (sisa > 0 ? `<button class="revMore" onclick="revShown += REV_PAGE; renderReviewList(null, false)">
                    Tampilkan ${Math.min(REV_PAGE, sisa)} lagi (sisa ${sisa})</button>` : '');
-  if (!reset) container.scrollTop = scroll;
+  if (!reset) body.scrollTop = scroll;
 }
 
 function filterByPeriod(rows, p) {
@@ -470,17 +546,17 @@ function pinSize(n) { return Math.max(24, Math.min(52, 22 + Math.sqrt(n) * 3)); 
 
 function popup(d) {
   return `<div class="pop">
-    <div class="pt">${d['Nama RS']}</div>
-    <div class="pr"><span class="pk">Avg Rating</span><span class="pv">${d.Avg_Rating.toFixed(2)}</span></div>
-    <div class="pr"><span class="pk">Total Reviews</span><span class="pv">${d.Total}</span></div>
+    <div class="pt">${esc(d['Nama RS'])}</div>
+    <div class="pr"><span class="pk">Rata-rata Rating</span><span class="pv">${d.Avg_Rating.toFixed(2)}</span></div>
+    <div class="pr"><span class="pk">Total Ulasan</span><span class="pv">${d.Total}</span></div>
     <div class="pb">
       <span style="width:${d.Pct_Pos}%;background:#4ade80"></span>
       <span style="width:${d.Pct_Net}%;background:#fbbf24"></span>
       <span style="width:${d.Pct_Neg}%;background:#fb7185"></span>
     </div>
-    <div class="pr"><span class="pk" style="color:#16a34a">Positive</span><span class="pv">${d.Positif} (${d.Pct_Pos}%)</span></div>
-    <div class="pr"><span class="pk" style="color:#d97706">Neutral</span><span class="pv">${d.Netral} (${d.Pct_Net}%)</span></div>
-    <div class="pr"><span class="pk" style="color:#e11d48">Negative</span><span class="pv">${d.Negatif} (${d.Pct_Neg}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#16a34a">Positif</span><span class="pv">${d.Positif} (${d.Pct_Pos}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#d97706">Netral</span><span class="pv">${d.Netral} (${d.Pct_Net}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#e11d48">Negatif</span><span class="pv">${d.Negatif} (${d.Pct_Neg}%)</span></div>
     <span class="ps ${d.Dominan}">${SENT_LABEL[d.Dominan]||d.Dominan}</span>
   </div>`;
 }
@@ -508,27 +584,32 @@ function stats() {
   document.getElementById('sTot').textContent = d.length;
   document.getElementById('sRat').textContent = d.length
     ? (d.reduce((s,x)=>s+x.Avg_Rating,0)/d.length).toFixed(2) : '-';
-  document.getElementById('sUl').textContent  = d.reduce((s,x)=>s+x.Total,0).toLocaleString('en-US');
+  document.getElementById('sUl').textContent  = d.reduce((s,x)=>s+x.Total,0).toLocaleString('id-ID');
 }
 
 function rsList() {
   const sorted = [...AGG_ALL].sort((a,b)=>b.Avg_Rating-a.Avg_Rating);
-  document.getElementById('rsListContent').innerHTML = sorted.map(d=>`
-    <div class="rsi ${selRS===d['Nama RS']?'sel':''}"
-         onclick="pick('${d['Nama RS'].replace(/'/g,"\\'")}')"
-         data-rs="${d['Nama RS'].replace(/'/g,'&quot;')}">
-      <div class="rdot" style="background:${COL[d.Dominan]}"></div>
+  document.getElementById('rsListContent').innerHTML = sorted.map((d,i)=>`
+    <div class="rsi ${selRS===d['Nama RS']?'sel':''}" data-rs="${attrEsc(d['Nama RS'])}">
+      <div class="rank">${i+1}</div>
       <div class="ri">
-        <div class="rn">${d['Nama RS']}</div>
-        <div class="rs">${d.Avg_Rating.toFixed(1)}★ | ${d.Total} reviews</div>
+        <div class="rn">${esc(d['Nama RS'])}</div>
+        <div class="rs">${d.Total} ulasan<span class="rdot" style="background:${COL[d.Dominan]}"></span>${SENT_LABEL[d.Dominan]}</div>
       </div>
+      <div class="rrate">${d.Avg_Rating.toFixed(1)}★</div>
     </div>`).join('');
 }
+document.getElementById('rsListContent').addEventListener('click', e => {
+  const it = e.target.closest('.rsi');
+  if (it) pick(it.dataset.rs);
+});
 
 function pick(name) {
   selRS = name;
   document.getElementById('rsName').textContent = name;
   document.querySelectorAll('.rsi').forEach(el=>el.classList.toggle('sel', el.dataset.rs===name));
+  const selEl = document.querySelector('.rsi.sel');
+  if (selEl && selEl.scrollIntoView) selEl.scrollIntoView({ block:'nearest' });
   markers.forEach(m=>{
     const el = m.getElement();
     if (el) el.style.opacity = (m.rsName===name) ? '1' : '0.35';
@@ -539,7 +620,7 @@ function pick(name) {
   renderReviewList(rowsRS);
 
   if (!rowsRS.length) {
-    document.getElementById('empty').style.display='block';
+    document.getElementById('empty').style.display='flex';
     if(chart){ chart.destroy(); chart=null; }
     return;
   }
@@ -550,11 +631,11 @@ function pick(name) {
   chart = new Chart(document.getElementById('trendChart').getContext('2d'), {
     type:'line',
     data:{labels:labels, datasets:[
-      {label:'Avg Rating', data:ratings, borderColor:'#818cf8',
+      {label:'Rata-rata Rating', data:ratings, borderColor:'#818cf8',
         backgroundColor:'rgba(129,140,248,.12)', fill:true, tension:.4,
         pointBackgroundColor:'#818cf8', pointRadius:5, yAxisID:'y',
         spanGaps:true},
-      {label:'Total Reviews', data:totals, borderColor:'#2dd4bf',
+      {label:'Jumlah Ulasan', data:totals, borderColor:'#2dd4bf',
         backgroundColor:'rgba(45,212,191,.08)', fill:false, tension:.4,
         pointBackgroundColor:'#2dd4bf', pointRadius:4, borderDash:[4,3], yAxisID:'y1'}
     ]},
@@ -578,6 +659,113 @@ function pick(name) {
 loadData();
 </script>
 
+<script>
+/* ===================== Tata letak: sidebar buka-tutup, lebar & tinggi panel bisa diatur ===================== */
+(function () {
+  const KEY = 'dashLayout.v1';
+  const app = document.getElementById('main');            // kelas side-closed dipasang di #main
+  const side = document.getElementById('side');
+  const toggle = document.getElementById('sideToggle');
+  const panels = [...side.querySelectorAll('.panel')];
+  const splitters = [...side.querySelectorAll('.splitter')];
+  const MIN_PANEL = 96, MIN_W = 300, MAX_W = 620;
+
+  let st = { sideOpen: window.innerWidth > 820, sideW: 360, panels: {} };
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') st = Object.assign(st, s); } catch (e) {}
+  if (!st.panels) st.panels = {};
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
+  function fixMap() { try { if (typeof map !== 'undefined') map.invalidateSize(); } catch (e) {} }
+
+  /* --- sidebar --- */
+  function applySide() {
+    app.classList.toggle('side-closed', !st.sideOpen);
+    document.documentElement.style.setProperty('--side-w', st.sideW + 'px');
+    toggle.setAttribute('aria-expanded', String(st.sideOpen));
+    toggle.textContent = st.sideOpen ? 'Panel ▸' : '◂ Panel';
+  }
+  toggle.addEventListener('click', () => {
+    st.sideOpen = !st.sideOpen; applySide(); save();
+    setTimeout(fixMap, 280);                                // setelah animasi lebar selesai
+  });
+
+  const resizer = document.getElementById('sideResizer');
+  resizer.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    if (resizer.setPointerCapture) resizer.setPointerCapture(e.pointerId);
+    side.classList.add('dragging');
+    const x0 = e.clientX, w0 = side.offsetWidth || st.sideW;
+    const move = ev => {
+      st.sideW = Math.max(MIN_W, Math.min(MAX_W, Math.round(w0 - (ev.clientX - x0))));  // tarik ke kiri = melebar
+      document.documentElement.style.setProperty('--side-w', st.sideW + 'px');
+      fixMap();
+    };
+    const up = () => {
+      resizer.removeEventListener('pointermove', move);
+      resizer.removeEventListener('pointerup', up);
+      resizer.removeEventListener('pointercancel', up);
+      side.classList.remove('dragging'); save(); fixMap();
+    };
+    resizer.addEventListener('pointermove', move);
+    resizer.addEventListener('pointerup', up);
+    resizer.addEventListener('pointercancel', up);
+  });
+
+  /* --- panel: tinggi dibagi proporsional lewat flex-grow (nilai = tinggi piksel saat diatur) --- */
+  const isCollapsed = p => p.classList.contains('collapsed');
+  function applyPanels() {
+    panels.forEach(p => {
+      const s = st.panels[p.id] || (st.panels[p.id] = { grow: +p.dataset.grow || 200, collapsed: false });
+      p.classList.toggle('collapsed', !!s.collapsed);
+      p.style.flex = s.collapsed ? '0 0 auto' : `${Math.max(s.grow, 1)} 1 0px`;
+    });
+  }
+  function snapshot() {                                      // simpan tinggi nyata tiap panel terbuka sebagai nilai grow
+    panels.forEach(p => { if (!isCollapsed(p)) st.panels[p.id].grow = Math.max(p.offsetHeight, MIN_PANEL); });
+  }
+  panels.forEach(p => {
+    p.querySelector('.phead').addEventListener('click', () => {
+      snapshot();
+      st.panels[p.id].collapsed = !st.panels[p.id].collapsed;
+      applyPanels(); save();
+    });
+  });
+
+  splitters.forEach((sp, i) => {
+    const above = () => { for (let k = i; k >= 0; k--) if (!isCollapsed(panels[k])) return k; return -1; };
+    const below = () => { for (let k = i + 1; k < panels.length; k++) if (!isCollapsed(panels[k])) return k; return -1; };
+    sp.addEventListener('pointerdown', e => {
+      const a = above(), b = below();
+      if (a < 0 || b < 0) return;
+      e.preventDefault();
+      if (sp.setPointerCapture) sp.setPointerCapture(e.pointerId);
+      snapshot();
+      sp.classList.add('active'); side.classList.add('dragging');
+      const A = panels[a], B = panels[b];
+      const ha = st.panels[A.id].grow, hb = st.panels[B.id].grow, y0 = e.clientY;
+      const move = ev => {
+        const na = Math.max(MIN_PANEL, Math.min(ha + hb - MIN_PANEL, ha + (ev.clientY - y0)));
+        st.panels[A.id].grow = na;
+        st.panels[B.id].grow = ha + hb - na;
+        applyPanels();
+      };
+      const up = () => {
+        sp.removeEventListener('pointermove', move);
+        sp.removeEventListener('pointerup', up);
+        sp.removeEventListener('pointercancel', up);
+        sp.classList.remove('active'); side.classList.remove('dragging'); save();
+      };
+      sp.addEventListener('pointermove', move);
+      sp.addEventListener('pointerup', up);
+      sp.addEventListener('pointercancel', up);
+    });
+  });
+
+  applySide(); applyPanels();
+  window.addEventListener('resize', fixMap);
+})();
+</script>
+
 <!-- ===================== AI AGENT CHAT WIDGET ===================== -->
 <!-- Library untuk merender jawaban (tabel/poin). Tanpa keduanya jawaban tetap tampil sebagai teks biasa. -->
 <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
@@ -585,56 +773,77 @@ loadData();
 <style>
   #chatToggleBtn {
     position: fixed; bottom: 24px; right: 24px; z-index: 2000;
-    width: 56px; height: 56px; border-radius: 50%;
+    width: 58px; height: 58px; border-radius: 50%;
     background: linear-gradient(135deg,#6366f1,#8b5cf6);
     border: none; cursor: pointer; display: flex; align-items: center;
-    justify-content: center; box-shadow: 0 4px 16px rgba(99,102,241,.4);
+    justify-content: center; box-shadow: 0 6px 20px rgba(99,102,241,.45);
     transition: transform .2s;
   }
   #chatToggleBtn:hover { transform: scale(1.08); }
-  #chatToggleBtn svg { width: 26px; height: 26px; fill: #fff; }
+  #chatToggleBtn svg { width: 27px; height: 27px; fill: #fff; }
 
   #chatPanel {
-    position: fixed; bottom: 92px; right: 24px; z-index: 2000;
-    width: 360px; height: 520px; max-width: calc(100vw - 48px);
-    max-height: calc(100vh - 140px);
-    background: #fff; border-radius: 16px; overflow: hidden;
-    box-shadow: 0 12px 40px rgba(15,23,42,.25);
+    position: fixed; bottom: 94px; right: 24px; z-index: 2000;
+    width: 400px; height: 600px;
+    max-width: calc(100vw - 32px); max-height: calc(100vh - 116px);
+    background: #fff; border-radius: 18px; overflow: hidden;
+    box-shadow: 0 16px 48px rgba(15,23,42,.28);
     display: none; flex-direction: column;
     border: 1px solid #e2e8f0;
+    transition: width .2s ease, height .2s ease;
   }
   #chatPanel.open { display: flex; }
+  #chatPanel.wide { width: 640px; height: 780px; }
+
   #chatPanelHeader {
     background: linear-gradient(135deg,#6366f1,#8b5cf6); color: #fff;
-    padding: 12px 16px; font-size: 13px; font-weight: 700;
-    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px 12px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
     flex-shrink: 0;
   }
-  #chatPanelHeader button {
+  .cph-title { display:flex; flex-direction:column; min-width:0; }
+  .cph-name { font-size: 14px; font-weight: 700; }
+  .cph-sub { font-size: 10.5px; opacity: .85; margin-top: 1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cph-actions { display:flex; gap:6px; flex-shrink:0; }
+  .cph-actions button {
     background: rgba(255,255,255,.2); border: none; color: #fff;
-    width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+    width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
     font-size: 14px; line-height: 1;
   }
+  .cph-actions button:hover { background: rgba(255,255,255,.32); }
   @media (max-width: 480px) {
-    #chatPanel { right: 12px; bottom: 84px; }
+    #chatPanel { right: 8px; bottom: 82px; width: calc(100vw - 16px); max-width: calc(100vw - 16px); }
+    #chatPanel.wide { width: calc(100vw - 16px); }
     #chatToggleBtn { right: 12px; bottom: 12px; }
   }
 
-  #chatMessages { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; }
-  .msgBubble { max-width:85%; padding:8px 12px; border-radius:12px; font-size:12.5px; line-height:1.5; white-space:pre-wrap; }
+  #chatMessages { flex:1; overflow-y:auto; padding:14px 12px; display:flex; flex-direction:column; gap:10px; background:#fff; }
+  .msgBubble { max-width:88%; padding:9px 13px; border-radius:14px; font-size:13px; line-height:1.55; white-space:pre-wrap; }
   .msgBubble.user { align-self:flex-end; background:#6366f1; color:#fff; border-bottom-right-radius:4px; }
   .msgBubble.bot { align-self:flex-start; background:#f1f5f9; color:#334155; border-bottom-left-radius:4px; }
-  #chatInputRow { display:flex; gap:6px; padding:10px; border-top:1px solid #e2e8f0; flex-shrink:0; }
-  #chatInputRow input { flex:1; border:1px solid #e2e8f0; border-radius:20px; padding:8px 14px; font-size:12.5px; outline:none; }
-  #chatInputRow input:focus { border-color:#6366f1; }
-  #chatSendBtn { background:#6366f1; color:#fff; border:none; width:36px; height:36px; border-radius:50%;
+  #chatPanel.wide .msgBubble { max-width: 94%; }
+
+  #chatChips { display:flex; flex-wrap:wrap; gap:6px; padding:0 12px 10px; flex-shrink:0; }
+  #chatChips .chip {
+    background:#eef2ff; color:#4f46e5; border:1px solid #c7d2fe; border-radius:16px;
+    padding:6px 11px; font-size:11.5px; cursor:pointer; transition:background .15s;
+  }
+  #chatChips .chip:hover { background:#e0e7ff; }
+
+  #chatInputRow { display:flex; align-items:flex-end; gap:8px; padding:10px 12px 12px; border-top:1px solid #e2e8f0; flex-shrink:0; background:#fff; }
+  #chatInput {
+    flex:1; border:1px solid #e2e8f0; border-radius:18px; padding:9px 14px; font-size:13px;
+    font-family:inherit; line-height:1.4; outline:none; resize:none; max-height:96px; overflow-y:auto;
+  }
+  #chatInput:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.12); }
+  #chatSendBtn { background:#6366f1; color:#fff; border:none; width:38px; height:38px; border-radius:50%;
                  cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   #chatSendBtn:disabled { opacity:.5; cursor:not-allowed; }
 
   /* Jawaban bot dirender sebagai HTML (poin, tabel), jadi spasi baris tidak boleh dipertahankan */
   .msgBubble.bot.chat-md { white-space: normal; }
-  /* Indikator menunggu jawaban: tiga titik beranimasi, bukan tulisan "Mengetik..." */
-  .msgBubble.bot.typing { display:inline-flex; gap:5px; align-items:center; padding:12px 14px; white-space:normal; }
+  /* Indikator menunggu jawaban: tiga titik beranimasi */
+  .msgBubble.bot.typing { display:inline-flex; gap:5px; align-items:center; padding:13px 15px; white-space:normal; }
   .msgBubble.bot.typing span { width:7px; height:7px; border-radius:50%; background:#94a3b8; opacity:.35;
                                animation: chat-dot 1.2s infinite ease-in-out; }
   .msgBubble.bot.typing span:nth-child(2) { animation-delay:.15s; }
@@ -724,20 +933,30 @@ loadData();
 
 </style>
 
-<button id="chatToggleBtn" onclick="toggleChat()" aria-label="Buka chat asisten">
+<button id="chatToggleBtn" onclick="toggleChat()" aria-label="Buka chat asisten" title="Tanya asisten AI">
   <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.03 2 11c0 2.4 1.07 4.57 2.84 6.19L4 22l5.05-1.68C9.98 20.76 10.97 21 12 21c5.52 0 10-4.03 10-9s-4.48-10-10-10z"/></svg>
 </button>
 
 <div id="chatPanel">
   <div id="chatPanelHeader">
-    <span>Asisten AI RS Banyumas</span>
-    <button onclick="toggleChat()">✕</button>
+    <div class="cph-title">
+      <span class="cph-name">Asisten AI RS Banyumas</span>
+      <span class="cph-sub">Berdasarkan ulasan pasien di Google Maps</span>
+    </div>
+    <div class="cph-actions">
+      <button id="chatExpandBtn" onclick="toggleChatSize()" title="Perbesar / perkecil" aria-label="Perbesar atau perkecil chat">⤢</button>
+      <button onclick="toggleChat()" title="Tutup" aria-label="Tutup chat">✕</button>
+    </div>
   </div>
   <div id="chatMessages"></div>
+  <div id="chatChips">
+    <button class="chip" data-q="RS terdekat dari Sokaraja">🏥 RS terdekat dari Sokaraja</button>
+    <button class="chip" data-q="RS untuk anak demam">👶 RS untuk anak demam</button>
+    <button class="chip" data-q="RS dengan IGD yang bagus">🚑 RS dengan IGD bagus</button>
+  </div>
   <div id="chatInputRow">
-    <input id="chatInput" type="text" placeholder="Tanya seputar RS, mis. RS terdekat dari Sokaraja..."
-           onkeydown="if(event.key==='Enter') sendChatMessage()">
-    <button id="chatSendBtn" onclick="sendChatMessage()">➤</button>
+    <textarea id="chatInput" rows="1" placeholder="Tanya seputar RS…"></textarea>
+    <button id="chatSendBtn" onclick="sendChatMessage()" aria-label="Kirim">➤</button>
   </div>
 </div>
 
@@ -932,7 +1151,7 @@ loadData();
 
 <script>
   // Tidak ada API key di sini. Semua panggilan AI lewat backend Render (/chat).
-  // Chatbot ini hanya untuk bertanya seputar RS; tidak ada lagi pengecekan sentimen per pesan.
+  // Chatbot ini hanya untuk bertanya seputar RS; tidak ada pengecekan sentimen per pesan.
   const CHAT_URL = "https://sentimen-api.onrender.com/chat";
 
   let chatHistory = [];
@@ -970,6 +1189,14 @@ Yuk, cari informasi rumah sakit dengan lebih mudah dan praktis! 😊`;
       chatOpened = true;
       typeReply(addBubble('bot', ''), WELCOME_TEXT, { maxMs: 3500 });
     }
+    if (isOpen) document.getElementById('chatInput').focus();
+  }
+
+  function toggleChatSize() {
+    const wide = document.getElementById('chatPanel').classList.toggle('wide');
+    document.getElementById('chatExpandBtn').textContent = wide ? '⤡' : '⤢';
+    const box = document.getElementById('chatMessages');
+    setTimeout(() => { box.scrollTop = box.scrollHeight; }, 220);
   }
 
   function addBubble(role, text, extraClass) {
@@ -988,6 +1215,23 @@ Yuk, cari informasi rumah sakit dengan lebih mudah dan praktis! 😊`;
     div.innerHTML = '<span></span><span></span><span></span>';
     return div;
   }
+
+  /* ---------- Kotak input: tumbuh ke bawah, Enter = kirim, Shift+Enter = baris baru ---------- */
+  const chatInputEl = document.getElementById('chatInput');
+  function autosizeInput() {
+    chatInputEl.style.height = 'auto';
+    chatInputEl.style.height = Math.min(chatInputEl.scrollHeight, 96) + 'px';
+  }
+  chatInputEl.addEventListener('input', autosizeInput);
+  chatInputEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendChatMessage(); }
+  });
+  document.getElementById('chatChips').addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    chatInputEl.value = chip.dataset.q;
+    sendChatMessage();
+  });
 
   /* ---------- Konteks dari reviews.json untuk chatbot ---------- */
   const TOPIK = {
@@ -1063,12 +1307,15 @@ Yuk, cari informasi rumah sakit dengan lebih mudah dan praktis! 😊`;
   }
 
   async function sendChatMessage() {
-    const input = document.getElementById('chatInput');
+    const input = chatInputEl;
     const sendBtn = document.getElementById('chatSendBtn');
     const text = input.value.trim();
     if (!text || sendBtn.disabled) return;
     input.value = '';
+    autosizeInput();
     sendBtn.disabled = true;
+    const chips = document.getElementById('chatChips');
+    if (chips) chips.style.display = 'none';       // saran pertanyaan cukup tampil di awal
 
     addBubble('user', text);
     chatHistory.push({ role: 'user', text });
@@ -1106,6 +1353,7 @@ Yuk, cari informasi rumah sakit dengan lebih mudah dan praktis! 😊`;
   }
 </script>
 <!-- =================== END AI AGENT CHAT WIDGET =================== -->
- 
+
+
 </body>
 </html>
