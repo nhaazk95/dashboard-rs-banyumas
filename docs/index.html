@@ -71,33 +71,21 @@
                 cursor:pointer; box-shadow:0 3px 12px rgba(15,23,42,.14); }
   #sideToggle:hover { background:var(--brand-l); }
 
-  /* ---------- Sidebar ---------- */
+  /* ---------- Sidebar: satu kolom yang digulir ke bawah (scrollbar panjang di tepi kanan) ---------- */
   #side { width:var(--side-w); background:var(--bg); border-left:1px solid var(--line); display:flex;
-          flex-direction:column; overflow:hidden auto; flex-shrink:0; position:relative;
-          transition:width .25s ease; }
-  #side.dragging, #side.dragging * { transition:none !important; user-select:none; }
-  .side-closed #side { width:0; border-left:0; }
-  #sideResizer { position:absolute; left:0; top:0; bottom:0; width:6px; cursor:col-resize; z-index:5; touch-action:none; }
-  #sideResizer:hover, #side.dragging #sideResizer { background:rgba(99,102,241,.25); }
-  .side-closed #sideResizer { display:none; }
+          flex-direction:column; gap:10px; padding:10px 10px 18px; overflow-x:hidden; overflow-y:scroll;
+          flex-shrink:0; transition:width .25s ease;
+          scrollbar-width:auto; scrollbar-color:#94a3b8 #e2e8f0; }
+  #side::-webkit-scrollbar { width:12px; }
+  #side::-webkit-scrollbar-track { background:#e2e8f0; }
+  #side::-webkit-scrollbar-thumb { background:#94a3b8; border-radius:8px; border:2px solid #e2e8f0; }
+  #side::-webkit-scrollbar-thumb:hover { background:#64748b; }
+  .side-closed #side { width:0; padding:0; border-left:0; overflow:hidden; }
 
-  .panel { background:var(--card); display:flex; flex-direction:column; min-height:0; overflow:hidden; }
-  .panel:not(.collapsed) { min-height:96px; }
-  #pnlStats:not(.collapsed) { min-height:164px; }   /* dua baris kartu KPI selalu terlihat utuh */
-  .phead { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 14px;
-           cursor:pointer; user-select:none; flex-shrink:0; border-bottom:1px solid var(--line); }
-  .phead:hover { background:#fafbff; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:12px; flex:0 0 auto; overflow:hidden; }
+  .phead { padding:10px 14px; border-bottom:1px solid var(--line); }
   .phead h3 { font-size:11px; color:var(--muted2); text-transform:uppercase; letter-spacing:1px; font-weight:700; }
-  .pcollapse { background:none; border:none; color:var(--muted); font-size:13px; cursor:pointer; transition:transform .2s; }
-  .panel.collapsed .pcollapse { transform:rotate(-90deg); }
-  .panel.collapsed .phead { border-bottom:0; }
-  .panel.collapsed .pbody { display:none; }
-  .pbody { flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:10px 12px; }
-
-  .splitter { flex:0 0 9px; height:9px; background:var(--bg); cursor:row-resize; position:relative; touch-action:none; }
-  .splitter::after { content:''; position:absolute; left:50%; top:50%; width:36px; height:3px; margin:-1.5px 0 0 -18px;
-                     border-radius:2px; background:#cbd5e1; transition:background .15s, width .15s, margin .15s; }
-  .splitter:hover::after, .splitter.active::after { background:var(--brand); width:52px; margin-left:-26px; }
+  .pbody { padding:10px 12px; }
 
   /* KPI */
   .kgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
@@ -112,10 +100,9 @@
   .kpi.neg { border-top-color:#fb7185; } .kpi.neg .v { color:var(--neg); }
 
   /* Tren */
-  #pnlTrend .pbody { display:flex; flex-direction:column; padding-bottom:8px; }
-  #rsName { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px; flex-shrink:0;
+  #rsName { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px;
             white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  #chartWrap { position:relative; flex:1; min-height:80px; min-width:0; width:100%; }
+  #chartWrap { position:relative; height:230px; min-width:0; width:100%; }
   #chartWrap canvas { max-width:100% !important; }
   #empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center;
            color:var(--muted); font-size:12px; padding:10px; }
@@ -140,7 +127,6 @@
   #revEmpty { text-align:center; color:var(--muted); font-size:12px; padding:22px 10px; }
 
   /* Daftar RS */
-  #pnlList .pbody { padding-bottom:12px; }
   .rsi { display:flex; align-items:center; gap:9px; padding:7px 8px; border-radius:10px; cursor:pointer;
          transition:background .15s; margin-bottom:3px; border:1px solid transparent; }
   .rsi:hover { background:#f1f5f9; }
@@ -175,7 +161,6 @@
     #side { position:absolute; right:0; top:0; bottom:0; z-index:1200; width:min(92vw,360px);
             box-shadow:-8px 0 24px rgba(15,23,42,.18); }
     .side-closed #side { width:0; box-shadow:none; }
-    #sideResizer { display:none; }
     #sideToggle { z-index:1300; }
     #main:not(.side-closed) #sideToggle { top:6px; right:8px; padding:5px 11px; }
     #main:not(.side-closed) #pnlStats .phead { padding-right:92px; }
@@ -219,10 +204,9 @@
   </div>
 
   <aside id="side">
-    <div id="sideResizer" title="Tarik untuk mengubah lebar panel"></div>
 
-    <section class="panel" id="pnlStats" data-grow="160">
-      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Ringkasan Periode</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+    <section class="panel" id="pnlStats">
+      <div class="phead"><h3>Ringkasan Periode</h3></div>
       <div class="pbody">
         <div class="kgrid">
           <div class="kpi tot"><div class="v" id="sTot">-</div><div class="l">Total RS</div></div>
@@ -234,10 +218,9 @@
         </div>
       </div>
     </section>
-    <div class="splitter" title="Tarik untuk mengatur tinggi"></div>
 
-    <section class="panel" id="pnlTrend" data-grow="200">
-      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Tren Rating</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+    <section class="panel" id="pnlTrend">
+      <div class="phead"><h3>Tren Rating</h3></div>
       <div class="pbody" id="trend">
         <div id="rsName">Klik penanda di peta untuk melihat tren</div>
         <div id="chartWrap">
@@ -246,16 +229,14 @@
         </div>
       </div>
     </section>
-    <div class="splitter" title="Tarik untuk mengatur tinggi"></div>
 
-    <section class="panel" id="pnlReviews" data-grow="150">
-      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Ulasan Terbaru</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+    <section class="panel" id="pnlReviews">
+      <div class="phead"><h3>Ulasan Terbaru</h3></div>
       <div class="pbody"><div id="reviewListContent"><div id="revEmpty">Pilih RS untuk melihat ulasan</div></div></div>
     </section>
-    <div class="splitter" title="Tarik untuk mengatur tinggi"></div>
 
-    <section class="panel" id="pnlList" data-grow="150">
-      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Daftar RS (urut rating)</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+    <section class="panel" id="pnlList">
+      <div class="phead"><h3>Daftar RS (urut rating)</h3></div>
       <div class="pbody"><div id="rsListContent"></div></div>
     </section>
   </aside>
@@ -399,12 +380,11 @@ function revCard(r) {
 
 function renderReviewList(rowsRS, reset = true) {
   const container = document.getElementById('reviewListContent');
-  const body = container.parentElement;            // area yang digulir sekarang adalah badan panel
-  const scroll = body.scrollTop;
+  const sc = document.getElementById('side');       // yang digulir adalah sidebar (scrollbar panjang di kanan)
+  const keep = sc.scrollTop;
   if (reset) {
     revRows = [...rowsRS].sort((a,b) => new Date(b['Waktu Ulasan']) - new Date(a['Waktu Ulasan']));
     revShown = REV_PAGE;
-    body.scrollTop = 0;
   }
   if (!revRows.length) {
     container.innerHTML = '<div id="revEmpty">Belum ada ulasan di periode ini</div>';
@@ -416,7 +396,7 @@ function renderReviewList(rowsRS, reset = true) {
     revRows.slice(0, revShown).map(revCard).join('') +
     (sisa > 0 ? `<button class="revMore" onclick="revShown += REV_PAGE; renderReviewList(null, false)">
                    Tampilkan ${Math.min(REV_PAGE, sisa)} lagi (sisa ${sisa})</button>` : '');
-  if (!reset) body.scrollTop = scroll;
+  if (!reset) sc.scrollTop = keep;
 }
 
 function filterByPeriod(rows, p) {
@@ -458,7 +438,7 @@ function recompute() {
   const filtered = filterByPeriod(RAW, cur);
   AGG_ALL = aggregate(filtered);
   render(); stats(); rsList();
-  if (selRS) pick(selRS);
+  if (selRS) pick(selRS, true);
 }
 
 async function loadData() {
@@ -605,13 +585,10 @@ document.getElementById('rsListContent').addEventListener('click', e => {
   if (it) pick(it.dataset.rs);
 });
 
-function pick(name) {
+function pick(name, keepScroll) {
   selRS = name;
-  if (window.dashLayout) window.dashLayout.onPick();
   document.getElementById('rsName').textContent = name;
   document.querySelectorAll('.rsi').forEach(el=>el.classList.toggle('sel', el.dataset.rs===name));
-  const selEl = document.querySelector('.rsi.sel');
-  if (selEl && selEl.scrollIntoView) selEl.scrollIntoView({ block:'nearest' });
   markers.forEach(m=>{
     const el = m.getElement();
     if (el) el.style.opacity = (m.rsName===name) ? '1' : '0.35';
@@ -620,6 +597,10 @@ function pick(name) {
 
   const rowsRS = filterByPeriod(RAW, cur).filter(r => r['Nama RS'] === name);
   renderReviewList(rowsRS);
+  if (!keepScroll) {                                  // tampilkan tren RS terpilih di bagian atas sidebar
+    const sc = document.getElementById('side');
+    if (sc.scrollTo) sc.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   if (!rowsRS.length) {
     document.getElementById('empty').style.display='flex';
@@ -662,120 +643,28 @@ loadData();
 </script>
 
 <script>
-/* ===================== Tata letak: sidebar buka-tutup, lebar & tinggi panel bisa diatur ===================== */
+/* ===================== Sidebar buka-tutup (tombol "Panel") ===================== */
 (function () {
-  const KEY = 'dashLayout.v2';
+  const KEY = 'dashLayout.v3';
   const app = document.getElementById('main');            // kelas side-closed dipasang di #main
-  const side = document.getElementById('side');
   const toggle = document.getElementById('sideToggle');
-  const panels = [...side.querySelectorAll('.panel')];
-  const splitters = [...side.querySelectorAll('.splitter')];
-  const MIN_PANEL = 96, MIN_W = 300, MAX_W = 620;
+  let open = window.innerWidth > 820;
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s.sideOpen === 'boolean') open = s.sideOpen; } catch (e) {}
+  if (window.innerWidth <= 820) open = false;               // di ponsel laci selalu mulai tertutup
 
-  let st = { sideOpen: window.innerWidth > 820, sideW: 360, panels: {} };
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') st = Object.assign(st, s); } catch (e) {}
-  if (!st.panels) st.panels = {};
-  if (window.innerWidth <= 820) st.sideOpen = false;                 // di ponsel laci selalu mulai tertutup
-  // Awalnya panel Ulasan menciut (isinya kosong sebelum ada RS dipilih); terbuka otomatis saat RS dipilih
-  if (!st.panels.pnlReviews) st.panels.pnlReviews = { grow: 150, collapsed: true, auto: true };
-
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
   function fixMap() { try { if (typeof map !== 'undefined') map.invalidateSize(); } catch (e) {} }
-
-  /* --- sidebar --- */
-  function applySide() {
-    app.classList.toggle('side-closed', !st.sideOpen);
-    document.body.classList.toggle('side-closed', !st.sideOpen);   // dipakai widget chat agar tidak menutupi sidebar
-    document.documentElement.style.setProperty('--side-w', st.sideW + 'px');
-    toggle.setAttribute('aria-expanded', String(st.sideOpen));
-    toggle.textContent = st.sideOpen ? 'Panel ▸' : '◂ Panel';
+  function apply() {
+    app.classList.toggle('side-closed', !open);
+    document.body.classList.toggle('side-closed', !open);   // dipakai widget chat agar tidak menutupi sidebar
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.textContent = open ? 'Panel ▸' : '◂ Panel';
   }
   toggle.addEventListener('click', () => {
-    st.sideOpen = !st.sideOpen; applySide(); save();
-    setTimeout(fixMap, 280);                                // setelah animasi lebar selesai
+    open = !open; apply();
+    try { localStorage.setItem(KEY, JSON.stringify({ sideOpen: open })); } catch (e) {}
+    setTimeout(fixMap, 280);                                 // setelah animasi lebar selesai
   });
-
-  const resizer = document.getElementById('sideResizer');
-  resizer.addEventListener('pointerdown', e => {
-    e.preventDefault();
-    if (resizer.setPointerCapture) resizer.setPointerCapture(e.pointerId);
-    side.classList.add('dragging');
-    const x0 = e.clientX, w0 = side.offsetWidth || st.sideW;
-    const move = ev => {
-      st.sideW = Math.max(MIN_W, Math.min(MAX_W, Math.round(w0 - (ev.clientX - x0))));  // tarik ke kiri = melebar
-      document.documentElement.style.setProperty('--side-w', st.sideW + 'px');
-      fixMap();
-    };
-    const up = () => {
-      resizer.removeEventListener('pointermove', move);
-      resizer.removeEventListener('pointerup', up);
-      resizer.removeEventListener('pointercancel', up);
-      side.classList.remove('dragging'); save(); fixMap();
-    };
-    resizer.addEventListener('pointermove', move);
-    resizer.addEventListener('pointerup', up);
-    resizer.addEventListener('pointercancel', up);
-  });
-
-  /* --- panel: tinggi dibagi proporsional lewat flex-grow (nilai = tinggi piksel saat diatur) --- */
-  const isCollapsed = p => p.classList.contains('collapsed');
-  const minOf = p => Math.max(MIN_PANEL, parseFloat(getComputedStyle(p).minHeight) || 0);
-  function applyPanels() {
-    panels.forEach(p => {
-      const s = st.panels[p.id] || (st.panels[p.id] = { grow: +p.dataset.grow || 200, collapsed: false });
-      p.classList.toggle('collapsed', !!s.collapsed);
-      p.style.flex = s.collapsed ? '0 0 auto' : `${Math.max(s.grow, 1)} 1 0px`;
-    });
-  }
-  function snapshot() {                                      // simpan tinggi nyata tiap panel terbuka sebagai nilai grow
-    panels.forEach(p => { if (!isCollapsed(p)) st.panels[p.id].grow = Math.max(p.offsetHeight, minOf(p)); });
-  }
-  panels.forEach(p => {
-    p.querySelector('.phead').addEventListener('click', () => {
-      snapshot();
-      st.panels[p.id].collapsed = !st.panels[p.id].collapsed;
-      st.panels[p.id].auto = false;                                  // pilihan manual menang atas aturan otomatis
-      applyPanels(); save();
-    });
-  });
-
-  splitters.forEach((sp, i) => {
-    const above = () => { for (let k = i; k >= 0; k--) if (!isCollapsed(panels[k])) return k; return -1; };
-    const below = () => { for (let k = i + 1; k < panels.length; k++) if (!isCollapsed(panels[k])) return k; return -1; };
-    sp.addEventListener('pointerdown', e => {
-      const a = above(), b = below();
-      if (a < 0 || b < 0) return;
-      e.preventDefault();
-      if (sp.setPointerCapture) sp.setPointerCapture(e.pointerId);
-      snapshot();
-      sp.classList.add('active'); side.classList.add('dragging');
-      const A = panels[a], B = panels[b];
-      const ha = st.panels[A.id].grow, hb = st.panels[B.id].grow, y0 = e.clientY;
-      const move = ev => {
-        const na = Math.max(minOf(A), Math.min(ha + hb - minOf(B), ha + (ev.clientY - y0)));
-        st.panels[A.id].grow = na;
-        st.panels[B.id].grow = ha + hb - na;
-        applyPanels();
-      };
-      const up = () => {
-        sp.removeEventListener('pointermove', move);
-        sp.removeEventListener('pointerup', up);
-        sp.removeEventListener('pointercancel', up);
-        sp.classList.remove('active'); side.classList.remove('dragging'); save();
-      };
-      sp.addEventListener('pointermove', move);
-      sp.addEventListener('pointerup', up);
-      sp.addEventListener('pointercancel', up);
-    });
-  });
-
-  window.dashLayout = {
-    onPick() {                                                        // RS dipilih: buka panel Ulasan bila masih menciut otomatis
-      const r = st.panels.pnlReviews;
-      if (r && r.auto) { snapshot(); r.collapsed = false; r.auto = false; applyPanels(); save(); }
-    }
-  };
-  applySide(); applyPanels();
+  apply();
   window.addEventListener('resize', fixMap);
 })();
 </script>
