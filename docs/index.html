@@ -71,21 +71,40 @@
                 cursor:pointer; box-shadow:0 3px 12px rgba(15,23,42,.14); }
   #sideToggle:hover { background:var(--brand-l); }
 
-  /* ---------- Sidebar: satu kolom yang digulir ke bawah (scrollbar panjang di tepi kanan) ---------- */
+  /* ---------- Sidebar: kolom yang digulir (scrollbar panjang di kanan); tinggi tiap panel bisa diatur ---------- */
   #side { width:var(--side-w); background:var(--bg); border-left:1px solid var(--line); display:flex;
-          flex-direction:column; gap:10px; padding:10px 10px 18px; overflow-x:hidden; overflow-y:scroll;
+          flex-direction:column; padding:10px 10px 6px; overflow-x:hidden; overflow-y:scroll;
           flex-shrink:0; transition:width .25s ease;
           scrollbar-width:auto; scrollbar-color:#94a3b8 #e2e8f0; }
   #side::-webkit-scrollbar { width:12px; }
   #side::-webkit-scrollbar-track { background:#e2e8f0; }
   #side::-webkit-scrollbar-thumb { background:#94a3b8; border-radius:8px; border:2px solid #e2e8f0; }
   #side::-webkit-scrollbar-thumb:hover { background:#64748b; }
+  #side.dragging, #side.dragging * { transition:none !important; user-select:none; cursor:row-resize !important; }
   .side-closed #side { width:0; padding:0; border-left:0; overflow:hidden; }
 
-  .panel { background:var(--card); border:1px solid var(--line); border-radius:12px; flex:0 0 auto; overflow:hidden; }
-  .phead { padding:10px 14px; border-bottom:1px solid var(--line); }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:12px; flex:0 0 auto;
+           overflow:hidden; display:flex; flex-direction:column; }
+  .phead { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 14px;
+           cursor:pointer; user-select:none; flex-shrink:0; border-bottom:1px solid var(--line); }
+  .phead:hover { background:#fafbff; }
   .phead h3 { font-size:11px; color:var(--muted2); text-transform:uppercase; letter-spacing:1px; font-weight:700; }
-  .pbody { padding:10px 12px; }
+  .pcollapse { background:none; border:none; color:var(--muted); font-size:13px; cursor:pointer; transition:transform .2s; }
+  .panel.collapsed .pcollapse { transform:rotate(-90deg); }
+  .panel.collapsed .phead { border-bottom:0; }
+  .panel.collapsed .pbody { display:none; }
+  /* Tinggi badan panel diatur lewat style.height (ditarik di pembatas); isi yang lebih tinggi digulir di dalam panel */
+  .pbody { padding:10px 12px; overflow-y:auto; overflow-x:hidden; flex:0 0 auto;
+           scrollbar-width:thin; scrollbar-color:#cbd5e1 transparent; }
+
+  /* Pembatas: tarik ke atas/bawah untuk mengubah tinggi panel di atasnya */
+  .splitter { flex:0 0 14px; height:14px; cursor:row-resize; position:relative; touch-action:none; }
+  .splitter::after { content:''; position:absolute; left:50%; top:50%; width:40px; height:4px; margin:-2px 0 0 -20px;
+                     border-radius:3px; background:#cbd5e1; transition:background .15s, width .15s, margin .15s; }
+  .splitter:hover::after, .splitter.active::after { background:var(--brand); width:60px; margin-left:-30px; }
+  .splitter.disabled { cursor:default; }
+  .splitter.disabled::after { opacity:.35; }
+  .splitter.disabled:hover::after { background:#cbd5e1; width:40px; margin-left:-20px; }
 
   /* KPI */
   .kgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
@@ -100,9 +119,10 @@
   .kpi.neg { border-top-color:#fb7185; } .kpi.neg .v { color:var(--neg); }
 
   /* Tren */
-  #rsName { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px;
+  #pnlTrend .pbody { display:flex; flex-direction:column; }
+  #rsName { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px; flex-shrink:0;
             white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  #chartWrap { position:relative; height:230px; min-width:0; width:100%; }
+  #chartWrap { position:relative; flex:1; min-height:60px; min-width:0; width:100%; }
   #chartWrap canvas { max-width:100% !important; }
   #empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center;
            color:var(--muted); font-size:12px; padding:10px; }
@@ -206,7 +226,7 @@
   <aside id="side">
 
     <section class="panel" id="pnlStats">
-      <div class="phead"><h3>Ringkasan Periode</h3></div>
+      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Ringkasan Periode</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
       <div class="pbody">
         <div class="kgrid">
           <div class="kpi tot"><div class="v" id="sTot">-</div><div class="l">Total RS</div></div>
@@ -218,9 +238,10 @@
         </div>
       </div>
     </section>
+    <div class="splitter" data-for="pnlStats" title="Tarik untuk mengubah tinggi panel (klik 2x untuk mengembalikan)"></div>
 
     <section class="panel" id="pnlTrend">
-      <div class="phead"><h3>Tren Rating</h3></div>
+      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Tren Rating</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
       <div class="pbody" id="trend">
         <div id="rsName">Klik penanda di peta untuk melihat tren</div>
         <div id="chartWrap">
@@ -229,16 +250,19 @@
         </div>
       </div>
     </section>
+    <div class="splitter" data-for="pnlTrend" title="Tarik untuk mengubah tinggi panel (klik 2x untuk mengembalikan)"></div>
 
     <section class="panel" id="pnlReviews">
-      <div class="phead"><h3>Ulasan Terbaru</h3></div>
+      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Ulasan Terbaru</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
       <div class="pbody"><div id="reviewListContent"><div id="revEmpty">Pilih RS untuk melihat ulasan</div></div></div>
     </section>
+    <div class="splitter" data-for="pnlReviews" title="Tarik untuk mengubah tinggi panel (klik 2x untuk mengembalikan)"></div>
 
     <section class="panel" id="pnlList">
-      <div class="phead"><h3>Daftar RS (urut rating)</h3></div>
+      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Daftar RS (urut rating)</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
       <div class="pbody"><div id="rsListContent"></div></div>
     </section>
+    <div class="splitter" data-for="pnlList" title="Tarik untuk mengubah tinggi panel (klik 2x untuk mengembalikan)"></div>
   </aside>
 </div>
 
@@ -380,11 +404,12 @@ function revCard(r) {
 
 function renderReviewList(rowsRS, reset = true) {
   const container = document.getElementById('reviewListContent');
-  const sc = document.getElementById('side');       // yang digulir adalah sidebar (scrollbar panjang di kanan)
-  const keep = sc.scrollTop;
+  const body = container.parentElement;            // badan panel Ulasan: digulir di dalam panel bila lebih tinggi
+  const scroll = body.scrollTop;
   if (reset) {
     revRows = [...rowsRS].sort((a,b) => new Date(b['Waktu Ulasan']) - new Date(a['Waktu Ulasan']));
     revShown = REV_PAGE;
+    body.scrollTop = 0;
   }
   if (!revRows.length) {
     container.innerHTML = '<div id="revEmpty">Belum ada ulasan di periode ini</div>';
@@ -396,7 +421,7 @@ function renderReviewList(rowsRS, reset = true) {
     revRows.slice(0, revShown).map(revCard).join('') +
     (sisa > 0 ? `<button class="revMore" onclick="revShown += REV_PAGE; renderReviewList(null, false)">
                    Tampilkan ${Math.min(REV_PAGE, sisa)} lagi (sisa ${sisa})</button>` : '');
-  if (!reset) sc.scrollTop = keep;
+  if (!reset) body.scrollTop = scroll;
 }
 
 function filterByPeriod(rows, p) {
@@ -643,28 +668,84 @@ loadData();
 </script>
 
 <script>
-/* ===================== Sidebar buka-tutup (tombol "Panel") ===================== */
+/* ===================== Sidebar: buka-tutup, panel bisa diciutkan, tinggi panel bisa diatur ===================== */
 (function () {
-  const KEY = 'dashLayout.v3';
+  const KEY = 'dashLayout.v4';
   const app = document.getElementById('main');            // kelas side-closed dipasang di #main
+  const side = document.getElementById('side');
   const toggle = document.getElementById('sideToggle');
-  let open = window.innerWidth > 820;
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s.sideOpen === 'boolean') open = s.sideOpen; } catch (e) {}
-  if (window.innerWidth <= 820) open = false;               // di ponsel laci selalu mulai tertutup
+  const panels = [...side.querySelectorAll('.panel')];
+  const splitters = [...side.querySelectorAll('.splitter')];
+  const MIN_BODY = 60, MAX_BODY = 1600;
+  // h = tinggi badan panel dalam px; null = mengikuti isi
+  const DEF = { pnlStats: { h: null }, pnlTrend: { h: 270 }, pnlReviews: { h: 300 }, pnlList: { h: 300 } };
 
+  let st = { sideOpen: window.innerWidth > 820, panels: {} };
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') st = Object.assign(st, s); } catch (e) {}
+  if (!st.panels || typeof st.panels !== 'object') st.panels = {};
+  panels.forEach(p => { st.panels[p.id] = Object.assign({ h: null, collapsed: false }, DEF[p.id], st.panels[p.id]); });
+  if (window.innerWidth <= 820) st.sideOpen = false;        // di ponsel laci selalu mulai tertutup
+
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
   function fixMap() { try { if (typeof map !== 'undefined') map.invalidateSize(); } catch (e) {} }
-  function apply() {
-    app.classList.toggle('side-closed', !open);
-    document.body.classList.toggle('side-closed', !open);   // dipakai widget chat agar tidak menutupi sidebar
-    toggle.setAttribute('aria-expanded', String(open));
-    toggle.textContent = open ? 'Panel ▸' : '◂ Panel';
+
+  /* --- sidebar --- */
+  function applySide() {
+    app.classList.toggle('side-closed', !st.sideOpen);
+    document.body.classList.toggle('side-closed', !st.sideOpen);   // dipakai widget chat agar tidak menutupi sidebar
+    toggle.setAttribute('aria-expanded', String(st.sideOpen));
+    toggle.textContent = st.sideOpen ? 'Panel ▸' : '◂ Panel';
   }
   toggle.addEventListener('click', () => {
-    open = !open; apply();
-    try { localStorage.setItem(KEY, JSON.stringify({ sideOpen: open })); } catch (e) {}
+    st.sideOpen = !st.sideOpen; applySide(); save();
     setTimeout(fixMap, 280);                                 // setelah animasi lebar selesai
   });
-  apply();
+
+  /* --- panel --- */
+  function applyPanels() {
+    panels.forEach(p => {
+      const s = st.panels[p.id];
+      p.classList.toggle('collapsed', !!s.collapsed);
+      p.querySelector('.pbody').style.height = (!s.collapsed && s.h) ? s.h + 'px' : '';
+    });
+    splitters.forEach(sp => sp.classList.toggle('disabled', !!st.panels[sp.dataset.for].collapsed));
+  }
+  panels.forEach(p => {
+    p.querySelector('.phead').addEventListener('click', () => {
+      st.panels[p.id].collapsed = !st.panels[p.id].collapsed;
+      applyPanels(); save();
+    });
+  });
+
+  splitters.forEach(sp => {
+    const id = sp.dataset.for;
+    const body = () => document.getElementById(id).querySelector('.pbody');
+    sp.addEventListener('pointerdown', e => {
+      if (st.panels[id].collapsed) return;
+      e.preventDefault();
+      if (sp.setPointerCapture) sp.setPointerCapture(e.pointerId);
+      const h0 = body().offsetHeight, y0 = e.clientY;
+      sp.classList.add('active'); side.classList.add('dragging');
+      const move = ev => {
+        st.panels[id].h = Math.max(MIN_BODY, Math.min(MAX_BODY, Math.round(h0 + (ev.clientY - y0))));
+        applyPanels();
+      };
+      const up = () => {
+        sp.removeEventListener('pointermove', move);
+        sp.removeEventListener('pointerup', up);
+        sp.removeEventListener('pointercancel', up);
+        sp.classList.remove('active'); side.classList.remove('dragging'); save();
+      };
+      sp.addEventListener('pointermove', move);
+      sp.addEventListener('pointerup', up);
+      sp.addEventListener('pointercancel', up);
+    });
+    sp.addEventListener('dblclick', () => {                  // klik 2x: kembalikan ke tinggi bawaan
+      st.panels[id].h = DEF[id].h; st.panels[id].collapsed = false; applyPanels(); save();
+    });
+  });
+
+  applySide(); applyPanels();
   window.addEventListener('resize', fixMap);
 })();
 </script>
@@ -736,8 +817,11 @@ loadData();
   #chatInputRow { display:flex; align-items:flex-end; gap:8px; padding:10px 12px 12px; border-top:1px solid #e2e8f0; flex-shrink:0; background:#fff; }
   #chatInput {
     flex:1; border:1px solid #e2e8f0; border-radius:18px; padding:9px 14px; font-size:13px;
-    font-family:inherit; line-height:1.4; outline:none; resize:none; max-height:96px; overflow-y:auto;
+    font-family:inherit; line-height:1.4; outline:none; resize:none; max-height:96px;
+    overflow-y:hidden;                       /* tanpa scrollbar di kotak input */
+    scrollbar-width:none;                    /* bila teks melebihi 4 baris tetap bisa digulir, tapi tanpa bar */
   }
+  #chatInput::-webkit-scrollbar { display:none; }
   #chatInput:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.12); }
   #chatSendBtn { background:#6366f1; color:#fff; border:none; width:38px; height:38px; border-radius:50%;
                  cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -1131,8 +1215,12 @@ Yuk, cari informasi rumah sakit dengan lebih mudah dan praktis! 😊`;
   /* ---------- Kotak input: tumbuh ke bawah, Enter = kirim, Shift+Enter = baris baru ---------- */
   const chatInputEl = document.getElementById('chatInput');
   function autosizeInput() {
-    chatInputEl.style.height = 'auto';
-    chatInputEl.style.height = Math.min(chatInputEl.scrollHeight, 96) + 'px';
+    const el = chatInputEl;
+    el.style.height = 'auto';
+    const extra = el.offsetHeight - el.clientHeight;          // garis tepi ikut dihitung agar 1 baris tidak dianggap meluap
+    const need = el.scrollHeight + extra;
+    el.style.height = Math.min(need, 96) + 'px';
+    el.style.overflowY = need > 96 ? 'auto' : 'hidden';
   }
   chatInputEl.addEventListener('input', autosizeInput);
   chatInputEl.addEventListener('keydown', e => {
