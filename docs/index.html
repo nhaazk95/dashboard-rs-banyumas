@@ -579,6 +579,9 @@ loadData();
 </script>
 
 <!-- ===================== AI AGENT CHAT WIDGET ===================== -->
+<!-- Library untuk merender jawaban (tabel/poin). Tanpa keduanya jawaban tetap tampil sebagai teks biasa. -->
+<script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 <style>
   #chatToggleBtn {
     position: fixed; bottom: 24px; right: 24px; z-index: 2000;
@@ -621,13 +624,104 @@ loadData();
   .msgBubble { max-width:85%; padding:8px 12px; border-radius:12px; font-size:12.5px; line-height:1.5; white-space:pre-wrap; }
   .msgBubble.user { align-self:flex-end; background:#6366f1; color:#fff; border-bottom-right-radius:4px; }
   .msgBubble.bot { align-self:flex-start; background:#f1f5f9; color:#334155; border-bottom-left-radius:4px; }
-  .msgBubble.typing { align-self:flex-start; background:#f1f5f9; color:#94a3b8; font-style:italic; }
   #chatInputRow { display:flex; gap:6px; padding:10px; border-top:1px solid #e2e8f0; flex-shrink:0; }
   #chatInputRow input { flex:1; border:1px solid #e2e8f0; border-radius:20px; padding:8px 14px; font-size:12.5px; outline:none; }
   #chatInputRow input:focus { border-color:#6366f1; }
   #chatSendBtn { background:#6366f1; color:#fff; border:none; width:36px; height:36px; border-radius:50%;
                  cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   #chatSendBtn:disabled { opacity:.5; cursor:not-allowed; }
+
+  /* Jawaban bot dirender sebagai HTML (poin, tabel), jadi spasi baris tidak boleh dipertahankan */
+  .msgBubble.bot.chat-md { white-space: normal; }
+  /* Indikator menunggu jawaban: tiga titik beranimasi, bukan tulisan "Mengetik..." */
+  .msgBubble.bot.typing { display:inline-flex; gap:5px; align-items:center; padding:12px 14px; white-space:normal; }
+  .msgBubble.bot.typing span { width:7px; height:7px; border-radius:50%; background:#94a3b8; opacity:.35;
+                               animation: chat-dot 1.2s infinite ease-in-out; }
+  .msgBubble.bot.typing span:nth-child(2) { animation-delay:.15s; }
+  .msgBubble.bot.typing span:nth-child(3) { animation-delay:.3s; }
+
+/* chat-ui.css -- pasangan chat-ui.js. Warna memakai currentColor/rgba, jadi ikut tema gelap atau terang. */
+
+.chat-md { line-height: 1.55; overflow-wrap: anywhere; }
+.chat-md > :first-child { margin-top: 0; }
+.chat-md > :last-child { margin-bottom: 0; }
+.chat-md p { margin: .45em 0; }
+.chat-md ul, .chat-md ol { margin: .45em 0; padding-left: 1.25em; }
+.chat-md li { margin: .2em 0; }
+.chat-md strong { font-weight: 600; }
+.chat-md a { color: inherit; text-decoration: underline; }
+.chat-md code { padding: .1em .35em; border-radius: 4px; background: rgba(127,127,127,.2); font-size: .92em; }
+
+/* ---------- Tabel (layar lebar): bisa digulir ke samping, kolom tetap terbaca ---------- */
+.chat-md .tbl-wrap {
+  overflow-x: auto;
+  margin: .7em 0;
+  border: 1px solid rgba(127,127,127,.35);
+  border-radius: 10px;
+}
+.chat-md table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: .9em; }
+.chat-md th, .chat-md td {
+  padding: .55em .7em;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(127,127,127,.25);
+}
+.chat-md th { background: rgba(127,127,127,.16); font-weight: 600; white-space: nowrap; }
+.chat-md tbody tr:last-child td { border-bottom: 0; }
+.chat-md tbody tr:nth-child(even) td { background: rgba(127,127,127,.07); }
+.chat-md .col-no { width: 2.4em; text-align: center; white-space: nowrap; }
+.chat-md td.col-name { min-width: 9em; font-weight: 600; }
+
+/* ---------- Tabel (jendela sempit): tiap baris jadi kartu ---------- */
+.chat-md.is-narrow .tbl-wrap { overflow: visible; border: 0; margin: .5em 0; }
+.chat-md.is-narrow table,
+.chat-md.is-narrow tbody,
+.chat-md.is-narrow tr,
+.chat-md.is-narrow td { display: block; width: 100%; min-width: 0; }
+.chat-md.is-narrow thead { display: none; }
+.chat-md.is-narrow tbody tr {
+  margin: .6em 0;
+  padding: .6em .75em;
+  border: 1px solid rgba(127,127,127,.35);
+  border-radius: 10px;
+  background: rgba(127,127,127,.07);
+}
+.chat-md.is-narrow td,
+.chat-md.is-narrow tbody tr:nth-child(even) td { padding: .2em 0; border: 0; background: none; }
+.chat-md.is-narrow td.col-no { display: none; }
+.chat-md.is-narrow td.col-name { font-size: 1.02em; margin-bottom: .2em; }
+.chat-md.is-narrow td[data-label]:not(.col-name)::before {
+  content: attr(data-label) ": ";
+  font-weight: 600;
+  opacity: .75;
+}
+
+/* ---------- Efek mengetik ---------- */
+.chat-caret {
+  display: inline-block;
+  width: .5ch;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: -.15em;
+  background: currentColor;
+  animation: chat-blink 1s steps(1) infinite;
+}
+@keyframes chat-blink { 50% { opacity: 0; } }
+
+.chat-typing { display: inline-flex; gap: 5px; padding: .7em .9em; }
+.chat-typing span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: currentColor; opacity: .35;
+  animation: chat-dot 1.2s infinite ease-in-out;
+}
+.chat-typing span:nth-child(2) { animation-delay: .15s; }
+.chat-typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes chat-dot { 0%, 60%, 100% { transform: translateY(0); opacity: .35; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-caret, .chat-typing span { animation: none; }
+}
+
 </style>
 
 <button id="chatToggleBtn" onclick="toggleChat()" aria-label="Buka chat asisten">
@@ -636,31 +730,245 @@ loadData();
 
 <div id="chatPanel">
   <div id="chatPanelHeader">
-    <span>Asisten Analisis RS</span>
+    <span>Asisten AI RS Banyumas</span>
     <button onclick="toggleChat()">✕</button>
   </div>
   <div id="chatMessages"></div>
   <div id="chatInputRow">
-    <input id="chatInput" type="text" placeholder="Tanya tentang RS, atau tempel ulasan untuk dianalisis..."
+    <input id="chatInput" type="text" placeholder="Tanya seputar RS, mis. RS terdekat dari Sokaraja..."
            onkeydown="if(event.key==='Enter') sendChatMessage()">
     <button id="chatSendBtn" onclick="sendChatMessage()">➤</button>
   </div>
 </div>
 
 <script>
+(function (global) {
+  'use strict';
+
+  var NARROW_PX = 560;
+  var reduceMotion = !!(global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // Tabel: bungkus agar bisa digulir, beri label per sel (dipakai tampilan kartu di layar sempit)
+  function decorateTable(table) {
+    var heads = Array.prototype.map.call(table.querySelectorAll('thead th'), function (th) {
+      return th.textContent.trim();
+    });
+    var noIdx = -1, nameIdx = -1;
+    heads.forEach(function (h, i) {
+      if (noIdx < 0 && /^(no\.?|#)$/i.test(h)) noIdx = i;
+      if (nameIdx < 0 && /(rumah sakit|nama|aspek)/i.test(h)) nameIdx = i;
+    });
+    Array.prototype.forEach.call(table.querySelectorAll('tr'), function (tr) {
+      Array.prototype.forEach.call(tr.children, function (cell, i) {
+        if (i === noIdx) cell.classList.add('col-no');
+        if (i === nameIdx) cell.classList.add('col-name');
+        if (cell.tagName === 'TD' && heads[i]) cell.setAttribute('data-label', heads[i]);
+      });
+    });
+    var wrap = document.createElement('div');
+    wrap.className = 'tbl-wrap';
+    table.parentNode.replaceChild(wrap, table);
+    wrap.appendChild(table);
+  }
+
+  function renderTemplate(markdown) {
+    var md = String(markdown == null ? '' : markdown);
+    var html;
+    if (global.marked && global.DOMPurify) {
+      var parse = global.marked.parse || global.marked;
+      html = global.DOMPurify.sanitize(parse.call(global.marked, md, { gfm: true, breaks: true }));
+    } else {
+      html = '<p>' + escapeHtml(md).replace(/\n/g, '<br>') + '</p>';
+    }
+    var tpl = document.createElement('template');
+    tpl.innerHTML = html;
+    Array.prototype.forEach.call(tpl.content.querySelectorAll('a'), function (a) {
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+    });
+    Array.prototype.forEach.call(tpl.content.querySelectorAll('table'), decorateTable);
+    return tpl;
+  }
+
+  // Layar/jendela sempit -> tabel jadi kartu (lihat chat-ui.css)
+  function applyLayout(el) {
+    var host = el.__chatHost || el.parentElement || el;
+    el.classList.toggle('is-narrow', host.clientWidth < NARROW_PX);
+  }
+  global.addEventListener('resize', function () {
+    Array.prototype.forEach.call(document.querySelectorAll('.chat-md'), applyLayout);
+  });
+
+  function prepare(el, opts) {
+    el.classList.add('chat-md');
+    el.__chatHost = (opts && opts.scrollEl) || null;
+  }
+
+  function renderInto(el, markdown, opts) {
+    prepare(el, opts);
+    el.innerHTML = '';
+    el.appendChild(renderTemplate(markdown).content);
+    applyLayout(el);
+    if (opts && opts.scrollEl) opts.scrollEl.scrollTop = opts.scrollEl.scrollHeight;
+  }
+
+  function typeInto(el, markdown, opts) {
+    opts = opts || {};
+    var speed = opts.speed || 18;
+    var maxMs = opts.maxMs || 7000;
+    var scrollEl = opts.scrollEl || null;
+    function scroll() { if (scrollEl) scrollEl.scrollTop = scrollEl.scrollHeight; }
+
+    if (reduceMotion || opts.instant) {
+      renderInto(el, markdown, opts);
+      return Promise.resolve();
+    }
+
+    prepare(el, opts);
+    var tpl = renderTemplate(markdown);
+    var blocks = Array.prototype.slice.call(tpl.content.children);
+    el.innerHTML = '';
+    el.appendChild(tpl.content);
+    applyLayout(el);
+
+    // Susun antrean: tiap blok baru ditampilkan saat gilirannya; teks diketik per karakter,
+    // baris tabel muncul satu per satu (lebar kolom stabil karena isi sudah ada, hanya disembunyikan).
+    var queue = [];
+    var totalChars = 0;
+    blocks.forEach(function (block) {
+      block.style.display = 'none';
+      queue.push({ t: 'block', block: block });
+      if (block.classList.contains('tbl-wrap')) {
+        Array.prototype.forEach.call(block.querySelectorAll('tbody tr'), function (tr) {
+          tr.style.visibility = 'hidden';
+          queue.push({ t: 'row', tr: tr, wrap: block });
+        });
+        return;
+      }
+      Array.prototype.forEach.call(block.querySelectorAll('li'), function (li) { li.style.display = 'none'; });
+      var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      var n;
+      while ((n = walker.nextNode())) {
+        if (!n.nodeValue.trim()) continue;
+        var chars = Array.from(n.nodeValue);   // per code point, supaya emoji tidak terpotong
+        queue.push({ t: 'text', node: n, chars: chars, full: n.nodeValue, block: block });
+        n.nodeValue = '';
+        totalChars += chars.length;
+      }
+    });
+
+    var caret = document.createElement('span');
+    caret.className = 'chat-caret';
+    var chunk = Math.max(1, Math.ceil(totalChars / (maxMs / speed)));
+    var qi = 0, pos = 0, timer = null, done = false, resolveFn = function () {};
+
+    function showAncestors(node, block) {
+      for (var p = node.parentNode; p && p !== block.parentNode; p = p.parentNode) {
+        if (p.nodeType === 1) p.style.display = '';
+      }
+    }
+    function finish() {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      if (caret.parentNode) caret.parentNode.removeChild(caret);
+      resolveFn();
+    }
+    function revealAll() {
+      if (done) return;
+      queue.forEach(function (s) {
+        if (s.t === 'block') s.block.style.display = '';
+        else if (s.t === 'row') s.tr.style.visibility = '';
+        else s.node.nodeValue = s.full;
+      });
+      Array.prototype.forEach.call(el.querySelectorAll('li'), function (li) { li.style.display = ''; });
+      scroll();
+      finish();
+    }
+    function tick() {
+      if (done) return;
+      var s = queue[qi];
+      if (!s) { scroll(); finish(); return; }
+      if (s.t === 'block') { s.block.style.display = ''; qi++; tick(); return; }
+      if (s.t === 'row') {
+        s.tr.style.visibility = '';
+        qi++;
+        s.wrap.parentNode.insertBefore(caret, s.wrap.nextSibling);
+        scroll();
+        timer = setTimeout(tick, 140);
+        return;
+      }
+      if (pos === 0) showAncestors(s.node, s.block);
+      pos = Math.min(s.chars.length, pos + chunk);
+      s.node.nodeValue = s.chars.slice(0, pos).join('');
+      if (s.node.parentNode) s.node.parentNode.insertBefore(caret, s.node.nextSibling);
+      if (pos >= s.chars.length) { qi++; pos = 0; }
+      scroll();
+      timer = setTimeout(tick, speed);
+    }
+
+    if (opts.skipOnClick !== false) el.addEventListener('click', revealAll, { once: true });
+    return new Promise(function (resolve) { resolveFn = resolve; tick(); });
+  }
+
+  function showTyping(container) {
+    var d = document.createElement('div');
+    d.className = 'chat-typing';
+    d.setAttribute('aria-label', 'Asisten sedang menulis jawaban');
+    d.innerHTML = '<span></span><span></span><span></span>';
+    container.appendChild(d);
+    container.scrollTop = container.scrollHeight;
+    return function () { if (d.parentNode) d.parentNode.removeChild(d); };
+  }
+
+  global.ChatUI = { showTyping: showTyping, typeInto: typeInto, renderInto: renderInto, renderTemplate: renderTemplate };
+})(window);
+
+</script>
+
+<script>
   // Tidak ada API key di sini. Semua panggilan AI lewat backend Render (/chat).
+  // Chatbot ini hanya untuk bertanya seputar RS; tidak ada lagi pengecekan sentimen per pesan.
   const CHAT_URL = "https://sentimen-api.onrender.com/chat";
-  const SVM_PREDICT_URL = "https://sentimen-api.onrender.com/predict";
 
   let chatHistory = [];
   let chatOpened = false;
+
+  const WELCOME_TEXT = `👋 Halo! Selamat datang di Asisten AI RS Banyumas 🏥✨
+
+Saya siap membantu kamu menemukan rumah sakit yang sesuai di Kabupaten Banyumas, berdasarkan ulasan pasien di Google Maps dan data lokasi rumah sakit.
+
+Yang bisa saya bantu:
+- Rekomendasi RS sesuai kebutuhan (anak, ibu hamil, IGD, rawat inap)
+- Mencari RS terdekat dari daerahmu (sebutkan nama kecamatannya)
+- Membandingkan beberapa RS: rating, kelebihan, dan hal yang perlu diperhatikan
+- Merangkum kata pasien soal dokter, perawat, antrean, farmasi, kebersihan, dan parkir
+
+Contoh pertanyaan:
+- "RS terdekat dari Sokaraja untuk anak demam"
+- "Bandingkan Hermina Hospital Purwokerto dan RS JIH Purwokerto"
+
+Yuk, cari informasi rumah sakit dengan lebih mudah dan praktis! 😊`;
+
+  // Menulis teks ke bubble dengan efek mengetik (jatuh kembali ke teks biasa bila modul gagal dimuat)
+  function typeReply(el, text, opts) {
+    const scrollEl = document.getElementById('chatMessages');
+    if (window.ChatUI) return ChatUI.typeInto(el, text, Object.assign({ scrollEl }, opts || {}));
+    el.textContent = text;
+    scrollEl.scrollTop = scrollEl.scrollHeight;
+    return Promise.resolve();
+  }
 
   function toggleChat() {
     const panel = document.getElementById('chatPanel');
     const isOpen = panel.classList.toggle('open');
     if (isOpen && !chatOpened) {
       chatOpened = true;
-      addBubble('bot', '👋 Halo! Selamat datang di Asisten AI RS Banyumas 🏥✨ Saya siap membantu kamu menemukan rumah sakit yang sesuai, memberikan rekomendasi, membandingkan layanan antar-RS, hingga menganalisis sentimen ulasan pasien. Yuk, cari informasi rumah sakit dengan lebih mudah dan praktis!');
+      typeReply(addBubble('bot', ''), WELCOME_TEXT, { maxMs: 3500 });
     }
   }
 
@@ -674,18 +982,11 @@ loadData();
     return div;
   }
 
-  async function classifyWithSVM(text) {
-    try {
-      const resp = await fetch(SVM_PREDICT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
-      });
-      if (!resp.ok) return null;
-      return await resp.json();
-    } catch (e) {
-      return null;
-    }
+  function addTypingBubble() {
+    const div = addBubble('bot', '', 'typing');
+    div.setAttribute('aria-label', 'Asisten sedang menulis jawaban');
+    div.innerHTML = '<span></span><span></span><span></span>';
+    return div;
   }
 
   /* ---------- Konteks dari reviews.json untuk chatbot ---------- */
@@ -761,62 +1062,50 @@ loadData();
     return teks;   // Username sengaja tidak dikirim
   }
 
-  function looksLikeReviewText(text) {
-    const lower = text.toLowerCase();
-    if (text.includes('?')) return false;
-    const searchWords = ['cari','rekomendasi','bandingkan','rs mana','rumah sakit mana','dimana','akurasi','berapa','terbaik'];
-    if (searchWords.some(w => lower.includes(w))) return false;
-    return text.trim().split(/\s+/).length >= 4;
-  }
-
   async function sendChatMessage() {
     const input = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('chatSendBtn');
     const text = input.value.trim();
-    if (!text) return;
+    if (!text || sendBtn.disabled) return;
     input.value = '';
-    document.getElementById('chatSendBtn').disabled = true;
+    sendBtn.disabled = true;
 
     addBubble('user', text);
     chatHistory.push({ role: 'user', text });
-    const typingBubble = addBubble('bot', 'Mengetik...', 'typing');
-
-    let promptText = text, context = "";
-    if (looksLikeReviewText(text)) {
-      const svmResult = await classifyWithSVM(text);
-      if (svmResult && svmResult.sentimen) {
-        promptText = `[Konteks: ulasan berikut sudah diklasifikasi oleh model SVM dengan hasil Sentimen="${svmResult.sentimen}", Confidence=${svmResult.confidence}]\n\nAnalisis ulasan ini: "${text}"`;
-      }
-    } else {
-      context = buatKonteks(text);
-    }
+    const typingBubble = addTypingBubble();
 
     try {
       const resp = await fetch(CHAT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: promptText,
+          message: text,
           history: chatHistory.slice(0, -1).slice(-6).map(m => ({ role: m.role, text: m.text })),
-          context
+          context: buatKonteks(text),
+          format: 'rich'          // minta jawaban bertabel/berpoin; tampilan ini merender Markdown
         })
       });
       const data = await resp.json().catch(() => ({}));
-      let replyText;
-      if (resp.ok) replyText = data.reply || 'Maaf, terjadi kesalahan saat memproses jawaban.';
-      else if (resp.status === 429) replyText = data.detail || 'Layanan chatbot sedang ramai. Coba lagi sekitar satu menit.';
-      else replyText = 'Maaf, asisten AI sedang bermasalah. Coba lagi nanti.';
       typingBubble.remove();
-      addBubble('bot', replyText);
-      chatHistory.push({ role: 'model', text: replyText });
+      if (resp.ok) {
+        const replyText = data.reply || 'Maaf, terjadi kesalahan saat memproses jawaban.';
+        await typeReply(addBubble('bot', ''), replyText);
+        chatHistory.push({ role: 'model', text: replyText });
+      } else if (resp.status === 429) {
+        addBubble('bot', data.detail || 'Layanan chatbot sedang ramai. Coba lagi sekitar satu menit.');
+      } else {
+        addBubble('bot', 'Maaf, asisten AI sedang bermasalah. Coba lagi nanti.');
+      }
     } catch (e) {
       typingBubble.remove();
       addBubble('bot', 'Maaf, gagal terhubung ke asisten AI. Coba lagi nanti.');
     } finally {
-      document.getElementById('chatSendBtn').disabled = false;
+      sendBtn.disabled = false;
+      input.focus();
     }
   }
 </script>
 <!-- =================== END AI AGENT CHAT WIDGET =================== -->
-
+ 
 </body>
 </html>
