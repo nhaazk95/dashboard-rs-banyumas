@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 from email.message import EmailMessage
 from pathlib import Path
-
+from collections import Counter
 import requests
 from apify_client import ApifyClient
 from apify_client.errors import ApifyApiError
