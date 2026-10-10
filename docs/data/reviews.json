@@ -7974,12 +7974,13 @@
     "Lokasi Tempat": "Jl. Raya Buntu, Gombong, Pageralang, Kec. Kemranjen, Kabupaten Banyumas, Jawa Tengah 53194, Indonesia",
     "Latitude": -7.5925669,
     "Longitude": 109.2747121,
-    "Isi Ulasan": "Trimakasih atas pelayanan merawat  keluarga  kami,Baik doctor,perawatnya yg ramah\".semoga rsu  medical lestari bms,semakin maju kedepanya",
+    "Isi Ulasan": "Trimakasih atas pelayanan merawat  keluarga  kami,Baik doctor,perawatnya yg ramah .semoga rsu  medical lestari bms,semakin maju kedepanya",
     "id": "70f8e0cb482eedf6",
-    "Sentimen_Prediksi": "Netral",
+    "Sentimen_Prediksi": "Positif",
     "Confidence": 1.0453,
     "Teks_Bersih": "terima kasih atas layan rawat keluarga kamibaik doctorperawatnya yang ramahsemoga rumah sakit umum medical lestari bmssemakin maju depa",
-    "Processed_At": "2026-10-06T10:03:14.060201"
+    "Processed_At": "2026-10-06T10:03:14.060201",
+    "Label_Manual": "Positif"
   },
   {
     "Nama RS": "RSU Medika Lestari",
