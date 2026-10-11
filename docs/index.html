@@ -957,6 +957,7 @@ loadData();
       <span class="cph-sub">Berdasarkan ulasan pasien di Google Maps</span>
     </div>
     <div class="cph-actions">
+      <button id="chatLocBtn" onclick="pakaiLokasi()" title="Pakai lokasiku untuk mencari RS terdekat" aria-label="Pakai lokasiku">📍</button>
       <button id="chatExpandBtn" onclick="toggleChatSize()" title="Perbesar / perkecil" aria-label="Perbesar atau perkecil chat">⤢</button>
       <button onclick="toggleChat()" title="Tutup" aria-label="Tutup chat">✕</button>
     </div>
@@ -1170,6 +1171,31 @@ loadData();
   let chatHistory = [];
   let chatOpened = false;
 
+    let userPos = null;
+  function ambilLokasi() {
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) return resolve(null);
+      navigator.geolocation.getCurrentPosition(
+        (p) => { userPos = { lat: p.coords.latitude, lng: p.coords.longitude }; resolve(userPos); },
+        () => resolve(null),
+        { timeout: 8000, maximumAge: 300000 }
+      );
+    });
+  }
+  async function pakaiLokasi() {
+    const btn = document.getElementById('chatLocBtn');
+    btn.disabled = true;
+    const pos = await ambilLokasi();
+    btn.disabled = false;
+    if (pos) {
+      btn.style.background = 'rgba(255,255,255,.55)';
+      btn.title = 'Lokasi aktif (klik untuk memperbarui)';
+      addBubble('bot', '📍 Lokasimu diterima. Coba tanya, misalnya: "RS terdekat dari saya untuk anak demam".');
+    } else {
+      addBubble('bot', 'Lokasi tidak bisa diakses (izin ditolak atau tidak tersedia). Kamu tetap bisa menyebut nama kecamatan, misalnya "RS terdekat dari Sokaraja".');
+    }
+  }
+
   const WELCOME_TEXT = `👋 Halo! Selamat datang di Asisten AI RS Banyumas 🏥✨
 
 Saya siap membantu kamu menemukan rumah sakit yang sesuai di Kabupaten Banyumas, berdasarkan ulasan pasien di Google Maps dan data lokasi rumah sakit.
@@ -1346,7 +1372,9 @@ Yuk, cari informasi rumah sakit dengan lebih mudah dan praktis! 😊`;
           message: text,
           history: chatHistory.slice(0, -1).slice(-6).map(m => ({ role: m.role, text: m.text })),
           context: buatKonteks(text),
-          format: 'rich'          // minta jawaban bertabel/berpoin; tampilan ini merender Markdown
+          format: 'rich',          // minta jawaban bertabel/berpoin; tampilan ini merender Markdown
+          lat: userPos ? userPos.lat : undefined,
+          lng: userPos ? userPos.lng : undefined
         })
       });
       const data = await resp.json().catch(() => ({}));
