@@ -768,13 +768,41 @@ loadData();
 </script>
 
 <!-- ===================== COPILOT STUDIO AGENT ===================== -->
-<div id="agentWrap" style="position:fixed; bottom:24px; right:24px; z-index:2000; width:400px; height:600px; max-width:calc(100vw - 32px); max-height:calc(100vh - 48px);">
-  <iframe
-    src="https://copilotstudio.microsoft.com/environments/Default-90affe0f-c2a3-4108-bb98-6ceb4e94ef15/bots/ca_agentBtg3qR/webchat?__version__=2"
-    title="Asisten AI RS Banyumas"
-    style="width:100%; height:100%; border:0; border-radius:16px; box-shadow:0 16px 48px rgba(15,23,42,.28); background:#fff;">
-  </iframe>
+<style>
+  #agentFab { position:fixed; bottom:24px; right:24px; z-index:2000; width:56px; height:56px; border:0;
+              border-radius:50%; cursor:pointer; font-size:26px; color:#fff;
+              background:linear-gradient(135deg,#6366f1,#8b5cf6); box-shadow:0 8px 24px rgba(15,23,42,.3); }
+  #agentFab:hover { filter:brightness(1.08); }
+  #agentWrap { position:fixed; bottom:24px; right:24px; z-index:2000; width:400px; height:600px;
+               max-width:calc(100vw - 32px); max-height:calc(100vh - 48px); display:none; }
+  #agentWrap.open { display:block; }
+  #agentWrap iframe { width:100%; height:100%; border:0; border-radius:16px; background:#fff;
+                      box-shadow:0 16px 48px rgba(15,23,42,.28); }
+  #agentClose { position:absolute; top:8px; right:10px; z-index:1; width:30px; height:30px; border:0;
+                border-radius:50%; background:rgba(255,255,255,.2); color:#fff; font-size:18px; cursor:pointer; }
+  #agentClose:hover { background:rgba(255,255,255,.35); }
+</style>
+
+<button id="agentFab" title="Buka asisten AI" aria-label="Buka asisten AI">💬</button>
+<div id="agentWrap">
+  <button id="agentClose" title="Tutup" aria-label="Tutup asisten AI">✕</button>
+  <iframe id="agentFrame" data-src="https://copilotstudio.microsoft.com/environments/Default-90affe0f-c2a3-4108-bb98-6ceb4e94ef15/bots/ca_agentBtg3qR/webchat?__version__=2"
+          title="Asisten AI RS Banyumas"></iframe>
 </div>
+<script>
+(function () {
+  const fab = document.getElementById('agentFab');
+  const wrap = document.getElementById('agentWrap');
+  const frame = document.getElementById('agentFrame');
+  function setOpen(o) {
+    wrap.classList.toggle('open', o);
+    fab.style.display = o ? 'none' : 'block';
+    if (o && !frame.src) frame.src = frame.dataset.src;   // iframe baru dimuat saat pertama dibuka
+  }
+  fab.addEventListener('click', () => setOpen(true));
+  document.getElementById('agentClose').addEventListener('click', () => setOpen(false));
+})();
+</script>
 <!-- ================= END COPILOT STUDIO AGENT ================= -->
  
 </body>
