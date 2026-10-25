@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,7 @@
          height:100vh; height:100dvh; overflow:hidden; display:flex; flex-direction:column; }
   button { font-family:inherit; }
 
-  /* ---------- Bilah atas (judul + periode + aksi dalam satu baris) ---------- */
+  /* ---------- Top bar (title + period + actions in one row) ---------- */
   #header { position:relative; background:linear-gradient(135deg,#eef2ff,#f5f3ff); border-bottom:1px solid #ddd6fe;
             padding:8px 16px; display:flex; align-items:center; gap:10px 18px; flex-wrap:wrap; flex-shrink:0;
             z-index:1300; }
@@ -42,17 +42,9 @@
   .btn { padding:7px 13px; border-radius:9px; cursor:pointer; font-size:12px; font-weight:600; transition:all .15s; white-space:nowrap; }
   .btn.ghost { background:#fff; color:var(--brand-d); border:1px solid var(--brand-b); }
   .btn.ghost:hover { background:var(--brand-l); }
-  .btn.primary { background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; border:1px solid transparent; }
-  .btn.primary:hover { filter:brightness(1.07); }
   .btn:disabled { opacity:.55; cursor:not-allowed; filter:none; }
-  /* Status update melayang di bawah bilah atas, tidak mengubah tinggi tata letak */
-  #updateStatus { position:absolute; left:50%; top:calc(100% + 8px); transform:translateX(-50%); z-index:1400;
-                  font-size:12px; color:var(--brand-d); background:#fff; border:1px solid var(--brand-b);
-                  padding:6px 14px; border-radius:16px; max-width:min(560px, 92vw); text-align:center; line-height:1.35;
-                  box-shadow:0 6px 20px rgba(15,23,42,.16); }
-  #updateStatus:empty { display:none; }
 
-  /* ---------- Area utama ---------- */
+  /* ---------- Main area ---------- */
   #main { flex:1; display:flex; overflow:hidden; position:relative; min-height:0; }
   #mapWrap { flex:1; position:relative; min-width:0; }
   #map { width:100%; height:100%; }
@@ -71,7 +63,7 @@
                 cursor:pointer; box-shadow:0 3px 12px rgba(15,23,42,.14); }
   #sideToggle:hover { background:var(--brand-l); }
 
-  /* ---------- Sidebar: kolom yang digulir (scrollbar panjang di kanan); tinggi tiap panel bisa diatur ---------- */
+  /* ---------- Sidebar: scrollable column; each panel's height is adjustable ---------- */
   #side { width:var(--side-w); background:var(--bg); border-left:1px solid var(--line); display:flex;
           flex-direction:column; padding:10px 10px 6px; overflow-x:hidden; overflow-y:scroll;
           flex-shrink:0; transition:width .25s ease;
@@ -93,11 +85,11 @@
   .panel.collapsed .pcollapse { transform:rotate(-90deg); }
   .panel.collapsed .phead { border-bottom:0; }
   .panel.collapsed .pbody { display:none; }
-  /* Tinggi badan panel diatur lewat style.height (ditarik di pembatas); isi yang lebih tinggi digulir di dalam panel */
+  /* Panel body height is set via style.height (dragged at the splitter); taller content scrolls inside the panel */
   .pbody { padding:10px 12px; overflow-y:auto; overflow-x:hidden; flex:0 0 auto;
            scrollbar-width:thin; scrollbar-color:#cbd5e1 transparent; }
 
-  /* Pembatas: tarik ke atas/bawah untuk mengubah tinggi panel di atasnya */
+  /* Splitter: drag up/down to resize the panel above it */
   .splitter { flex:0 0 14px; height:14px; cursor:row-resize; position:relative; touch-action:none; }
   .splitter::after { content:''; position:absolute; left:50%; top:50%; width:40px; height:4px; margin:-2px 0 0 -20px;
                      border-radius:3px; background:#cbd5e1; transition:background .15s, width .15s, margin .15s; }
@@ -118,7 +110,7 @@
   .kpi.net { border-top-color:#fbbf24; } .kpi.net .v { color:var(--neu); }
   .kpi.neg { border-top-color:#fb7185; } .kpi.neg .v { color:var(--neg); }
 
-  /* Tren */
+  /* Trend */
   #pnlTrend .pbody { display:flex; flex-direction:column; }
   #rsName { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px; flex-shrink:0;
             white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -127,7 +119,7 @@
   #empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center;
            color:var(--muted); font-size:12px; padding:10px; }
 
-  /* Ulasan */
+  /* Reviews */
   .revItem { padding:9px 10px; border-radius:10px; background:#f8fafc; border:1px solid #eef2f7;
              border-left:3px solid var(--muted); margin-bottom:7px; }
   .revItem.Positif { border-left-color:#4ade80; } .revItem.Netral { border-left-color:#fbbf24; }
@@ -146,7 +138,7 @@
   .revMore:hover { background:#e0e7ff; }
   #revEmpty { text-align:center; color:var(--muted); font-size:12px; padding:22px 10px; }
 
-  /* Daftar RS */
+  /* Hospital list */
   .rsi { display:flex; align-items:center; gap:9px; padding:7px 8px; border-radius:10px; cursor:pointer;
          transition:background .15s; margin-bottom:3px; border:1px solid transparent; }
   .rsi:hover { background:#f1f5f9; }
@@ -160,7 +152,7 @@
   .rs .rdot { display:inline-block; width:7px; height:7px; border-radius:50%; margin:0 4px 0 6px; }
   .rrate { font-size:12px; font-weight:700; color:#9333ea; flex-shrink:0; }
 
-  /* Popup peta */
+  /* Map popup */
   .pop { font-family:'Segoe UI',system-ui,Arial,sans-serif; width:230px; }
   .pop .pt { font-size:13px; font-weight:700; color:#4338ca; margin-bottom:6px; border-bottom:2px solid var(--brand-b); padding-bottom:4px; }
   .pop .pr { display:flex; justify-content:space-between; font-size:11px; margin:2px 0; }
@@ -173,7 +165,7 @@
   .pop .ps.Negatif { background:#fee2e2; color:#be123c; }
   .pin-icon { background:transparent; border:none; transition:opacity .2s; }
 
-  /* ---------- Layar kecil: sidebar menjadi laci di atas peta ---------- */
+  /* ---------- Small screens: sidebar becomes a drawer over the map ---------- */
   @media (max-width: 1400px) { .badge { display:none; } }
   @media (max-width: 820px) {
     #header { padding:8px 12px; }
@@ -194,82 +186,81 @@
     <div class="logo">🏥</div>
     <div class="brandtext">
       <h1><span>Banyumas</span> Hospital Sentiment Dashboard</h1>
-      <div id="lastUpdate">Memuat data...</div>
+      <div id="lastUpdate">Loading data...</div>
     </div>
   </div>
   <div class="ctrlgroup">
-    <span class="ctrl-label">Periode</span>
+    <span class="ctrl-label">Period</span>
     <div id="btnWrap" class="seg"></div>
   </div>
   <div class="ctrlgroup">
-    <button id="refreshBtn" class="btn ghost" onclick="loadData()" title="Muat ulang data yang sudah tayang di GitHub Pages">↻ Muat Ulang Tampilan</button>
-    <button id="updateBtn" class="btn primary" onclick="requestUpdate()" title="Ambil ulasan baru dari Google Maps lewat GitHub (3-5 menit)">⟳ Ambil Ulasan Terbaru</button>
+    <button id="refreshBtn" class="btn ghost" onclick="loadData()" title="Reload the latest data from the server">↻ Reload View</button>
   </div>
-  <span class="badge" title="Sentimen diklasifikasikan oleh model SVM dari ulasan Google Maps">SVM | Realtime (near-live)</span>
-  <span id="updateStatus"></span>
+  <span class="badge" title="Sentiment is classified by an SVM model from Google Maps reviews">SVM | Realtime (near-live)</span>
 </header>
 
 <div id="main">
   <div id="mapWrap">
     <div id="map"></div>
-    <div id="loadingOverlay">Memuat data ulasan...</div>
-    <button id="sideToggle" aria-expanded="true" title="Tampilkan / sembunyikan panel samping">Panel ▸</button>
+    <div id="loadingOverlay">Loading review data...</div>
+    <button id="sideToggle" aria-expanded="true" title="Show / hide side panel">Panel ▸</button>
     <div id="legend">
-      <b>Sentimen Dominan</b>
-      <div class="leg"><div class="ldot" style="background:#4ade80"></div>Positif</div>
-      <div class="leg"><div class="ldot" style="background:#fbbf24"></div>Netral</div>
-      <div class="leg"><div class="ldot" style="background:#fb7185"></div>Negatif</div>
-      <div style="margin-top:6px;font-size:10px;color:#94a3b8;">● Ukuran = jumlah ulasan</div>
+      <b>Dominant Sentiment</b>
+      <div class="leg"><div class="ldot" style="background:#4ade80"></div>Positive</div>
+      <div class="leg"><div class="ldot" style="background:#fbbf24"></div>Neutral</div>
+      <div class="leg"><div class="ldot" style="background:#fb7185"></div>Negative</div>
+      <div style="margin-top:6px;font-size:10px;color:#94a3b8;">● Size = number of reviews</div>
     </div>
   </div>
 
   <aside id="side">
 
     <section class="panel" id="pnlStats">
-      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Ringkasan Periode</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+      <div class="phead" title="Click to collapse / expand"><h3>Period Summary</h3><button class="pcollapse" aria-label="Collapse or expand">▾</button></div>
       <div class="pbody">
         <div class="kgrid">
-          <div class="kpi tot"><div class="v" id="sTot">-</div><div class="l">Total RS</div></div>
-          <div class="kpi ul"><div class="v" id="sUl">-</div><div class="l">Total Ulasan</div></div>
-          <div class="kpi rat"><div class="v" id="sRat">-</div><div class="l">Rata-rata Rating</div></div>
-          <div class="kpi pos" title="RS yang ulasannya paling banyak positif pada periode terpilih"><div class="v" id="sPos">-</div><div class="l">RS Dominan Positif</div></div>
-          <div class="kpi net" title="RS yang ulasannya paling banyak netral pada periode terpilih"><div class="v" id="sNet">-</div><div class="l">RS Dominan Netral</div></div>
-          <div class="kpi neg" title="RS yang ulasannya paling banyak negatif pada periode terpilih"><div class="v" id="sNeg">-</div><div class="l">RS Dominan Negatif</div></div>
+          <div class="kpi tot"><div class="v" id="sTot">-</div><div class="l">Total Hospitals</div></div>
+          <div class="kpi ul"><div class="v" id="sUl">-</div><div class="l">Total Reviews</div></div>
+          <div class="kpi rat"><div class="v" id="sRat">-</div><div class="l">Average Rating</div></div>
+          <div class="kpi pos" title="Hospitals with the most positive reviews in the selected period"><div class="v" id="sPos">-</div><div class="l">Positive-Dominant Hospitals</div></div>
+          <div class="kpi net" title="Hospitals with the most neutral reviews in the selected period"><div class="v" id="sNet">-</div><div class="l">Neutral-Dominant Hospitals</div></div>
+          <div class="kpi neg" title="Hospitals with the most negative reviews in the selected period"><div class="v" id="sNeg">-</div><div class="l">Negative-Dominant Hospitals</div></div>
         </div>
       </div>
     </section>
-    <div class="splitter" data-for="pnlStats" title="Tarik untuk mengubah tinggi panel (klik 2x untuk mengembalikan)"></div>
+    <div class="splitter" data-for="pnlStats" title="Drag to resize the panel (double-click to reset)"></div>
 
     <section class="panel" id="pnlTrend">
-      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Tren Rating</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+      <div class="phead" title="Click to collapse / expand"><h3>Rating Trend</h3><button class="pcollapse" aria-label="Collapse or expand">▾</button></div>
       <div class="pbody" id="trend">
-        <div id="rsName">Klik penanda di peta untuk melihat tren</div>
+        <div id="rsName">Click a map marker to view the trend</div>
         <div id="chartWrap">
           <canvas id="trendChart"></canvas>
-          <div id="empty">Pilih sebuah RS untuk melihat tren rating</div>
+          <div id="empty">Select a hospital to view its rating trend</div>
         </div>
       </div>
     </section>
-    <div class="splitter" data-for="pnlTrend" title="Tarik untuk mengubah tinggi panel (klik 2x untuk mengembalikan)"></div>
+    <div class="splitter" data-for="pnlTrend" title="Drag to resize the panel (double-click to reset)"></div>
 
     <section class="panel" id="pnlReviews">
-      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Ulasan Terbaru</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
-      <div class="pbody"><div id="reviewListContent"><div id="revEmpty">Pilih RS untuk melihat ulasan</div></div></div>
+      <div class="phead" title="Click to collapse / expand"><h3>Latest Reviews</h3><button class="pcollapse" aria-label="Collapse or expand">▾</button></div>
+      <div class="pbody"><div id="reviewListContent"><div id="revEmpty">Select a hospital to view reviews</div></div></div>
     </section>
-    <div class="splitter" data-for="pnlReviews" title="Tarik untuk mengubah tinggi panel (klik 2x untuk mengembalikan)"></div>
+    <div class="splitter" data-for="pnlReviews" title="Drag to resize the panel (double-click to reset)"></div>
 
     <section class="panel" id="pnlList">
-      <div class="phead" title="Klik untuk ciutkan / buka"><h3>Daftar RS (urut rating)</h3><button class="pcollapse" aria-label="Ciutkan atau buka">▾</button></div>
+      <div class="phead" title="Click to collapse / expand"><h3>Hospital List (by rating)</h3><button class="pcollapse" aria-label="Collapse or expand">▾</button></div>
       <div class="pbody"><div id="rsListContent"></div></div>
     </section>
-    <div class="splitter" data-for="pnlList" title="Tarik untuk mengubah tinggi panel (klik 2x untuk mengembalikan)"></div>
+    <div class="splitter" data-for="pnlList" title="Drag to resize the panel (double-click to reset)"></div>
   </aside>
 </div>
 
 <script>
 const MAPBOX_TOKEN = "pk.eyJ1IjoibmhhYXprIiwiYSI6ImNtdW51Z3liajBkYmcyeHE3dHYwaW1wZmYifQ.CvBbuiQZHlSCpzni9EU-og";
 const COL = {Positif:'#4ade80', Netral:'#fbbf24', Negatif:'#fb7185'};
-const SENT_LABEL = {Positif:'Positif', Netral:'Netral', Negatif:'Negatif'};
+// Data keys stay in Indonesian (they come from the model output); only the displayed labels are English
+const SENT_LABEL = {Positif:'Positive', Netral:'Neutral', Negatif:'Negative'};
 
 let RAW = [];
 let AGG_ALL = [];
@@ -282,7 +273,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{
 }).addTo(map);
 
 const PERIODS = ['ALL', '7D', '30D'];
-const PLABEL  = { 'ALL':'Semua Waktu', '7D':'7 Hari Terakhir', '30D':'30 Hari Terakhir' };
+const PLABEL  = { 'ALL':'All Time', '7D':'Last 7 Days', '30D':'Last 30 Days' };
 
 const bw = document.getElementById('btnWrap');
 PERIODS.forEach(p => {
@@ -301,21 +292,21 @@ function setPeriod(p) {
 }
 
 function formatDateID(d) {
-  return d.toLocaleDateString('id-ID', { day:'numeric', month:'short' });
+  return d.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
 }
 function formatDateTimeID(d) {
-  return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+  return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
 }
 function monthKey(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
-function monthLabelID(d) { return d.toLocaleDateString('id-ID', { month:'short', year:'numeric' }); }
+function monthLabelID(d) { return d.toLocaleDateString('en-GB', { month:'short', year:'numeric' }); }
 
-// Waktu tanpa tanda zona (mis. Processed_At) dianggap UTC supaya tampil benar dalam WIB
+// Timestamps without a zone (e.g. Processed_At) are treated as UTC so they display correctly in WIB
 function toDate(v) {
   const s = String(v);
   return new Date(/(Z|[+-]\d\d:\d\d)$/.test(s) ? s : s + 'Z');
 }
 function formatWIB(d) {
-  return d.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + ' WIB';
+  return d.toLocaleString('en-GB', { timeZone: 'Asia/Jakarta' }) + ' WIB';
 }
 
 function buildTrend(rowsRS, period) {
@@ -344,7 +335,7 @@ function buildTrend(rowsRS, period) {
     let wkStart = new Date(start), idx = 1;
     while (wkStart <= end) {
       const wkEnd = new Date(wkStart); wkEnd.setDate(wkEnd.getDate() + 6); wkEnd.setHours(23,59,59,999);
-      weeks.push({ label: `Minggu ${idx}`, start: new Date(wkStart),
+      weeks.push({ label: `Week ${idx}`, start: new Date(wkStart),
                    end: wkEnd < end ? wkEnd : end, ratingSum: 0, total: 0 });
       wkStart = new Date(wkStart); wkStart.setDate(wkStart.getDate() + 7);
       idx++;
@@ -377,7 +368,7 @@ function buildTrend(rowsRS, period) {
   };
 }
 
-/* ---------- Daftar ulasan (semua ulasan, teks penuh, muat bertahap) ---------- */
+/* ---------- Review list (all reviews, full text, loaded in batches) ---------- */
 const REV_PAGE = 20;
 let revRows = [], revShown = REV_PAGE;
 
@@ -404,7 +395,7 @@ function revCard(r) {
 
 function renderReviewList(rowsRS, reset = true) {
   const container = document.getElementById('reviewListContent');
-  const body = container.parentElement;            // badan panel Ulasan: digulir di dalam panel bila lebih tinggi
+  const body = container.parentElement;            // Reviews panel body: scrolls inside the panel when taller
   const scroll = body.scrollTop;
   if (reset) {
     revRows = [...rowsRS].sort((a,b) => new Date(b['Waktu Ulasan']) - new Date(a['Waktu Ulasan']));
@@ -412,15 +403,15 @@ function renderReviewList(rowsRS, reset = true) {
     body.scrollTop = 0;
   }
   if (!revRows.length) {
-    container.innerHTML = '<div id="revEmpty">Belum ada ulasan di periode ini</div>';
+    container.innerHTML = '<div id="revEmpty">No reviews in this period yet</div>';
     return;
   }
   const sisa = revRows.length - revShown;
   container.innerHTML =
-    `<div class="revCount">${revRows.length} ulasan | ${PLABEL[cur]}</div>` +
+    `<div class="revCount">${revRows.length} reviews | ${PLABEL[cur]}</div>` +
     revRows.slice(0, revShown).map(revCard).join('') +
     (sisa > 0 ? `<button class="revMore" onclick="revShown += REV_PAGE; renderReviewList(null, false)">
-                   Tampilkan ${Math.min(REV_PAGE, sisa)} lagi (sisa ${sisa})</button>` : '');
+                   Show ${Math.min(REV_PAGE, sisa)} more (${sisa} left)</button>` : '');
   if (!reset) body.scrollTop = scroll;
 }
 
@@ -468,8 +459,8 @@ function recompute() {
 
 const API_BASE = 'https://sentimen-api.onrender.com';
 
-// Ambil data dari server agen (selalu terbaru). Server Render gratis bisa butuh ~1 menit untuk bangun.
-// Bila gagal, jatuh ke file statis lama supaya dashboard tidak kosong.
+// Fetch data from the agent server (always the latest). The free Render server can take ~1 minute to wake up.
+// If that fails, fall back to the old static file so the dashboard is not empty.
 async function fetchReviews() {
   try {
     const ctl = new AbortController();
@@ -479,7 +470,7 @@ async function fetchReviews() {
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const data = await r.json();
     if (Array.isArray(data) && data.length) return { data, sumber: 'api' };
-  } catch (e) { console.warn('API agen gagal, memakai file statis:', e); }
+  } catch (e) { console.warn('Agent API failed, using static file:', e); }
   const r = await fetch('data/reviews.json?_=' + Date.now());
   return { data: await r.json(), sumber: 'statis' };
 }
@@ -495,63 +486,25 @@ async function loadData() {
       return t > max ? t : max;
     }, new Date(0));
 
-    // Opsional: data/meta.json (waktu pengecekan terakhir oleh workflow). Aman bila belum ada.
+    // Optional: time of the last check by the agent. Safe if the endpoint is unavailable.
     let metaTxt = '';
     try {
       const mr = await fetch(API_BASE + '/refresh/status');
       if (mr.ok) {
         const m = await mr.json();
-        if (m.last_run_utc) metaTxt = ` | Dicek terakhir: ${formatWIB(toDate(m.last_run_utc))}`;
+        if (m.last_run_utc) metaTxt = ` | Last checked: ${formatWIB(toDate(m.last_run_utc))}`;
       }
     } catch (e) {}
 
-    const infoTxt = `Ulasan terbaru diproses: ${formatWIB(latest)} | Total ulasan: ${RAW.length}${metaTxt}`
-                  + (sumber === 'api' ? '' : ' | data cadangan');
+    const infoTxt = `Latest review processed: ${formatWIB(latest)} | Total reviews: ${RAW.length}${metaTxt}`
+                  + (sumber === 'api' ? '' : ' | backup data');
     const infoEl = document.getElementById('lastUpdate');
     infoEl.textContent = infoTxt; infoEl.title = infoTxt;
     recompute();
   } catch (e) {
-    document.getElementById('lastUpdate').textContent = 'Gagal memuat data: ' + e.message;
+    document.getElementById('lastUpdate').textContent = 'Failed to load data: ' + e.message;
   } finally {
     document.getElementById('loadingOverlay').style.display = 'none';
-  }
-}
-
-/* ---------- Tombol "Ambil Ulasan Terbaru": memicu workflow GitHub lewat backend ---------- */
-const REFRESH_URL = "https://sentimen-api.onrender.com/refresh";
-const sleep = ms => new Promise(res => setTimeout(res, ms));
-
-async function requestUpdate() {
-  const btn = document.getElementById('updateBtn');
-  const st = document.getElementById('updateStatus');
-  btn.disabled = true;
-  const t0 = Date.now();
-  try {
-    st.textContent = 'Menghubungi server (bisa 30-50 detik jika server tertidur)...';
-    const r = await fetch(REFRESH_URL, { method: 'POST' });
-    const d = await r.json().catch(() => ({}));
-    if (r.status === 429) { st.textContent = d.detail || 'Update baru saja dijalankan.'; return; }
-    if (!r.ok) throw new Error(d.detail || ('HTTP ' + r.status));
-
-    st.textContent = 'Agen sedang mengambil ulasan baru (sekitar 3-8 menit)...';
-    let hasil = null;
-    for (let i = 0; i < 40; i++) {
-      await sleep(15000);
-      try {
-        const s = await (await fetch(REFRESH_URL + '/status')).json();
-        if (s.status === 'completed' && new Date(s.created_at).getTime() >= t0 - 30000) { hasil = s; break; }
-      } catch (e) { /* server mungkin sibuk, coba lagi */ }
-    }
-    if (!hasil) { st.textContent = 'Update belum selesai. Coba "Muat Ulang Tampilan" beberapa menit lagi.'; return; }
-    if (hasil.conclusion !== 'success') { st.textContent = 'Update gagal. Coba lagi beberapa menit lagi.'; return; }
-
-    st.textContent = 'Memuat data terbaru...';
-    await loadData();
-    st.textContent = 'Selesai. Data sudah dimuat ulang.';
-  } catch (e) {
-    st.textContent = 'Gagal memulai update: ' + e.message;
-  } finally {
-    btn.disabled = false;
   }
 }
 
@@ -570,16 +523,16 @@ function pinSize(n) { return Math.max(24, Math.min(52, 22 + Math.sqrt(n) * 3)); 
 function popup(d) {
   return `<div class="pop">
     <div class="pt">${esc(d['Nama RS'])}</div>
-    <div class="pr"><span class="pk">Rata-rata Rating</span><span class="pv">${d.Avg_Rating.toFixed(2)}</span></div>
-    <div class="pr"><span class="pk">Total Ulasan</span><span class="pv">${d.Total}</span></div>
+    <div class="pr"><span class="pk">Average Rating</span><span class="pv">${d.Avg_Rating.toFixed(2)}</span></div>
+    <div class="pr"><span class="pk">Total Reviews</span><span class="pv">${d.Total}</span></div>
     <div class="pb">
       <span style="width:${d.Pct_Pos}%;background:#4ade80"></span>
       <span style="width:${d.Pct_Net}%;background:#fbbf24"></span>
       <span style="width:${d.Pct_Neg}%;background:#fb7185"></span>
     </div>
-    <div class="pr"><span class="pk" style="color:#16a34a">Positif</span><span class="pv">${d.Positif} (${d.Pct_Pos}%)</span></div>
-    <div class="pr"><span class="pk" style="color:#d97706">Netral</span><span class="pv">${d.Netral} (${d.Pct_Net}%)</span></div>
-    <div class="pr"><span class="pk" style="color:#e11d48">Negatif</span><span class="pv">${d.Negatif} (${d.Pct_Neg}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#16a34a">Positive</span><span class="pv">${d.Positif} (${d.Pct_Pos}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#d97706">Neutral</span><span class="pv">${d.Netral} (${d.Pct_Net}%)</span></div>
+    <div class="pr"><span class="pk" style="color:#e11d48">Negative</span><span class="pv">${d.Negatif} (${d.Pct_Neg}%)</span></div>
     <span class="ps ${d.Dominan}">${SENT_LABEL[d.Dominan]||d.Dominan}</span>
   </div>`;
 }
@@ -607,7 +560,7 @@ function stats() {
   document.getElementById('sTot').textContent = d.length;
   document.getElementById('sRat').textContent = d.length
     ? (d.reduce((s,x)=>s+x.Avg_Rating,0)/d.length).toFixed(2) : '-';
-  document.getElementById('sUl').textContent  = d.reduce((s,x)=>s+x.Total,0).toLocaleString('id-ID');
+  document.getElementById('sUl').textContent  = d.reduce((s,x)=>s+x.Total,0).toLocaleString('en-US');
 }
 
 function rsList() {
@@ -617,7 +570,7 @@ function rsList() {
       <div class="rank">${i+1}</div>
       <div class="ri">
         <div class="rn">${esc(d['Nama RS'])}</div>
-        <div class="rs">${d.Total} ulasan<span class="rdot" style="background:${COL[d.Dominan]}"></span>${SENT_LABEL[d.Dominan]}</div>
+        <div class="rs">${d.Total} reviews<span class="rdot" style="background:${COL[d.Dominan]}"></span>${SENT_LABEL[d.Dominan]}</div>
       </div>
       <div class="rrate">${d.Avg_Rating.toFixed(1)}★</div>
     </div>`).join('');
@@ -639,7 +592,7 @@ function pick(name, keepScroll) {
 
   const rowsRS = filterByPeriod(RAW, cur).filter(r => r['Nama RS'] === name);
   renderReviewList(rowsRS);
-  if (!keepScroll) {                                  // tampilkan tren RS terpilih di bagian atas sidebar
+  if (!keepScroll) {                                  // show the selected hospital's trend at the top of the sidebar
     const sc = document.getElementById('side');
     if (sc.scrollTo) sc.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -656,11 +609,11 @@ function pick(name, keepScroll) {
   chart = new Chart(document.getElementById('trendChart').getContext('2d'), {
     type:'line',
     data:{labels:labels, datasets:[
-      {label:'Rata-rata Rating', data:ratings, borderColor:'#818cf8',
+      {label:'Average Rating', data:ratings, borderColor:'#818cf8',
         backgroundColor:'rgba(129,140,248,.12)', fill:true, tension:.4,
         pointBackgroundColor:'#818cf8', pointRadius:5, yAxisID:'y',
         spanGaps:true},
-      {label:'Jumlah Ulasan', data:totals, borderColor:'#2dd4bf',
+      {label:'Review Count', data:totals, borderColor:'#2dd4bf',
         backgroundColor:'rgba(45,212,191,.08)', fill:false, tension:.4,
         pointBackgroundColor:'#2dd4bf', pointRadius:4, borderDash:[4,3], yAxisID:'y1'}
     ]},
@@ -685,23 +638,23 @@ loadData();
 </script>
 
 <script>
-/* ===================== Sidebar: buka-tutup, panel bisa diciutkan, tinggi panel bisa diatur ===================== */
+/* ===================== Sidebar: open/close, collapsible panels, adjustable panel heights ===================== */
 (function () {
   const KEY = 'dashLayout.v4';
-  const app = document.getElementById('main');            // kelas side-closed dipasang di #main
+  const app = document.getElementById('main');            // the side-closed class is set on #main
   const side = document.getElementById('side');
   const toggle = document.getElementById('sideToggle');
   const panels = [...side.querySelectorAll('.panel')];
   const splitters = [...side.querySelectorAll('.splitter')];
   const MIN_BODY = 60, MAX_BODY = 1600;
-  // h = tinggi badan panel dalam px; null = mengikuti isi
+  // h = panel body height in px; null = follow content
   const DEF = { pnlStats: { h: null }, pnlTrend: { h: 270 }, pnlReviews: { h: 300 }, pnlList: { h: 300 } };
 
   let st = { sideOpen: window.innerWidth > 820, panels: {} };
   try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') st = Object.assign(st, s); } catch (e) {}
   if (!st.panels || typeof st.panels !== 'object') st.panels = {};
   panels.forEach(p => { st.panels[p.id] = Object.assign({ h: null, collapsed: false }, DEF[p.id], st.panels[p.id]); });
-  if (window.innerWidth <= 820) st.sideOpen = false;        // di ponsel laci selalu mulai tertutup
+  if (window.innerWidth <= 820) st.sideOpen = false;        // on phones the drawer always starts closed
 
   function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
   function fixMap() { try { if (typeof map !== 'undefined') map.invalidateSize(); } catch (e) {} }
@@ -709,16 +662,16 @@ loadData();
   /* --- sidebar --- */
   function applySide() {
     app.classList.toggle('side-closed', !st.sideOpen);
-    document.body.classList.toggle('side-closed', !st.sideOpen);   // dipakai widget chat agar tidak menutupi sidebar
+    document.body.classList.toggle('side-closed', !st.sideOpen);   // used by the chat widget so it doesn't cover the sidebar
     toggle.setAttribute('aria-expanded', String(st.sideOpen));
     toggle.textContent = st.sideOpen ? 'Panel ▸' : '◂ Panel';
   }
   toggle.addEventListener('click', () => {
     st.sideOpen = !st.sideOpen; applySide(); save();
-    setTimeout(fixMap, 280);                                 // setelah animasi lebar selesai
+    setTimeout(fixMap, 280);                                 // after the width animation finishes
   });
 
-  /* --- panel --- */
+  /* --- panels --- */
   function applyPanels() {
     panels.forEach(p => {
       const s = st.panels[p.id];
@@ -757,7 +710,7 @@ loadData();
       sp.addEventListener('pointerup', up);
       sp.addEventListener('pointercancel', up);
     });
-    sp.addEventListener('dblclick', () => {                  // klik 2x: kembalikan ke tinggi bawaan
+    sp.addEventListener('dblclick', () => {                  // double-click: reset to default height
       st.panels[id].h = DEF[id].h; st.panels[id].collapsed = false; applyPanels(); save();
     });
   });
@@ -771,7 +724,7 @@ loadData();
 <!-- ===================== COPILOT STUDIO AGENT ===================== -->
 <style>
   :root { --agent-right: 24px; }
-  /* Sidebar terbuka: geser ke kiri sebesar lebar sidebar supaya tidak menutupi panel */
+  /* Sidebar open: shift left by the sidebar width so the button doesn't cover the panels */
   body:not(.side-closed) { --agent-right: calc(var(--side-w) + 36px); }
   @media (max-width: 820px) { :root, body:not(.side-closed) { --agent-right: 16px; } }
 
@@ -781,9 +734,6 @@ loadData();
               transition:transform .15s, right .25s ease; }
   #agentFab:hover { transform:scale(1.07); }
   #agentFab img { width:100%; height:100%; object-fit:contain; display:block; }
-  #agentFab .fabEmoji { display:none; font-size:28px; line-height:58px; }
-  #agentFab.noimg img { display:none; }
-  #agentFab.noimg .fabEmoji { display:block; }
 
   #agentWrap { position:fixed; bottom:24px; right:var(--agent-right); z-index:1150; width:400px; height:600px;
                max-width:calc(100vw - var(--agent-right) - 16px); max-height:calc(100vh - 110px);
@@ -799,23 +749,20 @@ loadData();
   }
 </style>
 
-<button id="agentFab" title="Buka asisten AI" aria-label="Buka asisten AI">
-  <img id="agentFabImg" src="logo_ai_agent.png" alt="">
-  <span class="fabEmoji">💬</span>
+<button id="agentFab" title="Open AI assistant" aria-label="Open AI assistant">
+  <img src="logo_ai_agent.png" alt="AI assistant">
 </button>
 <div id="agentWrap">
-  <button id="agentClose" title="Tutup" aria-label="Tutup asisten AI">✕</button>
+  <button id="agentClose" title="Close" aria-label="Close AI assistant">✕</button>
   <iframe id="agentFrame"
           data-src="https://copilotstudio.microsoft.com/environments/Default-90affe0f-c2a3-4108-bb98-6ceb4e94ef15/bots/ca_agentBtg3qR/webchat?__version__=2"
-          title="Asisten AI RS Banyumas"></iframe>
+          title="Banyumas Hospital AI Assistant"></iframe>
 </div>
 <script>
 (function () {
   const fab = document.getElementById('agentFab');
-  const img = document.getElementById('agentFabImg');
   const wrap = document.getElementById('agentWrap');
   const frame = document.getElementById('agentFrame');
-  img.addEventListener('error', () => fab.classList.add('noimg'));   // bila gambar tidak ditemukan, tampil emoji
   function setOpen(o) {
     wrap.classList.toggle('open', o);
     fab.style.display = o ? 'none' : 'block';
@@ -826,6 +773,6 @@ loadData();
 })();
 </script>
 <!-- ================= END COPILOT STUDIO AGENT ================= -->
- 
+
 </body>
 </html>
